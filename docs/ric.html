@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Plan d'Action : Réforme Art. 89 & Code Électoral</title>
+    <style>
+        :root {
+            --blue-france: #000091;
+            --red-marianne: #e1000f;
+            --text-title: #161616;
+            --text-default: #3a3a3a;
+            --background-alt: #f6f6f6;
+            --border-default: #ddd;
+        }
+
+        body {
+            font-family: 'Marianne', arial, sans-serif;
+            line-height: 1.5;
+            color: var(--text-default);
+            margin: 0;
+            padding: 2rem;
+            background-color: #ffffff;
+        }
+
+        header {
+            border-bottom: 2px solid var(--blue-france);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .fr-badge {
+            background-color: var(--blue-france);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        h1 { color: var(--blue-france); font-size: 2rem; margin-top: 0.5rem; }
+        h2 { border-left: 4px solid var(--red-marianne); padding-left: 1rem; color: var(--text-title); margin-top: 2rem; }
+        
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .card {
+            background: var(--background-alt);
+            border: 1px solid var(--border-default);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .highlight { font-weight: bold; color: var(--blue-france); }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { border: 1px solid var(--border-default); padding: 0.75rem; text-align: left; }
+        th { background-color: var(--blue-france); color: white; }
+
+        .btn-print {
+            background-color: var(--blue-france);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
+        }
+
+        @media print {
+            .btn-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn-print" onclick="window.print()">Exporter en PDF</button>
+    <header>
+        <span class="fr-badge">Projet RIC - Architecture Système</span>
+        <h1>Réforme de l'Article 89 & Modernisation Électorale</h1>
+        <p><em>En application de l'Article 16 de la DDHC : "La séparation des pouvoirs déterminée".</em></p>
+    </header>
+
+    <section>
+        <h2>1. État des Lieux : Le Verrou Constitutionnel</h2>
+        <div class="card">
+            <p><strong>Article 89 actuel :</strong> L'initiative est réservée au sommet de l'État (Président/Parlement). Le peuple n'est qu'un organe de ratification facultatif (Congrès à 3/5ème).</p>
+            <p class="highlight">Objectif : Introduire l'Initiative Citoyenne Directe comme troisième voie concurrente.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>2. Plan d'Action : Séparation des Pouvoirs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pouvoir</th>
+                    <th>Action Législative (Art. 89 / Code Électoral)</th>
+                    <th>Solution Technique (Repo RIC)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="highlight">Juridique</td>
+                    <td>Droit d'initiative pour tout citoyen inscrit.</td>
+                    <td><code>ui-soumission</code> & <code>referendums.json</code></td>
+                </tr>
+                <tr>
+                    <td class="highlight">Législatif</td>
+                    <td>Souveraineté par le vote direct (numérique & physique).</td>
+                    <td><code>vote_encrypted_payload</code> (Anonymat)</td>
+                </tr>
+                <tr>
+                    <td class="highlight">Exécutif</td>
+                    <td>Contrôle de l'application par tirage au sort.</td>
+                    <td>Module <code>ia.js</code> & Algorithme de sélection</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>3. Programmation & Procédures (Notes d'Atelier)</h2>
+        <div id="notes-container">
+            <p><em>En attente de saisie durant la réunion (14h-17h)...</em></p>
+        </div>
+        <textarea id="input-note" style="width: 100%; height: 100px; margin-top: 1rem;" placeholder="Saisir une décision d'atelier ici..."></textarea>
+        <button onclick="addNote()" style="margin-top: 0.5rem; padding: 0.5rem;">Ajouter au Procès-Verbal</button>
+    </section>
+
+    <footer style="margin-top: 3rem; font-size: 0.8rem; color: #666; border-top: 1px solid #ccc; padding-top: 1rem;">
+        Protocole RIC v2026.03.28 | Médialab Colombelles | Document de travail interne
+    </footer>
+</div>
+
+<script>
+    function addNote() {
+        const input = document.getElementById('input-note');
+        const container = document.getElementById('notes-container');
+        if (input.value.trim() !== "") {
+            if (container.innerHTML.includes("En attente")) container.innerHTML = "";
+            const date = new Date().toLocaleTimeString();
+            const newNote = document.createElement('div');
+            newNote.className = 'card';
+            newNote.innerHTML = `<strong>[${date}] :</strong> ${input.value}`;
+            container.prepend(newNote);
+            input.value = "";
+        }
+    }
+</script>
+
+</body>
+</html>
