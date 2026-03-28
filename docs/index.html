@@ -3,243 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>RIC - Projet de Loi & Dôme d'Initiative Citoyenne</title>
+    <meta name="description" content="Projet de Loi Constitutionnelle pour le RIC - Séparation des pouvoirs Art. 16 DDHC">
+    <title>PLC - Référendum d'Initiative Citoyenne (RIC)</title>
+    
     <style>
+        /* Variables DSFR (Système de Design de l'État) */
         :root {
             --blue-france: #000091;
             --red-marianne: #e1000f;
-            --ric-yellow: #FFD700;
-            --ric-orange: #FF8C00;
             --text-title: #161616;
+            --text-default: #3a3a3a;
             --background-alt: #f6f6f6;
+            --border-default: #ddd;
+            --ric-yellow: #FFD700;
         }
 
         body {
             font-family: 'Marianne', arial, sans-serif;
             line-height: 1.6;
-            color: #3a3a3a;
+            color: var(--text-default);
+            background-color: #ffffff;
             margin: 0;
-            background-color: #f9f9f9;
+            padding: 0;
         }
 
-        /* Header Style Resolve/Gouv */
+        .fr-container {
+            max-width: 48rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* En-tête Gouvernemental */
         .fr-header {
-            padding: 1.5rem;
-            background-color: white;
-            border-bottom: 4px solid var(--ric-yellow);
+            border-bottom: 2px solid var(--blue-france);
+            padding: 1rem 0;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            justify-content: space-between;
         }
 
-        .marianne-logo {
-            font-weight: 900;
+        .fr-logo {
             text-transform: uppercase;
-            line-height: 1;
-            border-left: 3px solid var(--blue-france);
+            font-weight: 700;
+            border-left: 4px solid var(--blue-france);
             padding-left: 0.5rem;
+            line-height: 1;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        /* Hero Section */
-        .dome-header {
-            background: linear-gradient(135deg, var(--ric-yellow), var(--ric-orange));
-            color: var(--blue-france);
-            padding: 3rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        /* Grid Layout for Separation of Powers */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 1.5rem;
-            border-radius: 4px;
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .card:hover { transform: translateY(-5px); }
-
-        .card h3 {
-            margin-top: 0;
-            color: var(--blue-france);
-            border-bottom: 2px solid var(--ric-orange);
+        /* Badge Statut */
+        .fr-badge {
             display: inline-block;
-        }
-
-        .badge-tech {
-            font-size: 0.7rem;
-            background: #eee;
-            padding: 0.2rem 0.5rem;
-            border-radius: 10px;
-            float: right;
-            font-family: monospace;
-        }
-
-        /* Action Form */
-        .proposition-form {
-            background: var(--blue-france);
-            color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-top: 3rem;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.75rem;
-            margin: 0.5rem 0 1rem 0;
-            border-radius: 4px;
-            border: none;
-        }
-
-        .btn-submit {
-            background: var(--ric-yellow);
+            background-color: var(--ric-yellow);
             color: var(--blue-france);
+            padding: 0.25rem 0.6rem;
+            font-size: 0.8rem;
             font-weight: bold;
-            padding: 1rem 2rem;
-            border: none;
             border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
+            margin-bottom: 1rem;
         }
 
-        .btn-submit:hover { background: var(--ric-orange); color: white; }
+        h1 { color: var(--blue-france); font-size: 2.2rem; margin-bottom: 0.5rem; }
+        h2 { color: var(--text-title); border-bottom: 1px solid var(--border-default); padding-bottom: 0.5rem; margin-top: 2.5rem; }
+        h3 { color: var(--red-marianne); font-size: 1.2rem; }
 
+        /* Style Cahier des Charges */
+        .spec-box {
+            background-color: var(--background-alt);
+            border: 1px solid var(--border-default);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 6px solid var(--blue-france);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-default);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th { background-color: var(--blue-france); color: white; }
+
+        /* Accessibilité & Print */
         @media print {
             .no-print { display: none; }
+            body { font-size: 12pt; }
+        }
+
+        .fr-footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-default);
+            font-size: 0.8rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-<header class="fr-header">
-    <div class="marianne-logo">
-        République<br>Française
-    </div>
-    <div style="text-align: right;">
-        <strong>Dôme d'Initiative Citoyenne</strong><br>
-        <small>Projet de Loi de Réforme Constitutionnelle</small>
-    </div>
-</header>
+<div class="fr-container">
+    <header class="fr-header">
+        <div class="fr-logo">République<br>Française</div>
+        <div style="text-align: right;"><strong>Dôme d'Initiative Citoyenne</strong><br>Session du 28 Mars 2026</div>
+    </header>
 
-<div class="container">
-    <div class="dome-header">
-        <h1>Transformer l'Article 89 : Le Pouvoir au Peuple</h1>
-        <p>Mise en application de l'Article 16 de la DDHC via le système RIC (Electron/NoSQL)</p>
-    </div>
-
-    <section class="grid">
-        <div class="card">
-            <span class="badge-tech">module: referendums</span>
-            <h3>I. L'Initiative</h3>
-            <p><strong>Rôle :</strong> Pouvoir Juridique.</p>
-            <p>Tout citoyen peut soumettre une proposition de loi binaire. Le système indexe la demande dans <code>database.json</code> après vérification du quorum numérique.</p>
+    <main>
+        <div style="margin-top: 2rem;">
+            <span class="fr-badge">Projet de Loi Constitutionnelle (PLC)</span>
+            <h1>Instauration du RIC & Séparation des Pouvoirs</h1>
+            <p><strong>Objet :</strong> Réforme des articles 11 et 89 de la Constitution du 4 octobre 1958.</p>
         </div>
 
-        <div class="card">
-            <span class="badge-tech">module: votes</span>
-            <h3>II. Le Vote Direct</h3>
-            <p><strong>Rôle :</strong> Pouvoir Législatif.</p>
-            <p>Le vote n'est plus une simple ratification mais l'acte souverain. Utilisation du <code>vote_encrypted_payload</code> pour garantir l'anonymat total.</p>
-        </div>
+        <section id="expose">
+            <h2>1. Exposé des Motifs</h2>
+            <p>En vertu de l'<strong>Article 16 de la DDHC</strong>, l'absence de séparation réelle des pouvoirs invalide la garantie des droits. Le présent projet restaure la souveraineté en confiant l'initiative, le vote et le contrôle directement aux citoyens.</p>
+        </section>
 
-        <div class="card">
-            <span class="badge-tech">module: ia.js</span>
-            <h3>III. Le Contrôle</h3>
-            <p><strong>Rôle :</strong> Pouvoir Exécutif.</p>
-            <p>Un collège de citoyens tirés au sort supervise l'application de la loi votée, garantissant que le mandat n'est pas trahi.</p>
-        </div>
-    </section>
-<section class="card" style="margin-top: 2rem; border-top: 4px solid var(--blue-france);">
-    <h2>⚖️ Transformation de l'Article 89</h2>
-    <p><em>Mise en conformité avec l'Article 16 de la DDHC et extension du droit de pétition (Art. 72-1).</em></p>
-    
-    <table>
-        <thead>
-            <tr>
-                <th style="background-color: #666;">Version Actuelle (Verrouillée)</th>
-                <th style="background-color: var(--ric-orange);">Version Réformée (RIC)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>"L'initiative appartient au Président et aux membres du Parlement."</td>
-                <td><strong>"L'initiative appartient au Président, au Parlement et à tout citoyen via le Droit d'Initiative."</strong></td>
-            </tr>
-            <tr>
-                <td>"La révision est définitive après avoir été approuvée par référendum."</td>
-                <td><strong>"Toute proposition validée par le quorum citoyen est soumise obligatoirement au référendum."</strong></td>
-            </tr>
-            <tr>
-                <td>"Le Président peut décider de soumettre le projet au Congrès (3/5ème)."</td>
-                <td><span style="color: var(--red-marianne);">[ALINÉA SUPPRIMÉ]</span> : <strong>"Le passage par le Congrès ne peut substituer le vote populaire direct."</strong></td>
-            </tr>
-        </tbody>
-    </table>
-</section>
+        <section id="structure">
+            <h2>2. Cahier des Charges du Système RIC</h2>
+            <div class="spec-box">
+                <h3>A. Pouvoir Juridique (L'Initiative)</h3>
+                <p>Tout citoyen peut porter une initiative via le système <code>/cvnu_data</code>. L'initiative est indexée en clusters (Législatif, Constituant, Révocatoire).</p>
+                <ul>
+                    <li><strong>Quorum Local :</strong> 1% des inscrits.</li>
+                    <li><strong>Quorum National :</strong> 5% des inscrits.</li>
+                </ul>
+            </div>
 
-<section class="card" style="background-color: #fff9e6; border: 1px dashed var(--ric-orange);">
-    <h3>🔗 Extension de l'Article 72-1 (Droit de Pétition)</h3>
-    <p>Pour rendre le RIC opérationnel localement (Caen, Blainville, Colombelles), nous activons le levier de l'Article 72-1, alinéa 2 :</p>
-    <blockquote style="border-left: 5px solid var(--ric-yellow); padding-left: 1rem; font-style: italic;">
-        "Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence."
-    </blockquote>
-    <p><strong>Innovation RIC :</strong> Le "Droit de Pétition" devient une **"Saisine Automatique"**. Si la pétition numérique (via ton app Electron) atteint le quorum, elle déclenche non plus une simple discussion, mais un <strong>Référendum Décisionnel Local</strong>.</p>
-</section>
-    <section class="proposition-form no-print">
-        <h2>🗳️ Déposer une Initiative Citoyenne</h2>
-        <p>Cette interface alimente directement le coeur du serveur <code>sereur.js</code>.</p>
-        
-        <label for="title">Titre de la proposition de loi</label>
-        <input type="text" id="title" placeholder="Ex: Réforme du Code Électoral pour le vote numérique...">
+            <div class="spec-box">
+                <h3>B. Pouvoir Législatif (L'Exercice)</h3>
+                <p>Le vote s'effectue par référendum. Le système garantit :</p>
+                <ul>
+                    <li><strong>Unicité :</strong> Identification via protocole sécurisé (KYC).</li>
+                    <li><strong>Anonymat :</strong> Chiffrement des bulletins (<code>vote_encrypted_payload</code>).</li>
+                    <li><strong>Polyvalence :</strong> Vote par SMS, application ou urne physique.</li>
+                </ul>
+            </div>
 
-        <label for="type">Type de Référendum</label>
-        <select id="type">
-            <option>RIC Constituant (Art. 89)</option>
-            <option>RIC Législatif</option>
-            <option>RIC Abrogatoire</option>
-            <option>RIC Révocatoire</option>
-        </select>
+            <div class="spec-box">
+                <h3>C. Pouvoir Exécutif (Le Contrôle)</h3>
+                <p>Mise en place d'un tirage au sort aléatoire parmi les citoyens inscrits pour superviser l'application des lois et la gestion des serveurs <code>sereur.js</code>.</p>
+            </div>
+        </section>
 
-        <label for="content">Description détaillée & Arguments</label>
-        <textarea id="content" rows="5" placeholder="Expliquez ici les modalités de votre projet..."></textarea>
+        <section id="loi">
+            <h2>3. Dispositif Législatif</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th>Rédaction Proposée</th>
+                        <th>Impact Système</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Art. 89</strong></td>
+                        <td>"L'initiative appartient au Président, au Parlement et aux citoyens."</td>
+                        <td>Active le module <code>referendums</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Art. 11</strong></td>
+                        <td>"Le référendum est de plein droit sur pétition numérique certifiée."</td>
+                        <td>Reconnaissance du Code source RIC.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Art. 72-1</strong></td>
+                        <td>"Le droit de pétition locale devient décisionnel après vote."</td>
+                        <td>Application immédiate (Colombelles/Caen).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-        <button class="btn-submit" onclick="simulerEnvoi()">Soumettre au Dôme d'Initiative</button>
-    </section>
+        <section id="modalites" class="no-print">
+            <h2>4. Modalités de Vote & Scrutin</h2>
+            <p>Le projet définit quatre piliers de consultation :</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="border: 1px solid #ddd; padding: 1rem;">
+                    <strong>RIC Constituant</strong><br><small>Réforme des institutions.</small>
+                </div>
+                <div style="border: 1px solid #ddd; padding: 1rem;">
+                    <strong>RIC Législatif</strong><br><small>Création/Modification de lois.</small>
+                </div>
+                <div style="border: 1px solid #ddd; padding: 1rem;">
+                    <strong>RIC Abrogatoire</strong><br><small>Suppression d'une loi.</small>
+                </div>
+                <div style="border: 1px solid #ddd; padding: 1rem;">
+                    <strong>RIC Révocatoire</strong><br><small>Destitution d'un élu.</small>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <footer style="text-align: center; margin-top: 4rem; padding: 2rem; border-top: 1px solid #ddd; font-size: 0.9rem;">
-        <p>Projet Open-Source RIC - <a href="https://ia-local.github.io/RIC14/">GitHub Repository</a></p>
-        <p><em>"La forme républicaine du Gouvernement est la Démocratie Directe."</em></p>
+    <footer class="fr-footer">
+        <p>Document généré pour le système <strong>CORE_SYSTEM_CVNU.js</strong></p>
+        <p>Licence Libre - Participation Citoyenne - 2026</p>
+        <button onclick="window.print();" style="cursor:pointer; padding: 0.5rem 1rem;">Imprimer le Cahier des Charges</button>
     </footer>
 </div>
-
-<script>
-    function simulerEnvoi() {
-        const title = document.getElementById('title').value;
-        if(title) {
-            alert("Initiative '" + title + "' enregistrée dans le cluster de données.\nStatut : En attente de signatures numériques.");
-        } else {
-            alert("Veuillez saisir un titre pour votre initiative.");
-        }
-    }
-</script>
 
 </body>
 </html>
