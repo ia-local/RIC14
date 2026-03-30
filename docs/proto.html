@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Prototype RIC - Dôme d'Initiative Citoyenne</title>
+    <style>
+        /* DSFR Minimaliste & Couleurs RIC */
+        :root {
+            --blue-france: #000091;
+            --red-marianne: #e1000f;
+            --ric-yellow: #FFD700;
+            --ric-orange: #FF8C00;
+            --bg-alt: #f6f6f6;
+        }
+
+        body { font-family: 'Marianne', arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header & Nav */
+        header { border-bottom: 2px solid var(--blue-france); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; background: white; }
+        .logo { font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--blue-france); padding-left: 10px; }
+        nav button { background: none; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
+        nav button.active { border-bottom: 2px solid var(--blue-france); color: var(--blue-france); }
+
+        /* Main Content */
+        main { flex: 1; padding: 2rem; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s; }
+
+        /* Components */
+        .card { background: var(--bg-alt); border: 1px solid #ddd; padding: 1.5rem; border-radius: 4px; margin-bottom: 1rem; }
+        .fr-btn { background: var(--blue-france); color: white; border: none; padding: 0.75rem 1.5rem; cursor: pointer; font-weight: bold; }
+        .fr-btn--secondary { background: var(--ric-yellow); color: var(--blue-france); }
+        input, textarea, select { width: 100%; padding: 0.75rem; margin: 0.5rem 0 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+
+        /* HUD & Status */
+        .status-bar { background: #333; color: #0f0; font-family: monospace; padding: 0.5rem 1rem; font-size: 0.8rem; display: flex; justify-content: space-between; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="status-bar">
+        <span>KERNEL: CORE_SYSTEM_RIC.js v1.0</span>
+        <span id="sys-clock">2026-03-29 | 18:00:00</span>
+    </div>
+
+    <header>
+        <div class="logo">République Française<br><small>Dôme d'Initiative</small></div>
+        <nav>
+            <button onclick="showPage('home')" id="btn-home" class="active">Accueil</button>
+            <button onclick="showPage('propose')" id="btn-propose">Initiative (Art. 11)</button>
+            <button onclick="showPage('vote')" id="btn-vote">Scrutin (Art. 89)</button>
+            <button onclick="showPage('admin')" id="btn-admin">Contrôle (Exécutif)</button>
+        </nav>
+    </header>
+
+    <main id="app-content">
+        <section id="page-home" class="page active">
+            <h1>Bienvenue sur le Dôme RIC</h1>
+            <p>Conformément à l'Article 16 de la DDHC, ce système garantit la séparation des pouvoirs.</p>
+            <div class="card" style="border-left: 10px solid var(--ric-orange);">
+                <h3>Dernière Pétition validée</h3>
+                <p id="last-pet-title">"Instauration du RIC Constituant"</p>
+                <progress value="85" max="100" style="width:100%"></progress>
+                <small>85% du quorum atteint (Seuil: 5%)</small>
+            </div>
+        </section>
+
+        <section id="page-propose" class="page">
+            <h2>Soumettre une Initiative (Pouvoir Juridique)</h2>
+            <div class="card">
+                <label>Titre de l'initiative</label>
+                <input type="text" id="init-title" placeholder="Ex: Réforme du Code Électoral...">
+                <label>Type de RIC</label>
+                <select id="init-type">
+                    <option value="constitutif">Constituant (Art. 89)</option>
+                    <option value="legislatif">Législatif</option>
+                    <option value="abrogatoire">Abrogatoire</option>
+                    <option value="revocatoire">Révocatoire</option>
+                </select>
+                <label>Exposé des motifs</label>
+                <textarea id="init-desc" rows="4"></textarea>
+                <button class="fr-btn" onclick="RIC_CORE.processInitiative()">Enregistrer dans le Registre</button>
+            </div>
+        </section>
+
+        <section id="page-vote" class="page">
+            <h2>Espace de Vote (Pouvoir Législatif)</h2>
+            <div id="active-referendum" class="card">
+                <h3 id="vote-q-title">Chargement du scrutin...</h3>
+                <p id="vote-q-desc"></p>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="fr-btn" style="background:green" onclick="RIC_CORE.castVote('OUI')">OUI</button>
+                    <button class="fr-btn" style="background:red" onclick="RIC_CORE.castVote('NON')">NON</button>
+                </div>
+                <p><small>Sécurité : Vote chiffré via <code>vote_encrypted_payload</code></small></p>
+            </div>
+        </section>
+
+        <section id="page-admin" class="page">
+            <h2>Supervision (Pouvoir Exécutif)</h2>
+            <div class="card">
+                <h3>Tirage au sort des contrôleurs</h3>
+                <button class="fr-btn--secondary" onclick="RIC_CORE.drawCitizens()">Lancer l'algorithme aléatoire</button>
+                <ul id="drawn-list"></ul>
+            </div>
+            <div class="card">
+                <h3>Logs du Système (database.json)</h3>
+                <pre id="sys-logs" style="background:#000; color:#0f0; padding:1rem;"></pre>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const RIC_CORE = {
+            db: {
+                initiatives: [],
+                votes: { oui: 0, non: 0 },
+                logs: []
+            },
+
+            processInitiative: function() {
+                const title = document.getElementById('init-title').value;
+                const type = document.getElementById('init-type').value;
+                if(!title) return alert("Veuillez saisir un titre.");
+                
+                this.db.initiatives.push({ title, type, status: 'Quorum en cours' });
+                this.log(`Initiative "${title}" enregistrée [Type: ${type}]`);
+                alert("Initiative enregistrée ! Passage en phase de recueil des soutiens.");
+                showPage('home');
+                document.getElementById('last-pet-title').innerText = title;
+            },
+
+            castVote: function(choice) {
+                if(choice === 'OUI') this.db.votes.oui++;
+                else this.db.votes.non++;
+                
+                this.log(`Vote sécurisé enregistré : ${choice}`);
+                alert("Votre vote a été chiffré et transmis avec succès.");
+            },
+
+            drawCitizens: function() {
+                const names = ["Claudine", "Fabienne", "Laurence", "Mickael", "Raoul"];
+                const winner = names[Math.floor(Math.random() * names.length)];
+                const li = document.createElement('li');
+                li.innerText = `Citoyen tiré au sort : ${winner} (Contrôleur du scrutin)`;
+                document.getElementById('drawn-list').appendChild(li);
+                this.log(`Tirage au sort effectué : ${winner} désigné.`);
+            },
+
+            log: function(msg) {
+                const timestamp = new Date().toLocaleTimeString();
+                this.db.logs.push(`[${timestamp}] ${msg}`);
+                document.getElementById('sys-logs').innerText = this.db.logs.join('\n');
+            }
+        };
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.getElementById('btn-' + pageId).classList.add('active');
+            
+            if(pageId === 'vote') {
+                document.getElementById('vote-q-title').innerText = RIC_CORE.db.initiatives[0]?.title || "Réforme de l'Article 89";
+            }
+        }
+
+        // Clock init
+        setInterval(() => {
+            document.getElementById('sys-clock').innerText = new Date().toLocaleString('fr-FR');
+        }, 1000);
+    </script>
+</body>
+</html>
