@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Notice Technique et Explicative - Infrastructure Dôme d'Initiative">
+    <title>Dossier Technique - Fonctionnement du RIC</title>
+    <style>
+        /* Variables DSFR */
+        :root {
+            --blue-france: #000091;
+            --red-marianne: #e1000f;
+            --text-main: #161616;
+            --text-muted: #666666;
+            --bg-alt: #f6f6f6;
+            --border-color: #dddddd;
+            --tech-accent: #0f417a;
+        }
+
+        body {
+            font-family: 'Marianne', Arial, Helvetica, sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #e5e5e5;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Page A4 Container */
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            background-color: #ffffff;
+            margin: 2rem 0;
+            padding: 20mm;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Header / Logo République */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid var(--text-main);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .marianne {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 14pt;
+            line-height: 1.1;
+            border-left: 4px solid var(--blue-france);
+            padding-left: 10px;
+        }
+
+        .marianne span { display: block; }
+
+        .doc-meta {
+            text-align: right;
+            font-size: 10pt;
+            color: var(--text-muted);
+        }
+
+        .doc-meta strong { color: var(--blue-france); }
+
+        /* Typography & Layout */
+        h1 {
+            color: var(--blue-france);
+            font-size: 20pt;
+            text-align: center;
+            margin: 20px 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .intro-box {
+            background-color: var(--bg-alt);
+            border-left: 6px solid var(--red-marianne);
+            padding: 20px;
+            font-size: 11pt;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        .phase-section {
+            margin-bottom: 35px;
+            page-break-inside: avoid;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--blue-france);
+            padding-bottom: 5px;
+        }
+
+        .phase-number {
+            background-color: var(--blue-france);
+            color: white;
+            font-size: 14pt;
+            font-weight: bold;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        h2 {
+            color: var(--blue-france);
+            font-size: 14pt;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            text-align: justify;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "■";
+            color: var(--tech-accent);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 10pt;
+        }
+
+        .feature-list strong {
+            color: var(--text-main);
+            background-color: rgba(0, 0, 145, 0.05);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #2d2d2d;
+            color: #00ff00;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9.5pt;
+        }
+
+        /* Print Controls */
+        .print-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .btn-print {
+            background-color: var(--blue-france);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 11pt;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+
+        .btn-print:hover { background-color: #1212ff; }
+
+        @media print {
+            body { background-color: #ffffff; margin: 0; }
+            .a4-container { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
+            .print-controls { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="print-controls">
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimer la Notice</button>
+    </div>
+
+    <div class="a4-container">
+        
+        <header>
+            <div class="marianne">
+                <span>République</span>
+                <span>Française</span>
+            </div>
+            <div class="doc-meta">
+                <strong>ric.gouv.fr</strong><br>
+                Annexe Technique<br>
+                Architecture & Infrastructure
+            </div>
+        </header>
+
+        <h1>Notice Technique et Explicative</h1>
+        
+        <div class="intro-box">
+            Le présent projet repose sur une innovation majeure : l'intégration d'une infrastructure numérique sécurisée (le <strong>"Dôme d'Initiative"</strong>) permettant d'exercer la démocratie directe à grande échelle, tout en respectant strictement l'Article 16 de la Déclaration des Droits de l'Homme et du Citoyen (la séparation des pouvoirs).<br><br>
+            Voici le cycle de vie d'une loi dans ce nouveau paradigme, divisé en trois phases :
+        </div>
+
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number">1</div>
+                <h2>L'Initiative : Le Pouvoir Juridique Citoyen</h2>
+            </div>
+            <ul class="feature-list">
+                <li>
+                    <strong>La Soumission :</strong> Tout citoyen inscrit sur les listes électorales peut rédiger et déposer une proposition de loi (ou de révision constitutionnelle) sur la plateforme nationale sécurisée.
+                </li>
+                <li>
+                    <strong>Le Quorum :</strong> Pour qu'une proposition soit soumise au vote, elle doit recueillir un nombre défini de soutiens numériques (ex: 2% du corps électoral pour une loi, 5% pour la Constitution).
+                </li>
+                <li>
+                    <strong>L'Authentification :</strong> Le soutien à une initiative nécessite une authentification forte (type FranceConnect ou KYC). Le système génère une signature cryptographique qui garantit qu'un citoyen ne peut soutenir une initiative qu'une seule fois, éliminant ainsi toute fraude.
+                </li>
+            </ul>
+        </div>
+
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number">2</div>
+                <h2>Le Scrutin : Le Pouvoir Législatif Souverain</h2>
+            </div>
+            <ul class="feature-list">
+                <li>
+                    <strong>Le Déclenchement :</strong> Dès que le quorum est atteint, le système déclenche automatiquement le référendum de plein droit. Aucun organe exécutif ou parlementaire ne peut bloquer la procédure.
+                </li>
+                <li>
+                    <strong>Le Vote par Clic (ou terminal physique) :</strong> Le vote s'effectue via une interface numérique ou en mairie.
+                </li>
+                <li>
+                    <strong>Le Secret et l'Intégrité :</strong> Le bulletin de vote est chiffré sur l'appareil de l'électeur avant transmission <code>(vote_encrypted_payload)</code>. L'identité du votant est mathématiquement séparée de son choix. Le dépouillement est algorithmique, instantané, et auditable publiquement par des preuves à divulgation nulle de connaissance <em>(Zero-Knowledge Proofs)</em>.
+                </li>
+            </ul>
+        </div>
+
+        <div class="phase-section">
+            <div class="phase-header">
+                <div class="phase-number">3</div>
+                <h2>Le Contrôle : Le Pouvoir Exécutif Aléatoire</h2>
+            </div>
+            <ul class="feature-list">
+                <li>
+                    <strong>Le Tirage au Sort :</strong> Pour s'assurer que le gouvernement ou l'administration applique fidèlement le résultat du référendum, un "Collège de Contrôle Citoyen" est constitué.
+                </li>
+                <li>
+                    <strong>La Méthode :</strong> Un algorithme public et vérifiable tire au sort des citoyens parmi le registre national des inscrits.
+                </li>
+                <li>
+                    <strong>Le Mandat :</strong> Ces citoyens disposent d'un mandat impératif temporaire pour auditer les serveurs de vote et surveiller la rédaction des décrets d'application.
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>

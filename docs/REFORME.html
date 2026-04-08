@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comparatif avant/après de la réforme constitutionnelle pour le RIC">
+    <title>Comparatif Réforme Constitutionnelle - Équipe de Travail</title>
+    <style>
+        /* Variables DSFR & Couleurs de comparaison */
+        :root {
+            --blue-france: #000091;
+            --text-main: #161616;
+            --bg-body: #f6f6f6;
+            
+            /* Code Couleur : Avant Réforme (Rouge/Grisé) */
+            --color-avant-border: #ce0500;
+            --color-avant-bg: #fff4f3;
+            --color-avant-text: #3a3a3a;
+            
+            /* Code Couleur : Après Réforme (Vert/Validé) */
+            --color-apres-border: #18753c;
+            --color-apres-bg: #e3fdf0;
+            --color-apres-text: #161616;
+        }
+
+        body {
+            font-family: 'Marianne', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            min-height: 100vh;
+        }
+
+        /* En-tête */
+        header {
+            border-bottom: 2px solid var(--blue-france);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .marianne {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            line-height: 1.1;
+            border-left: 4px solid var(--blue-france);
+            padding-left: 10px;
+        }
+
+        h1 {
+            color: var(--blue-france);
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 50px;
+            padding: 0 20px;
+        }
+
+        /* Grille de comparaison */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        /* Titres des articles */
+        .article-title {
+            grid-column: 1 / -1;
+            background-color: var(--blue-france);
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Blocs Avant / Après */
+        .block-version {
+            padding: 25px;
+            border-radius: 0 0 4px 4px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .block-avant {
+            background-color: var(--color-avant-bg);
+            border-left: 6px solid var(--color-avant-border);
+            color: var(--color-avant-text);
+        }
+
+        .block-apres {
+            background-color: var(--color-apres-bg);
+            border-left: 6px solid var(--color-apres-border);
+            color: var(--color-apres-text);
+        }
+
+        .version-label {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+        }
+
+        .label-avant {
+            background-color: var(--color-avant-border);
+            color: white;
+        }
+
+        .label-apres {
+            background-color: var(--color-apres-border);
+            color: white;
+        }
+
+        /* Mise en valeur des changements */
+        .block-apres strong {
+            color: var(--color-apres-border);
+            background-color: rgba(24, 117, 60, 0.1);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .block-avant del {
+            color: #a00;
+            opacity: 0.7;
+        }
+
+        /* Bouton d'impression */
+        .print-btn {
+            display: block;
+            margin: 40px auto 0;
+            background-color: var(--blue-france);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .print-btn:hover {
+            background-color: #1212ff;
+        }
+
+        @media print {
+            .print-btn { display: none; }
+            body { background-color: white; }
+            .container { box-shadow: none; padding: 0; }
+            .block-version { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="marianne">République<br>Française</div>
+            <div style="text-align: right; color: #666;">
+                <strong>Document de travail interne</strong><br>
+                Équipe Projet RIC
+            </div>
+        </header>
+
+        <h1>Tableau Comparatif de la Réforme</h1>
+        <p class="intro">
+            Ce document met en évidence les modifications apportées à la Constitution du 4 octobre 1958 pour y intégrer la séparation des pouvoirs et le Référendum d'Initiative Citoyenne (RIC). <strong>Les ajouts et modifications majeures sont surlignés en gras dans les encarts verts.</strong>
+        </p>
+
+        <div class="comparison-grid">
+            <div class="article-title">Article 89 : Le Pouvoir Constituant</div>
+            
+            <div class="block-version block-avant">
+                <span class="version-label label-avant">Avant Réforme (Actuel)</span>
+                <p>L'initiative de la révision de la Constitution appartient concurremment au Président de la République sur proposition du Premier ministre et aux membres du Parlement.</p>
+                <p><del>Toutefois, le projet de révision n'est pas présenté au référendum lorsque le Président de la République décide de le soumettre au Parlement convoqué en Congrès</del> ; dans ce cas, le projet de révision n'est approuvé que s'il réunit la majorité des trois cinquièmes des suffrages exprimés.</p>
+            </div>
+
+            <div class="block-version block-apres">
+                <span class="version-label label-apres">Après Réforme (Projet RIC)</span>
+                <p>L'initiative de la révision de la Constitution appartient concurremment au Président de la République sur proposition du Premier ministre, aux membres du Parlement, <strong>ainsi qu'aux citoyens par la voie du référendum d'initiative citoyenne constituant.</strong></p>
+                <p>Le projet ou la proposition de révision doit être voté par les deux assemblées en termes identiques. <strong>La révision n'est définitive qu'après avoir été approuvée par référendum obligatoire.</strong></p>
+            </div>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="article-title">Article 11 : Le Pouvoir Législatif Citoyen</div>
+            
+            <div class="block-version block-avant">
+                <span class="version-label label-avant">Avant Réforme (Actuel)</span>
+                <p>Un référendum portant sur un objet mentionné au premier alinéa peut être organisé à l'initiative d'un cinquième des membres du Parlement, soutenue par un dixième des électeurs inscrits sur les listes électorales. Cette initiative prend la forme d'une proposition de loi et ne peut avoir pour objet l'abrogation d'une disposition législative promulguée depuis moins d'un an.</p>
+            </div>
+
+            <div class="block-version block-apres">
+                <span class="version-label label-apres">Après Réforme (Projet RIC)</span>
+                <p><strong>Un référendum est organisé de plein droit à l'initiative d'une fraction du corps électoral sous la forme d'un Référendum d'Initiative Citoyenne.</strong> Ce droit s'exerce sous forme législative, abrogatoire ou révocatoire.</p>
+                <p><strong>La loi organique détermine les seuils de déclenchement et garantit l'usage de technologies sécurisées, assurant l'anonymat et l'unicité du suffrage, pour l'exercice de ce droit.</strong></p>
+            </div>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="article-title">Nouvel Article 11-1 : Le Pouvoir Exécutif de Contrôle</div>
+            
+            <div class="block-version block-avant" style="display: flex; align-items: center; justify-content: center; color: #999; font-style: italic;">
+                [Cet article n'existe pas dans la Constitution actuelle. L'administration s'auto-contrôle.]
+            </div>
+
+            <div class="block-version block-apres">
+                <span class="version-label label-apres">Création (Projet RIC)</span>
+                <p><strong>Art. 11-1. – Afin de garantir l'intégrité de l'exercice démocratique et la stricte séparation des pouvoirs, un collège de citoyens, désignés par tirage au sort parmi les électeurs inscrits, contrôle la régularité des opérations référendaires et surveille la promulgation et l'exécution des textes adoptés.</strong></p>
+            </div>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="article-title">Article 72-1 : Le Pouvoir Décisionnel Local</div>
+            
+            <div class="block-version block-avant">
+                <span class="version-label label-avant">Avant Réforme (Actuel)</span>
+                <p>Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence.</p>
+                <p><em>[Fin de l'alinéa : la pétition n'est que consultative.]</em></p>
+            </div>
+
+            <div class="block-version block-apres">
+                <span class="version-label label-apres">Après Réforme (Projet RIC)</span>
+                <p>Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence.</p>
+                <p><strong>Lorsque cette pétition atteint le quorum défini par la loi, elle déclenche de plein droit un référendum décisionnel dont le résultat s'impose à l'assemblée délibérante.</strong></p>
+            </div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ Imprimer ce comparatif pour la réunion</button>
+    </div>
+
+</body>
+</html>
