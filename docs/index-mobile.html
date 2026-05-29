@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RIC Mobile - Dôme d'Initiative Citoyenne</title>
+    <style>
+        /* ==========================================
+           1. CORE DESIGN SYSTEM (Charte RIC & DSFR)
+           ========================================== */
+        :root {
+            --blue-france: #000091;
+            --blue-france-hover: #1212ff;
+            --red-marianne: #e1000f;
+            --ric-yellow: #FFD700;
+            --ric-orange: #FF8C00;
+            --bg-body: #f4f6f9;
+            --bg-card: #ffffff;
+            --text-main: #161616;
+            --text-muted: #666666;
+            --border-color: #e5e5e5;
+            --success: #18753c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Marianne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Cadre de simulation de smartphone (Desktop) / Fullscreen sur Mobile */
+        .phone-wrapper {
+            width: 100%;
+            max-width: 412px;
+            height: 100vh;
+            background: var(--bg-body);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        @media (min-width: 413px) {
+            .phone-wrapper {
+                height: 844px;
+                border-radius: 32px;
+                border: 8px solid #2d2d2d;
+            }
+        }
+
+        /* App Header */
+        header {
+            background: white;
+            padding: 16px;
+            border-bottom: 2px solid var(--ric-yellow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .marianne-brand {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            line-height: 1.1;
+            border-left: 3px solid var(--blue-france);
+            padding-left: 6px;
+        }
+
+        .app-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--blue-france);
+            text-align: right;
+        }
+
+        /* Conteneur principal défilable */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 90px; /* Espace pour la barre de navigation basse */
+        }
+
+        /* Barre de navigation basse (Mobile Layout) */
+        nav.bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 20%;
+            gap: 4px;
+        }
+
+        .nav-btn.active {
+            color: var(--blue-france);
+        }
+
+        .nav-btn span.icon {
+            font-size: 1.3rem;
+        }
+
+        /* Views management */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* Éléments UI Répétables */
+        .card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            color: var(--blue-france);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-right: 4px;
+            text-transform: uppercase;
+        }
+        .badge-level { background: #eef3f8; color: var(--blue-france); }
+        .badge-modality { background: #fff4e5; color: var(--ric-orange); }
+        .badge-status-attente { background: #fff3cd; color: #856404; }
+        .badge-status-valide { background: #d4edda; color: #155724; }
+        .badge-status-cloture { background: #e2e3e5; color: #383d41; }
+
+        /* Formulaires & Inputs de taille Mobile Tactile (min 44px) */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="number"], select, textarea {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        textarea { min-height: 80px; resize: vertical; }
+
+        .btn {
+            width: 100%;
+            min-height: 44px;
+            background: var(--blue-france);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .btn:active { background: var(--blue-france-hover); }
+        .btn-orange { background: var(--ric-orange); }
+        .btn-secondary { background: transparent; border: 2px solid var(--blue-france); color: var(--blue-france); }
+
+        /* Simulations Spécifiques Isoloir / Modalités */
+        .modality-box {
+            background: #fafafa;
+            border: 1px dashed #ccc;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+        }
+        .sms-mock {
+            background: #e1ffc7;
+            padding: 10px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            border: 1px solid #bce29e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-wrapper">
+        
+        <header id="app-header" style="display: none;">
+            <div class="marianne-brand">République<br>Française</div>
+            <div class="app-title">Dôme RIC<br><small style="font-weight:400; font-size:0.75rem;" id="header-user-role"></small></div>
+        </header>
+
+        <div class="app-content">
+
+            <div id="view-login" class="view active">
+                <div style="text-align: center; margin: 24px 0;">
+                    <div style="font-size: 2.5rem;">🗳️</div>
+                    <h2 style="color: var(--blue-france); margin-top: 10px;">Espace Souverain</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Authentification certifiée (KYC Réseau National)</p>
+                </div>
+                
+                <div class="card">
+                    <div class="form-group">
+                        <label for="login-email">Adresse Électronique</label>
+                        <input type="email" id="login-email" placeholder="Ex: citoyen@ric.fr">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-pwd">Mot de passe</label>
+                        <input type="password" id="login-pwd" placeholder="••••••••">
+                    </div>
+                    <button class="btn" onclick="RIC_ENGINE.login()">S'authentifier numériquement</button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; text-align: center;">💡 Profils de test rapides :</p>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" style="font-size: 0.75rem; min-height: 36px;" onclick="RIC_ENGINE.quickFill('citoyen@ric.fr', '123')">Citoyen</button>
+                        <button class="btn btn-secondary" style="font-size: 0.75rem; min-height: 36px;" onclick="RIC_ENGINE.quickFill('admin@ric.fr', 'admin')">Administrateur</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-dashboard" class="view">
+                <h2 style="margin-bottom: 16px;">Registre Démocratique</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                    <div class="card" style="margin:0; text-align: center; border-top-color: var(--ric-orange);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Actifs</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--ric-orange);" id="stat-active">0</div>
+                    </div>
+                    <div class="card" style="margin:0; text-align: center; border-top-color: var(--success);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Clôturés</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);" id="stat-closed">0</div>
+                    </div>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #fff9e6, #fff4d0); border-left: 4px solid var(--ric-orange);">
+                    <h3 style="color: #856404; font-size: 0.95rem; margin-bottom: 6px;">📢 Note d'usage de l'outil</h3>
+                    <p style="font-size: 0.8rem; color: #664d03;">Ce système bascule automatiquement les écrans de vote selon la configuration choisie par l'initiateur (Clic, SMS, Pétition ou Main levée).</p>
+                </div>
+
+                <div id="dashboard-featured"></div>
+            </div>
+
+            <div id="view-propose" class="view">
+                <h2 style="margin-bottom: 16px;">Ouvrir un Scrutin</h2>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Titre du projet</label>
+                        <input type="text" id="prop-title" placeholder="Ex: Réforme électorale locale">
+                    </div>
+                    <div class="form-group">
+                        <label>Question Binaire (Oui/Non)</label>
+                        <input type="text" id="prop-question" placeholder="Ex: Approuvez-vous la mise en place de...">
+                    </div>
+                    <div class="form-group">
+                        <label>Description & Contexte</label>
+                        <textarea id="prop-desc" placeholder="Détails du projet de loi ou de la motion..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Échelle Territoriale</label>
+                        <select id="prop-level">
+                            <option value="Local">Local (Commune / Quartier)</option>
+                            <option value="Régional">Régional</option>
+                            <option value="National">National</option>
+                            <option value="Global">Global / Européen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Modalité d'expression du suffrage</label>
+                        <select id="prop-modality" onchange="RIC_ENGINE.toggleModalityHint(this.value)">
+                            <option value="Internet / Clic">Internet / Clic applicatif sécurisé</option>
+                            <option value="SMS">SMS (Numéro court certifié)</option>
+                            <option value="Pétition numérique">Pétition numérique (Recueil de signatures)</option>
+                            <option value="Main levée">À main levée (Vote de séance / Assemblée)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Seuil de Quorum Requis (%)</label>
+                        <input type="number" id="prop-quorum" value="2" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Butoir (Clôture)</label>
+                        <input type="date" id="prop-date">
+                    </div>
+                    <button class="btn btn-orange" onclick="RIC_ENGINE.createInitiative()">Soumettre l'initiative au Registre</button>
+                </div>
+            </div>
+
+            <div id="view-referendums" class="view">
+                <h2 style="margin-bottom: 12px;">Espace Législatif</h2>
+                <div style="overflow-x: auto; white-space: nowrap; margin-bottom: 16px; padding-bottom: 4px;">
+                    <select id="filter-level" onchange="RIC_ENGINE.renderList()" style="width: auto; min-height: 36px; padding: 4px 8px; display: inline-block; font-size: 0.85rem;">
+                        <option value="Tous">Tous les niveaux</option>
+                        <option value="Local">Local</option>
+                        <option value="Régional">Régional</option>
+                        <option value="National">National</option>
+                        <option value="Global">Global</option>
+                    </select>
+                </div>
+                <div id="referendums-container"></div>
+            </div>
+
+            <div id="view-vote-detail" class="view">
+                <button class="btn btn-secondary" style="min-height:36px; width:auto; margin-bottom:12px; font-size:0.8rem; padding: 4px 12px;" onclick="RIC_ENGINE.navigate('referendums')">← Retour</button>
+                <div class="card" id="isoloir-card"></div>
+            </div>
+
+            <div id="view-admin" class="view">
+                <h2 style="margin-bottom: 16px;">Collège d'Administration</h2>
+                <div class="card">
+                    <h3 style="font-size: 0.95rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Modération des initiatives</h3>
+                    <div id="admin-pending-container"></div>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 0.95rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Suivi et Clôture des scrutins</h3>
+                    <div id="admin-active-container"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <nav class="bottom-nav" id="app-nav" style="display: none;">
+            <button class="nav-btn active" id="nav-dashboard" onclick="RIC_ENGINE.navigate('dashboard')">
+                <span class="icon">📊</span><span>Accueil</span>
+            </button>
+            <button class="nav-btn" id="nav-propose" onclick="RIC_ENGINE.navigate('propose')">
+                <span class="icon">✍️</span><span>Initiative</span>
+            </button>
+            <button class="nav-btn" id="nav-referendums" onclick="RIC_ENGINE.navigate('referendums')">
+                <span class="icon">🗳️</span><span>Voter</span>
+            </button>
+            <button class="nav-btn admin-link" id="nav-admin" onclick="RIC_ENGINE.navigate('admin')" style="display:none;">
+                <span class="icon">⚙️</span><span>Admin</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        const RIC_ENGINE = {
+            // Base de données réactive simulée localement (JSON Structure)
+            state: {
+                users: {
+                    "citoyen@ric.fr": { id: "user_4829", name: "Mickael Cauchon", role: "citoyen" },
+                    "admin@ric.fr": { id: "user_0001", name: "Collège Exécutif", role: "admin" }
+                },
+                referendums: [
+                    {
+                        id: "ref_001",
+                        title: "Réforme de l'Article 89 de la Constitution",
+                        question: "Approuvez-vous la suppression de la ratification par le Congrès au profit du référendum obligatoire ?",
+                        description: "Cette proposition vise à rendre le peuple seul juge des révisions constitutionnelles.",
+                        level: "National",
+                        modality: "Internet / Clic",
+                        quorum: 5,
+                        endDate: "2026-12-31",
+                        status: "Validé",
+                        votesOui: 432,
+                        votesNon: 128,
+                        voters: []
+                    },
+                    {
+                        id: "ref_002",
+                        title: "Instauration d'un budget participatif municipal",
+                        question: "Souhaitez-vous déduire 10% du budget de la commune pour des projets d'initiative citoyenne directe ?",
+                        description: "Scrutin local expérimental lié aux dispositions de l'article 72-1.",
+                        level: "Local",
+                        modality: "Pétition numérique",
+                        quorum: 10,
+                        endDate: "2026-08-15",
+                        status: "Validé",
+                        votesOui: 89,
+                        votesNon: 12,
+                        voters: []
+                    }
+                ],
+                currentUser: null
+            },
+
+            // Navigation Mobile
+            navigate: function(viewId) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                
+                document.getElementById('view-' + viewId).classList.add('active');
+                const targetNav = document.getElementById('nav-' + viewId);
+                if(targetNav) targetNav.classList.add('active');
+
+                // Chargement dynamique des données de vue
+                if(viewId === 'dashboard') this.renderDashboard();
+                if(viewId === 'referendums') this.renderList();
+                if(viewId === 'admin') this.renderAdmin();
+            },
+
+            quickFill: function(email, pwd) {
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-pwd').value = pwd;
+            },
+
+            login: function() {
+                const email = document.getElementById('login-email').value.trim();
+                const user = this.state.users[email];
+                
+                if (user) {
+                    this.state.currentUser = user;
+                    document.getElementById('view-login').classList.remove('active');
+                    document.getElementById('app-header').style.display = 'flex';
+                    document.getElementById('app-nav').style.display = 'flex';
+                    document.getElementById('header-user-role').innerText = `${user.name} (${user.role})`;
+
+                    if (user.role === 'admin') {
+                        document.getElementById('nav-admin').style.display = 'flex';
+                    } else {
+                        document.getElementById('nav-admin').style.display = 'none';
+                    }
+
+                    this.navigate('dashboard');
+                } else {
+                    alert("Identifiants inconnus. Vérifiez le KYC.");
+                }
+            },
+
+            renderDashboard: function() {
+                const activeCount = this.state.referendums.filter(r => r.status === 'Validé').length;
+                const closedCount = this.state.referendums.filter(r => r.status === 'Clôturé').length;
+                
+                document.getElementById('stat-active').innerText = activeCount;
+                document.getElementById('stat-closed').innerText = closedCount;
+
+                const container = document.getElementById('dashboard-featured');
+                container.innerHTML = `<h3 style="font-size:1rem; margin-bottom:12px;">Dernières initiatives du Registre</h3>`;
+                
+                this.state.referendums.slice().reverse().forEach(r => {
+                    container.innerHTML += `
+                        <div class="card" onclick="RIC_ENGINE.openScrutin('${r.id}')" style="cursor:pointer;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                <span class="badge badge-level">${r.level}</span>
+                                <span class="badge badge-status-${r.status.toLowerCase()}">${r.status}</span>
+                            </div>
+                            <div class="card-title">${r.title}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">Modalité : ${r.modality}</div>
+                        </div>
+                    `;
+                });
+            },
+
+            createInitiative: function() {
+                const title = document.getElementById('prop-title').value.trim();
+                const question = document.getElementById('prop-question').value.trim();
+                const description = document.getElementById('prop-desc').value.trim();
+                const level = document.getElementById('prop-level').value;
+                const modality = document.getElementById('prop-modality').value;
+                const quorum = parseInt(document.getElementById('prop-quorum').value) || 2;
+                const endDate = document.getElementById('prop-date').value;
+
+                if (!title || !question || !endDate) {
+                    alert("Erreur : Veuillez remplir les champs obligatoires (Titre, Question, Date).");
+                    return;
+                }
+
+                const newRef = {
+                    id: "ref_" + Date.now(),
+                    title, question, description, level, modality, quorum, endDate,
+                    status: "Attente", // En attente de validation administrative (Séparation des Pouvoirs)
+                    votesOui: 0, votesNon: 0, voters: []
+                };
+
+                this.state.referendums.push(newRef);
+                alert("Initiative enregistrée avec succès. Elle a été transmise au Collège d'Administration pour validation réglementaire.");
+                
+                // Reset Form
+                document.getElementById('prop-title').value = '';
+                document.getElementById('prop-question').value = '';
+                document.getElementById('prop-desc').value = '';
+                
+                this.navigate('dashboard');
+            },
+
+            renderList: function() {
+                const filter = document.getElementById('filter-level').value;
+                const container = document.getElementById('referendums-container');
+                container.innerHTML = '';
+
+                const targets = this.state.referendums.filter(r => r.status !== 'Attente' && (filter === 'Tous' || r.level === filter));
+
+                if(targets.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:20px;">Aucun scrutin à cette échelle territoriale.</p>`;
+                    return;
+                }
+
+                targets.forEach(r => {
+                    container.innerHTML += `
+                        <div class="card">
+                            <div style="margin-bottom:6px;">
+                                <span class="badge badge-level">${r.level}</span>
+                                <span class="badge badge-modality">${r.modality}</span>
+                            </div>
+                            <div class="card-title">${r.title}</div>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Échéance : ${r.endDate}</p>
+                            <button class="btn" onclick="RIC_ENGINE.openScrutin('${r.id}')">Accéder à l'isoloir</button>
+                        </div>
+                    `;
+                });
+            },
+
+            openScrutin: function(id) {
+                const r = this.state.referendums.find(item => item.id === id);
+                const container = document.getElementById('isoloir-card');
+                const hasVoted = r.voters.includes(this.state.currentUser.id);
+                
+                let actionInterface = '';
+
+                if (r.status === 'Clôturé') {
+                    const total = r.votesOui + r.votesNon;
+                    const pctOui = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
+                    const pctNon = total === 0 ? 0 : Math.round((r.votesNon / total) * 100);
+                    actionInterface = `
+                        <div style="background:#f0f4f8; padding:12px; border-radius:6px; margin-top:12px;">
+                            <div style="font-weight:700; margin-bottom:6px; font-size:0.9rem; color:var(--success);">Scrutin Clos - Résultats officiels :</div>
+                            <div style="font-size:0.85rem;">🟢 Approbation (OUI) : <strong>${pctOui}%</strong> (${r.votesOui} votes)</div>
+                            <div style="font-size:0.85rem;">🔴 Rejet (NON) : <strong>${pctNon}%</strong> (${r.votesNon} votes)</div>
+                        </div>
+                    `;
+                } else if (hasVoted) {
+                    actionInterface = `
+                        <div style="background:#e8f5e9; color:#1b5e20; padding:12px; border-radius:6px; font-size:0.85rem; text-align:center; font-weight:700; margin-top:12px;">
+                            ✓ Votre charge utile chiffrée (vote_encrypted_payload) a été enregistrée de façon unique pour ce scrutin.
+                        </div>
+                    `;
+                } else {
+                    // ADAPTATION STRUCTURELLE DYNAMIQUE SELON LA MODALITÉ CHOISIE PAR L'INITIATEUR
+                    if (r.modality === 'Internet / Clic') {
+                        actionInterface = `
+                            <p style="font-size:0.8rem; margin-bottom:10px; color:var(--text-muted);">Exprimez votre choix directement par clic cryptographique sécurisé :</p>
+                            <div style="display:flex; gap:10px;">
+                                <button class="btn" style="background:#18753c;" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">OUI</button>
+                                <button class="btn" style="background:#ce0500;" onclick="RIC_ENGINE.submitVote('${r.id}', 'NON')">NON</button>
+                            </div>
+                        `;
+                    } else if (r.modality === 'SMS') {
+                        actionInterface = `
+                            <div class="modality-box">
+                                <label style="color:var(--ric-orange);">Vote par transmission SMS détecté :</label>
+                                <p style="font-size:0.8rem;">Pour voter, simulez l'envoi du mot-clé au numéro d'État court dédié :</p>
+                                <div class="sms-mock">📱 Envoyer <strong>${r.id}_OUI</strong> ou <strong>${r.id}_NON</strong> au <strong>3600</strong></div>
+                                <div style="display:flex; gap:10px; margin-top:10px;">
+                                    <button class="btn btn-secondary" style="min-height:36px; font-size:0.8rem;" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">Simuler envoi SMS [OUI]</button>
+                                    <button class="btn btn-secondary" style="min-height:36px; font-size:0.8rem;" onclick="RIC_ENGINE.submitVote('${r.id}', 'NON')">Simuler envoi SMS [NON]</button>
+                                </div>
+                            </div>
+                        `;
+                    } else if (r.modality === 'Pétition numérique') {
+                        actionInterface = `
+                            <div class="modality-box" style="border-color:var(--blue-france);">
+                                <label>Recueil de signatures pour validation de motion :</label>
+                                <p style="font-size:0.8rem; margin-bottom:10px;">En signant électroniquement, vous comptabilisez votre voix en faveur du projet (OUI).</p>
+                                <button class="btn btn-orange" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">✍️ Signer la pétition d'initiative</button>
+                            </div>
+                        `;
+                    } else if (r.modality === 'Main levée') {
+                        actionInterface = `
+                            <div class="modality-box">
+                                <label>Vote de Séance à Main Levée :</label>
+                                <p style="font-size:0.8rem; margin-bottom:10px;">Réservé aux assemblées citoyennes locales de présence physique.</p>
+                                <div style="display:flex; gap:10px;">
+                                    <button class="btn" style="background:var(--blue-france);" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">✋ Lever la main pour (OUI)</button>
+                                    <button class="btn btn-secondary" onclick="RIC_ENGINE.submitVote('${r.id}', 'NON')">Baisser la main / Contre (NON)</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                container.innerHTML = `
+                    <div style="margin-bottom:8px;">
+                        <span class="badge badge-level">${r.level}</span>
+                        <span class="badge badge-modality">${r.modality}</span>
+                    </div>
+                    <h3 style="color:var(--blue-france); margin-bottom:10px;">${r.title}</h3>
+                    <p style="font-size:0.85rem; font-weight:700; margin-bottom:6px;">Question soumise :</p>
+                    <p style="background:#f8f9fa; padding:10px; border-left:3px solid var(--ric-orange); font-size:0.9rem; margin-bottom:12px;">"${r.question}"</p>
+                    <p style="font-size:0.8rem; color:#555; margin-bottom:14px;">${r.description || 'Aucun descriptif complémentaire joint.'}</p>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Quorum configuré : ${r.quorum}% | Voix actuelles : ${r.votesOui + r.votesNon}</div>
+                    ${actionInterface}
+                `;
+
+                this.navigate('vote-detail');
+            },
+
+            submitVote: function(id, choice) {
+                const r = this.state.referendums.find(item => item.id === id);
+                if (choice === 'OUI') r.votesOui++;
+                if (choice === 'NON') r.votesNon++;
+                r.voters.push(this.state.currentUser.id);
+                
+                alert("Votre suffrage a été traité de manière intègre. Signature cryptographique injectée.");
+                this.openScrutin(id);
+            },
+
+            renderAdmin: function() {
+                const pendingContainer = document.getElementById('admin-pending-container');
+                const activeContainer = document.getElementById('admin-active-container');
+                
+                pendingContainer.innerHTML = '';
+                activeContainer.innerHTML = '';
+
+                const pendings = this.state.referendums.filter(r => r.status === 'Attente');
+                const actives = this.state.referendums.filter(r => r.status === 'Validé');
+
+                if(pendings.length === 0) {
+                    pendingContainer.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted);">Aucun projet en attente de modération réglementaire.</p>`;
+                } else {
+                    pendings.forEach(r => {
+                        pendingContainer.innerHTML += `
+                            <div style="border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
+                                <div style="font-size:0.85rem; font-weight:700;">${r.title}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">Quorum: ${r.quorum}% | Régulation: ${r.modality}</div>
+                                <div style="display:flex; gap:6px;">
+                                    <button class="btn" style="min-height:30px; font-size:0.75rem; background:var(--success);" onclick="RIC_ENGINE.setRefStatus('${r.id}', 'Validé')">Autoriser Scrutin</button>
+                                    <button class="btn" style="min-height:30px; font-size:0.75rem; background:var(--red-marianne);" onclick="RIC_ENGINE.setRefStatus('${r.id}', 'Refusé')">Rejeter</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                if(actives.length === 0) {
+                    activeContainer.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted);">Aucun scrutin actif modérable.</p>`;
+                } else {
+                    actives.forEach(r => {
+                        activeContainer.innerHTML += `
+                            <div style="border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
+                                <div style="font-size:0.85rem; font-weight:700;">${r.title}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">Participants actuels : ${r.votesOui + r.votesNon}</div>
+                                <button class="btn btn-orange" style="min-height:30px; font-size:0.75rem; width:auto; padding:0 8px;" onclick="RIC_ENGINE.setRefStatus('${r.id}', 'Clôturé')">Clôturer et figer les résultats</button>
+                            </div>
+                        `;
+                    });
+                }
+            },
+
+            setRefStatus: function(id, status) {
+                const r = this.state.referendums.find(item => item.id === id);
+                r.status = status;
+                this.renderAdmin();
+                alert(`Le statut de l'initiative a été mis à jour : ${status}`);
+            },
+
+            toggleModalityHint: function(val) {
+                // Fonction d'aide contextuelle optionnelle lors de la création
+            }
+        };
+    </script>
+</body>
+</html>

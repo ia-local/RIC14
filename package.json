@@ -1,0 +1,16 @@
+{
+  "name": "ric14",
+  "version": "1.0.0",
+  "description": "Une application pour une démocratie directe et transparente Bienvenue sur le dépôt GitHub du projet RIC, une application ambitieuse visant à renforcer la participation citoyenne en France (et potentiellement au-delà) en permettant à chaque citoyen de proposer et de voter sur des référendums. Inspirée par l'esprit d'initiative citoyenne, cette plateforme est conçue pour être un outil de démocratie directe, garantissant intégrité et transparence.",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

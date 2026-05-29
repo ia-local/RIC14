@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tableau de comparaison mobile-first pour la réforme constitutionnelle RIC">
+    <title>Outil de Travail : Comparatif Réforme Constitutionnelle</title>
+    <style>
+        /* ==========================================
+           1. VARIABLES ET CONFIGURATION DE BASE (Mobile)
+           ========================================== */
+        :root {
+            --blue-france: #000091;
+            --blue-france-hover: #1212ff;
+            --text-main: #161616;
+            --bg-body: #f6f6f6;
+            --bg-container: #ffffff;
+            --border-default: #dddddd;
+            
+            /* Code Couleur : Avant Réforme (Le Passé / Verrouillé) */
+            --avant-border: #ce0500;
+            --avant-bg: #fff4f3;
+            --avant-text: #3a3a3a;
+            
+            /* Code Couleur : Après Réforme (Le Futur / RIC) */
+            --apres-border: #18753c;
+            --apres-bg: #e3fdf0;
+            --apres-text: #161616;
+        }
+
+        /* Réinitialisation de base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Marianne', Arial, Helvetica, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 0;
+        }
+
+        /* ==========================================
+           2. MISE EN PAGE MOBILE-FIRST (Styles de Base)
+           ========================================== */
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            background-color: var(--bg-container);
+        }
+
+        header {
+            border-bottom: 2px solid var(--blue-france);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .marianne {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            line-height: 1.1;
+            border-left: 4px solid var(--blue-france);
+            padding-left: 8px;
+            margin-bottom: 12px;
+        }
+
+        .marianne span {
+            display: block;
+        }
+
+        .meta-info {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        h1 {
+            color: var(--blue-france);
+            font-size: 1.6rem;
+            margin: 24px 0 8px 0;
+            line-height: 1.2;
+        }
+
+        .intro {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 32px;
+        }
+
+        /* Cartes d'articles et de blocs */
+        .section-article {
+            margin-bottom: 32px;
+            border: 1px solid var(--border-default);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .article-header {
+            background-color: var(--blue-france);
+            color: white;
+            padding: 12px 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* Structure d'empilement par défaut sur Mobile */
+        .version-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .block-version {
+            padding: 20px 16px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .block-version:last-child {
+            border-bottom: none;
+        }
+
+        .block-avant {
+            background-color: var(--avant-bg);
+            border-left: 4px solid var(--avant-border);
+            color: var(--avant-text);
+        }
+
+        .block-apres {
+            background-color: var(--apres-bg);
+            border-left: 4px solid var(--apres-border);
+            color: var(--apres-text);
+        }
+
+        .version-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .tag-avant {
+            background-color: var(--avant-border);
+        }
+
+        .tag-apres {
+            background-color: var(--apres-border);
+        }
+
+        /* Inline Diff Highlights */
+        .block-apres strong {
+            color: var(--apres-border);
+            background-color: rgba(24, 117, 60, 0.08);
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 700;
+        }
+
+        .block-avant del {
+            color: #a00;
+            text-decoration: line-through;
+            opacity: 0.8;
+        }
+
+        .empty-state {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            padding: 24px 16px;
+        }
+
+        /* Bouton d'action tactile standardisé */
+        .action-container {
+            padding: 16px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-print {
+            width: 100%;
+            max-width: 300px;
+            background-color: var(--blue-france);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            text-align: center;
+        }
+
+        .btn-print:hover {
+            background-color: var(--blue-france-hover);
+        }
+
+        /* ==========================================
+           3. RESPONSIVE DESIGN (Tablettes et PC)
+           ========================================== */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+                margin: 24px auto;
+                padding: 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                border-radius: 4px;
+            }
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding-bottom: 20px;
+            }
+
+            .marianne {
+                font-size: 1.3rem;
+                margin-bottom: 0;
+            }
+
+            .meta-info {
+                text-align: right;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+                text-align: center;
+                margin: 40px 0 16px 0;
+            }
+
+            .intro {
+                font-size: 1.05rem;
+                text-align: center;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 48px;
+            }
+
+            /* Transformation de l'empilement en grille côte à côte */
+            .version-stack {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .block-version {
+                border-bottom: none;
+                padding: 24px;
+            }
+
+            .block-version:first-child {
+                border-right: 1px solid var(--border-color);
+            }
+
+            .block-avant {
+                border-left: 6px solid var(--avant-border);
+            }
+
+            .block-apres {
+                border-left: 6px solid var(--apres-border);
+            }
+
+            .btn-print {
+                width: auto;
+            }
+        }
+
+        /* ==========================================
+           4. CONFIGURATION D'IMPRESSION (Feuille A4)
+           ========================================== */
+        @media print {
+            body {
+                background-color: white;
+                font-size: 10pt;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .btn-print {
+                display: none;
+            }
+
+            .section-article {
+                page-break-inside: avoid;
+            }
+
+            .version-stack {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="marianne">
+                <span>République</span>
+                <span>Française</span>
+            </div>
+            <div class="meta-info">
+                <strong>Espace de Travail Collaboratif</strong><br>
+                Documentation de Réforme Constitutionnelle
+            </div>
+        </header>
+
+        <main>
+            <h1>Tableau Comparatif Évolutif</h1>
+            <p class="intro">
+                Analyse structurelle des modifications textuelles de la Constitution du 4 octobre 1958. Les suppressions législatives apparaissent à gauche en rouge, tandis que les extensions applicatives du protocole RIC sont mises en valeur à droite en vert.
+            </p>
+
+            <div class="section-article">
+                <div class="article-header">Article 89 : Le Pouvoir Constituant</div>
+                <div class="version-stack">
+                    <div class="block-version block-avant">
+                        <span class="version-tag tag-avant">Avant Réforme (Monopole)</span>
+                        <p>L'initiative de la révision de la Constitution appartient concurremment au Président de la République sur proposition du Premier ministre et aux membres du Parlement.</p>
+                        <p><del>Toutefois, le projet de révision n'est pas présenté au référendum lorsque le Président de la République décide de le soumettre au Parlement convoqué en Congrès ; dans ce cas, le projet de révision n'est approuvé que s'il réunit la majorité des trois cinquièmes des suffrages exprimés.</del></p>
+                    </div>
+                    <div class="block-version block-apres">
+                        <span class="version-tag tag-apres">Après Réforme (Extension RIC)</span>
+                        <p>L'initiative de la révision de la Constitution appartient concurremment au Président de la République sur proposition du Premier ministre, aux membres du Parlement, <strong>ainsi qu'aux citoyens par la voie du référendum d'initiative citoyenne constituant.</strong></p>
+                        <p>Le projet ou la proposition de révision doit être voté par les deux assemblées en termes identiques. <strong>La révision n'est définitive qu'après avoir été approuvée par référendum obligatoire.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-article">
+                <div class="article-header">Article 11 : Le Pouvoir Législatif Citoyen</div>
+                <div class="version-stack">
+                    <div class="block-version block-avant">
+                        <span class="version-tag tag-avant">Avant Réforme (RIP Restreint)</span>
+                        <p><del>Un référendum portant sur un objet mentionné au premier alinéa peut être organisé à l'initiative d'un cinquième des membres du Parlement, soutenue par un dixième des électeurs inscrits sur les listes électorales. Cette initiative prend la forme d'une proposition de loi et ne peut avoir pour objet l'abrogation d'une disposition législative promulguée depuis moins d'un an.</del></p>
+                    </div>
+                    <div class="block-version block-apres">
+                        <span class="version-tag tag-apres">Après Réforme (Souveraineté Directe)</span>
+                        <p><strong>Un référendum est organisé de plein droit à l'initiative d'une fraction du corps électoral sous la forme d'un Référendum d'Initiative Citoyenne.</strong> Ce droit s'exerce sous forme législative, abrogatoire ou révocatoire.</p>
+                        <p><strong>La loi organique détermine les seuils de déclenchement et garantit l'usage de technologies sécurisées, assurant l'anonymat et l'unicité du suffrage, pour l'exercice de ce droit.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-article">
+                <div class="article-header">Nouvel Article 11-1 : Le Pouvoir Exécutif de Contrôle</div>
+                <div class="version-stack">
+                    <div class="block-version block-avant empty-state">
+                        [Aucune disposition équivalente n'existe dans le texte de la Constitution d'origine. Les instances exécutives ne font l'objet d'aucune surveillance populaire directe.]
+                    </div>
+                    <div class="block-version block-apres">
+                        <span class="version-tag tag-apres">Création (Séparation des Pouvoirs)</span>
+                        <p><strong>Art. 11-1. – Afin de garantir l'intégrité de l'exercice démocratique et la stricte séparation des pouvoirs, un collège de citoyens, désignés par tirage au sort parmi les électeurs inscrits, contrôle la régularité des opérations référendaires et surveille la promulgation et l'exécution des textes adoptés.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-article">
+                <div class="article-header">Article 72-1 : Le Pouvoir Décisionnel Local</div>
+                <div class="version-stack">
+                    <div class="block-version block-avant">
+                        <span class="version-tag tag-avant">Avant Réforme (Pétition Consultative)</span>
+                        <p>Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence.</p>
+                    </div>
+                    <div class="block-version block-apres">
+                        <span class="version-tag tag-apres">Après Réforme (Décision Impérative)</span>
+                        <p>Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence.</p>
+                        <p><strong>Lorsque cette pétition atteint le quorum défini par la loi, elle déclenche de plein droit un référendum décisionnel dont le résultat s'impose à l'assemblée délibérante.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-container">
+                <button class="btn-print" onclick="window.print()">🖨️ Exporter la Note pour l'Équipe</button>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

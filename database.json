@@ -1,0 +1,20 @@
+{
+  "users": [
+    { "id": "admin_1", "email": "admin@ric.fr", "password": "admin", "role": "admin", "name": "Conseil Citoyen" },
+    { "id": "citoyen_1", "email": "citoyen@ric.fr", "password": "123", "role": "citoyen", "name": "Mickael" }
+  ],
+  "referendums": [
+    {
+      "id": "ref_1",
+      "title": "Réforme de l'Article 89",
+      "question": "Approuvez-vous l'intégration du RIC constituant ?",
+      "description": "Permettre aux citoyens de modifier la Constitution.",
+      "level": "National",
+      "endDate": "2026-12-31",
+      "status": "Validé",
+      "votesOui": 0,
+      "votesNon": 0,
+      "voters": []
+    }
+  ]
+}
