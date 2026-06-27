@@ -352,15 +352,27 @@
             </div>
 
             <div id="view-admin" class="view">
-                <h2>Contrôle Exécutif</h2>
-                <div class="card">
-                    <h3>Modération des initiatives (Quorum)</h3>
-                    <div id="admin-pending-container"></div>
-                </div>
-                <div class="card">
-                    <h3>Clôture des scrutins</h3>
-                    <div id="admin-active-container"></div>
-                </div>
+<h2>⚖️ Pouvoir Exécutif (Contrôle Citoyen)</h2>
+    <div id="admin-pending-container"></div>
+    <div id="admin-active-container"></div>
+    <div class="grid-2">
+        <div class="panel">
+            <h3>Collège de Supervision Citoyenne</h3>
+            <p>Conformément à l'Art. 11-1, ce collège est chargé d'auditer l'intégrité du système de vote et de surveiller l'application des lois votées par le RIC.</p>
+            
+            <div class="card" style="background:#f9f9f9; border-left: 4px solid var(--blue-france);">
+                <strong>Protocole de désignation :</strong>
+                <ol style="margin-top:10px; font-size:0.9rem;">
+                    <li>Extraction aléatoire via algorithme public (Hash de la blockchain).</li>
+                    <li>Vérification du statut d'inscrit sur les listes électorales.</li>
+                    <li>Validation par le Conseil Constitutionnel.</li>
+                    <li>Durée de mandat : 6 mois (non renouvelable).</li>
+                </ol>
+            </div>
+            
+        <button class="btn" onclick="RIC_ENGINE.tirageAuSort()">Lancer la procédure d'investiture</button>
+        </div>
+        </div>
             </div>
 
         </main>
@@ -459,7 +471,21 @@
                         votesOui: 125,
                         votesNon: 15,
                         voters: []
-                    }
+                    },
+                    {
+                        id: "ref_6335",
+                        title: "Castration chimique obligatoire pour les prédateurs sexuels",
+                        question: "Êtes-vous pour la castration chimique obligatoire des auteurs de crimes sexuels sur mineurs de moins de quinze ans ?",
+                        description: "Projet de loi visant à supprimer le consentement requis pour le traitement inhibiteur de libido chez les auteurs de crimes sexuels sur mineurs, à renforcer le pouvoir des juges dans l'ordonnance de ces traitements, et à instaurer une tolérance zéro avec annulation immédiate des remises de peine en cas de refus.",
+                        level: "National",
+                        modality: "Pétition numérique",
+                        quorum: 2,
+                        endDate: "2026-12-31",
+                        status: "Validé", // Passé en "Validé" pour apparaître dans l'Isoloir
+                        votesOui: 0,
+                        votesNon: 0,
+                        voters: []
+                        }
                 ],
                 currentUser: null
             },
@@ -745,7 +771,12 @@
 
             renderAdmin: function() {
                 const pending = document.getElementById('admin-pending-container');
+                const active = document.getElementById('admin-active-container');
+                // Vérification de sécurité : si les éléments n'existent pas, on arrête la fonction
+                if (!pending || !active) return; 
+
                 pending.innerHTML = '';
+                active.innerHTML = '';
                 
                 this.state.referendums.filter(r => r.status === 'Attente').forEach(r => {
                     pending.innerHTML += `
@@ -758,11 +789,36 @@
                     `;
                 });
             },
+            tirageAuSort: function() {
+                // On utilise une variable pour conserver la référence de RIC_ENGINE
+                const self = this; 
 
+                self.log("ALGORITHME : Initialisation du tirage sur Registre National (Hash: 0x8a92f...).");
+                self.log("PROTOCOLE : Exclusion des élus en exercice et des agents de l'État.");
+
+                // Utilisation d'une fonction fléchée () => qui conserve le contexte 'self'
+                setTimeout(() => {
+                    const elus = ["Laurence", "Mickael", "Claudine"];
+                    const liste = document.getElementById('jury-list');
+                    if(liste) {
+                        liste.innerHTML = '';
+                        elus.forEach(nom => {
+                            const li = document.createElement('li');
+                            li.innerText = `${nom} (ID-REF: ${Math.floor(Math.random()*9000)+1000})`;
+                            liste.appendChild(li);
+                            // Maintenant 'self.log' est bien défini
+                            self.log(`INVESTITURE : Citoyen(ne) ${nom} certifié(e).`);
+                        });
+                    }
+                }, 1000);
+            },
             setStatus: function(id, status) {
                 this.state.referendums.find(r => r.id === id).status = status;
                 this.renderAdmin();
-            }
+            },
+            log: function(message) {
+            console.log(`[RIC_SYSTEM]: ${message}`);
+            },
         };
     </script>
 </body>
