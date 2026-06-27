@@ -1,0 +1,12 @@
+{
+  "name": "ric-app",
+  "version": "1.0.0",
+  "description": "Application pour une démocratie directe et transparente",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^29.0.0"
+  }
+}

@@ -1,7 +1,19 @@
 {
   "users": [
-    { "id": "admin_1", "email": "admin@ric.fr", "password": "admin", "role": "admin", "name": "Conseil Citoyen" },
-    { "id": "citoyen_1", "email": "citoyen@ric.fr", "password": "123", "role": "citoyen", "name": "Mickael" }
+    {
+      "id": "admin_1",
+      "email": "admin@ric.fr",
+      "password": "admin",
+      "role": "admin",
+      "name": "Conseil Citoyen"
+    },
+    {
+      "id": "citoyen_1",
+      "email": "citoyen@ric.fr",
+      "password": "123",
+      "role": "citoyen",
+      "name": "Mickael"
+    }
   ],
   "referendums": [
     {
@@ -12,6 +24,42 @@
       "level": "National",
       "endDate": "2026-12-31",
       "status": "Validé",
+      "votesOui": 0,
+      "votesNon": 0,
+      "voters": []
+    },
+    {
+      "id": "ref_5049",
+      "title": "Légalisation et encadrement de la filière du cannabis",
+      "question": "Approuvez-vous la dépénalisation de l'usage du cannabis et l'encadrement souverain de sa filière agricole et économique ?",
+      "description": "Dépénalisation de l'usage pour désengorger la justice et privilégier la santé publique, couplée à la création d'une filière agricole française du chanvre pour assurer la souveraineté sanitaire, textile et générer des revenus fiscaux.",
+      "level": "National",
+      "endDate": "2026-12-31",
+      "status": "Attente",
+      "votesOui": 0,
+      "votesNon": 0,
+      "voters": []
+    },
+    {
+      "id": "ref_5146",
+      "title": "Abrogation des Accords de Paris et arrêt des S.A.I",
+      "question": "Approuvez-vous l'abrogation des Accords de Paris et l'ouverture d'une commission d'enquête sur la gestion du rayonnement solaire (S.A.I) ?",
+      "description": "Demande d'abrogation de l'Accord de Paris et retour à un Protocole de Kyoto réformé, motivée par les inquiétudes concernant les impacts environnementaux et sanitaires des méthodes de géo-ingénierie (injections d'aérosols stratosphériques).",
+      "level": "National",
+      "endDate": "2026-12-31",
+      "status": "Attente",
+      "votesOui": 0,
+      "votesNon": 0,
+      "voters": []
+    },
+    {
+      "id": "ref_1133",
+      "title": "Retrait de la PPL n° 1133 sur les rave-parties",
+      "question": "Approuvez-vous le retrait de la Proposition de Loi n° 1133 afin de préserver les libertés fondamentales liées à l'organisation de rassemblements festifs ?",
+      "description": "Pour la défense de nos libertés fondamentales : opposition stricte à la PPL n° 1133 et préservation de la culture des rave-parties et des rassemblements festifs libres.",
+      "level": "National",
+      "endDate": "2026-12-31",
+      "status": "Attente",
       "votesOui": 0,
       "votesNon": 0,
       "voters": []
