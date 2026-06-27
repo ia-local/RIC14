@@ -63,6 +63,18 @@
       "votesOui": 0,
       "votesNon": 0,
       "voters": []
+    },
+    {
+      "id": "ref_rup_bavent",
+      "title": "Création d'un Revenu Universel Progressif (RUP) basé sur le CVNU",
+      "question": "Approuvez-vous le Projet de Loi d'Expérimentation instaurant un Revenu Universel Progressif (RUP) financé par la TVA et encadré par le CVNU, testé initialement sur la commune de Bavent ?",
+      "description": "Expérimentation (Art. 37-1 de la Constitution) d'une redistribution préventive via le Curriculum Vitae Numérique Universel (CVNU). Instaure une Indemnité d'Économie Circulaire versée par l'employeur (remboursée via DSN) et financée par la réaffectation locale de la TVA (preuve d'achat) ainsi qu'une 'Taxe IA' de 6,8% sur les transactions automatisées.",
+      "level": "Local",
+      "endDate": "2026-12-31",
+      "status": "Attente",
+      "votesOui": 0,
+      "votesNon": 0,
+      "voters": []
     }
   ]
 }
