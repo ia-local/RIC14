@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RIC - Dôme d'Initiative Citoyenne</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         /* ==========================================
            1. CORE DESIGN SYSTEM (Charte RIC & DSFR)
@@ -187,6 +189,122 @@
         /* ==========================================
            4. MEDIA QUERIES (BUREAU / DESKTOP)
            ========================================== */
+        /* ==========================================
+           5. CARTE DES SCRUTINS (Leaflet)
+           ========================================== */
+        #map-container {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        #scrutin-map {
+            width: 100%;
+            height: 55vh;
+            min-height: 320px;
+            background: #e8edf2;
+        }
+
+        .map-filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .map-filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            background: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.18s;
+            min-height: 40px;
+        }
+
+        .map-filter-btn.active-local   { background: #e8f5e9; border-color: var(--success); color: var(--success); }
+        .map-filter-btn.active-regional { background: #fff4e5; border-color: var(--ric-orange); color: var(--ric-orange); }
+        .map-filter-btn.active-national { background: #eef3f8; border-color: var(--blue-france); color: var(--blue-france); }
+        .map-filter-btn.active-tous     { background: var(--blue-france); border-color: var(--blue-france); color: white; }
+
+        .map-legend {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .map-legend-item { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+        /* Modal Scrutin Map */
+        .map-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0;
+        }
+        .map-modal-overlay.open { display: flex; }
+
+        .map-modal-panel {
+            background: white;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.28s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+
+        .map-modal-handle {
+            width: 40px; height: 4px;
+            background: #ddd; border-radius: 4px;
+            margin: 0 auto 20px;
+        }
+
+        .map-modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: #f4f4f4; border: none; border-radius: 50%;
+            width: 32px; height: 32px; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        .map-modal-zone-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .modal-progress-bar {
+            width: 100%; background: #e0e0e0;
+            border-radius: 6px; height: 10px;
+            overflow: hidden; display: flex; margin: 6px 0 14px;
+        }
+
+        .modal-result-row {
+            display: flex; justify-content: space-between;
+            font-size: 0.85rem; font-weight: bold; margin-bottom: 3px;
+        }
+
         @media (min-width: 768px) {
             .app-layout { flex-direction: row; }
             header.app-header { display: none; }
@@ -219,6 +337,7 @@
                 <div class="sidebar-nav-item active" onclick="RIC_ENGINE.navigate('dashboard')" data-target="dashboard">📊 Tableau de Bord</div>
                 <div class="sidebar-nav-item" onclick="RIC_ENGINE.navigate('propose')" data-target="propose">✍️ Ouvrir un Scrutin</div>
                 <div class="sidebar-nav-item" onclick="RIC_ENGINE.navigate('referendums')" data-target="referendums">🗳️ Isoloir Numérique</div>
+                <div class="sidebar-nav-item" onclick="RIC_ENGINE.navigate('carte')" data-target="carte">🗺️ Carte des Scrutins</div>
                 <div class="sidebar-nav-item admin-link" onclick="RIC_ENGINE.navigate('admin')" data-target="admin" style="display: none;">⚙️ Administration</div>
             </div>
 
@@ -375,6 +494,37 @@
         </div>
             </div>
 
+            <!-- VUE CARTE DES SCRUTINS -->
+            <div id="view-carte" class="view">
+                <h2>🗺️ Carte des Scrutins</h2>
+
+                <div class="map-filter-bar">
+                    <button class="map-filter-btn active-tous" id="mfb-tous"      onclick="RIC_ENGINE.setMapFilter('Tous')">🗺️ France entière</button>
+                    <button class="map-filter-btn"             id="mfb-regional"  onclick="RIC_ENGINE.setMapFilter('Régional')">🏛️ Régional</button>
+                    <button class="map-filter-btn"             id="mfb-local"     onclick="RIC_ENGINE.setMapFilter('Local')">🏙️ Local (Mairies)</button>
+                </div>
+
+                <div id="map-container">
+                    <div id="scrutin-map"></div>
+                </div>
+
+                <div class="map-legend">
+                    <div class="map-legend-item"><span class="legend-dot" style="background:#000091;"></span> National</div>
+                    <div class="map-legend-item"><span class="legend-dot" style="background:#FF8C00;"></span> Régional</div>
+                    <div class="map-legend-item"><span class="legend-dot" style="background:#18753c;"></span> Local</div>
+                    <div class="map-legend-item" style="margin-left:auto; font-size:0.75rem; color:var(--text-muted);">Cliquez un marqueur pour ouvrir le scrutin</div>
+                </div>
+            </div>
+
+            <!-- MODAL SCRUTIN (carte) -->
+            <div class="map-modal-overlay" id="map-modal-overlay" onclick="RIC_ENGINE.closeMapModal(event)">
+                <div class="map-modal-panel" id="map-modal-panel">
+                    <div class="map-modal-handle"></div>
+                    <button class="map-modal-close" onclick="RIC_ENGINE.closeMapModal(null)">✕</button>
+                    <div id="map-modal-content"></div>
+                </div>
+            </div>
+
         </main>
 
         <nav class="mobile-bottom-nav" id="mobile-nav" style="display: none;">
@@ -386,6 +536,9 @@
             </button>
             <button class="nav-btn" data-target="referendums" onclick="RIC_ENGINE.navigate('referendums')">
                 <span class="icon">🗳️</span><span>Voter</span>
+            </button>
+            <button class="nav-btn" data-target="carte" onclick="RIC_ENGINE.navigate('carte')">
+                <span class="icon">🗺️</span><span>Carte</span>
             </button>
             <button class="nav-btn admin-link" data-target="admin" onclick="RIC_ENGINE.navigate('admin')" style="display:none;">
                 <span class="icon">⚙️</span><span>Admin</span>
@@ -414,7 +567,8 @@
                         status: "Validé",
                         votesOui: 432,
                         votesNon: 128,
-                        voters: []
+                        voters: [],
+                        geo: { type: "national", lat: 46.6, lng: 2.3, label: "France entière" }
                     },
                     {
                         id: "ref_5049",
@@ -428,7 +582,8 @@
                         status: "Validé", 
                         votesOui: 890,
                         votesNon: 410,
-                        voters: []
+                        voters: [],
+                        geo: { type: "national", lat: 46.2, lng: 1.8, label: "France entière" }
                     },
                     {
                         id: "ref_5146",
@@ -442,7 +597,8 @@
                         status: "Validé",
                         votesOui: 54,
                         votesNon: 12,
-                        voters: []
+                        voters: [],
+                        geo: { type: "national", lat: 47.1, lng: 2.8, label: "France entière" }
                     },
                     {
                         id: "ref_1133",
@@ -456,7 +612,8 @@
                         status: "Validé",
                         votesOui: 1024,
                         votesNon: 45,
-                        voters: []
+                        voters: [],
+                        geo: { type: "national", lat: 45.8, lng: 3.0, label: "France entière" }
                     },
                     {
                         id: "ref_rup_bavent",
@@ -470,7 +627,8 @@
                         status: "Validé",
                         votesOui: 125,
                         votesNon: 15,
-                        voters: []
+                        voters: [],
+                        geo: { type: "local", lat: 49.218, lng: -0.218, label: "Bavent (14)" }
                     },
                     {
                         id: "ref_6335",
@@ -481,10 +639,56 @@
                         modality: "Pétition numérique",
                         quorum: 2,
                         endDate: "2026-12-31",
-                        status: "Validé", // Passé en "Validé" pour apparaître dans l'Isoloir
+                        status: "Validé",
                         votesOui: 0,
                         votesNon: 0,
-                        voters: []
+                        voters: [],
+                        geo: { type: "national", lat: 46.8, lng: 1.2, label: "France entière" }
+                    },
+                    {
+                        id: "ref_normandie_eau",
+                        title: "Gestion citoyenne des ressources en eau – Normandie",
+                        question: "Approuvez-vous la création d'un comité de gestion citoyenne de l'eau pour la région Normandie ?",
+                        description: "Initiative régionale visant à placer la gestion de l'eau sous contrôle démocratique direct des habitant(e)s normand(e)s.",
+                        level: "Régional",
+                        modality: "Internet / Clic",
+                        quorum: 3,
+                        endDate: "2026-09-30",
+                        status: "Validé",
+                        votesOui: 312,
+                        votesNon: 87,
+                        voters: [],
+                        geo: { type: "regional", lat: 49.18, lng: 0.37, label: "Région Normandie" }
+                    },
+                    {
+                        id: "ref_paca_tgv",
+                        title: "Financement citoyen de la LGV PACA",
+                        question: "Approuvez-vous l'instauration d'une taxe régionale dédiée au financement de la LGV Marseille–Nice ?",
+                        description: "Référendum régional sur le financement participatif d'infrastructure ferroviaire haute vitesse en région Sud.",
+                        level: "Régional",
+                        modality: "Internet / Clic",
+                        quorum: 3,
+                        endDate: "2026-11-01",
+                        status: "Validé",
+                        votesOui: 198,
+                        votesNon: 210,
+                        voters: [],
+                        geo: { type: "regional", lat: 43.9, lng: 5.6, label: "Région PACA" }
+                    },
+                    {
+                        id: "ref_caen_velo",
+                        title: "Plan Vélo Métropolitain – Caen la Mer",
+                        question: "Approuvez-vous le Plan Vélo 2026–2030 de la métropole de Caen ?",
+                        description: "Extension du réseau cyclable, nouvelles pistes protégées, stationnements sécurisés en centre-ville.",
+                        level: "Local",
+                        modality: "Internet / Clic",
+                        quorum: 5,
+                        endDate: "2026-08-31",
+                        status: "Validé",
+                        votesOui: 640,
+                        votesNon: 120,
+                        voters: [],
+                        geo: { type: "local", lat: 49.183, lng: -0.362, label: "Caen (14)" }
                         }
                 ],
                 currentUser: null
@@ -536,6 +740,7 @@
                 if(viewId === 'dashboard') this.renderDashboard();
                 if(viewId === 'referendums') this.renderList();
                 if(viewId === 'admin') this.renderAdmin();
+                if(viewId === 'carte') this.initMap();
             },
 
             renderDashboard: function() {
@@ -818,6 +1023,211 @@
             },
             log: function(message) {
             console.log(`[RIC_SYSTEM]: ${message}`);
+            },
+
+            /* ==========================================
+               CARTE DES SCRUTINS – Leaflet Engine
+               ========================================== */
+            _map: null,
+            _mapFilter: 'Tous',
+            _mapMarkers: [],
+
+            initMap: function() {
+                const self = this;
+
+                // Si la carte existe déjà, juste rafraîchir les marqueurs
+                if (self._map) {
+                    setTimeout(() => { self._map.invalidateSize(); self._renderMarkers(); }, 150);
+                    return;
+                }
+
+                setTimeout(() => {
+                    self._map = L.map('scrutin-map', {
+                        center: [46.6, 2.3],
+                        zoom: 5,
+                        zoomControl: true,
+                        attributionControl: true
+                    });
+
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+                        subdomains: 'abcd',
+                        maxZoom: 19
+                    }).addTo(self._map);
+
+                    self._renderMarkers();
+                }, 100);
+            },
+
+            _markerColor: function(level) {
+                if (level === 'Local')    return '#18753c';
+                if (level === 'Régional') return '#FF8C00';
+                return '#000091';
+            },
+
+            _makeIcon: function(level) {
+                const color = this._markerColor(level);
+                const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 44" width="32" height="44">
+                    <path d="M16 0C9.4 0 4 5.4 4 12c0 9 12 32 12 32s12-23 12-32C28 5.4 22.6 0 16 0z" fill="${color}" stroke="white" stroke-width="2"/>
+                    <circle cx="16" cy="12" r="5" fill="white"/>
+                </svg>`;
+                return L.divIcon({
+                    html: svg,
+                    className: '',
+                    iconSize: [32, 44],
+                    iconAnchor: [16, 44],
+                    popupAnchor: [0, -44]
+                });
+            },
+
+            _renderMarkers: function() {
+                const self = this;
+                if (!self._map) return;
+
+                // Nettoyer les anciens marqueurs
+                self._mapMarkers.forEach(m => self._map.removeLayer(m));
+                self._mapMarkers = [];
+
+                const filter = self._mapFilter;
+                const refs = self.state.referendums.filter(r => {
+                    if (r.status === 'Attente' || !r.geo) return false;
+                    if (filter === 'Tous') return true;
+                    if (filter === 'Local')    return r.level === 'Local';
+                    if (filter === 'Régional') return r.level === 'Régional';
+                    return false;
+                });
+
+                // Grouper les scrutins nationaux au même point (légèrement décalés)
+                const nationalGroup = refs.filter(r => r.level === 'National');
+                const others = refs.filter(r => r.level !== 'National');
+
+                // Cluster national : centré sur France avec léger jitter
+                nationalGroup.forEach((r, i) => {
+                    const angle = (i / Math.max(nationalGroup.length, 1)) * 2 * Math.PI;
+                    const radius = nationalGroup.length > 1 ? 1.5 : 0;
+                    const lat = r.geo.lat + radius * Math.sin(angle);
+                    const lng = r.geo.lng + radius * Math.cos(angle);
+                    self._addMarker(r, lat, lng);
+                });
+
+                others.forEach(r => self._addMarker(r, r.geo.lat, r.geo.lng));
+
+                // Vue automatique selon filtre
+                if (filter === 'Local') {
+                    self._map.setView([46.6, 2.3], 6);
+                } else if (filter === 'Régional') {
+                    self._map.setView([46.6, 2.3], 5);
+                } else {
+                    self._map.setView([46.6, 2.3], 5);
+                }
+            },
+
+            _addMarker: function(r, lat, lng) {
+                const self = this;
+                const marker = L.marker([lat, lng], { icon: self._makeIcon(r.level) });
+
+                const total = r.votesOui + r.votesNon;
+                const pct = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
+                const color = self._markerColor(r.level);
+
+                marker.bindPopup(`
+                    <div style="min-width:180px; font-family:sans-serif;">
+                        <div style="font-size:0.7rem; font-weight:700; color:${color}; text-transform:uppercase; margin-bottom:4px;">${r.level} · ${r.geo.label}</div>
+                        <div style="font-weight:bold; font-size:0.9rem; margin-bottom:8px; line-height:1.3;">${r.title}</div>
+                        <div style="font-size:0.75rem; color:#666; margin-bottom:6px;">OUI ${pct}% · ${total} voix</div>
+                        <button onclick="RIC_ENGINE.openMapModal('${r.id}')" style="width:100%;padding:7px;background:${color};color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.8rem;">Voir le scrutin →</button>
+                    </div>
+                `, { maxWidth: 220 });
+
+                marker.addTo(self._map);
+                self._mapMarkers.push(marker);
+            },
+
+            setMapFilter: function(filter) {
+                this._mapFilter = filter;
+
+                // Mettre à jour les boutons
+                document.querySelectorAll('.map-filter-btn').forEach(b => {
+                    b.className = 'map-filter-btn';
+                });
+                const idMap = { 'Tous': 'mfb-tous', 'Régional': 'mfb-regional', 'Local': 'mfb-local' };
+                const classMap = { 'Tous': 'active-tous', 'Régional': 'active-regional', 'Local': 'active-local' };
+                const btn = document.getElementById(idMap[filter]);
+                if (btn) btn.classList.add(classMap[filter]);
+
+                this._renderMarkers();
+            },
+
+            openMapModal: function(id) {
+                const r = this.state.referendums.find(item => item.id === id);
+                if (!r) return;
+
+                const total = r.votesOui + r.votesNon;
+                const pctOui = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
+                const pctNon = 100 - pctOui;
+                const color = this._markerColor(r.level);
+
+                const tagStyle = `background:${color}1a; border:1px solid ${color}; color:${color};`;
+                const zoneIcon = r.level === 'Local' ? '🏙️' : r.level === 'Régional' ? '🏛️' : '🗺️';
+
+                const hasVoted = r.voters.includes(this.state.currentUser ? this.state.currentUser.id : '');
+
+                let voteHtml = '';
+                if (r.status === 'Clôturé' || hasVoted) {
+                    voteHtml = `
+                        <div style="background:#e8f5e9;padding:10px 14px;border-radius:6px;color:var(--success);font-weight:bold;font-size:0.85rem;margin-bottom:14px;">
+                            ${r.status === 'Clôturé' ? '✅ Scrutin Clos — résultats définitifs' : '✅ Vous avez voté'}
+                        </div>`;
+                } else {
+                    voteHtml = `
+                        <div style="display:flex;gap:10px;margin-top:4px;">
+                            <button class="btn" style="background:var(--success);flex:1;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','OUI');RIC_ENGINE.openMapModal('${r.id}')">OUI</button>
+                            <button class="btn" style="background:var(--red-marianne);flex:1;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','NON');RIC_ENGINE.openMapModal('${r.id}')">NON</button>
+                        </div>`;
+                }
+
+                document.getElementById('map-modal-content').innerHTML = `
+                    <div class="map-modal-zone-tag" style="${tagStyle}">${zoneIcon} ${r.level} · ${r.geo ? r.geo.label : ''}</div>
+                    <h3 style="font-size:1.05rem;line-height:1.35;margin-bottom:10px;color:var(--blue-france);">${r.title}</h3>
+                    <div style="background:#f8f9fa;border-left:4px solid ${color};padding:12px;border-radius:0 6px 6px 0;font-size:0.9rem;margin-bottom:14px;">
+                        <strong>Question :</strong> « ${r.question} »
+                    </div>
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:14px;">${r.description}</p>
+
+                    <div style="margin-bottom:16px;">
+                        <div class="modal-result-row">
+                            <span style="color:var(--success);">OUI — ${r.votesOui} voix</span>
+                            <span style="color:var(--success);">${pctOui}%</span>
+                        </div>
+                        <div class="modal-progress-bar">
+                            <div style="width:${pctOui}%;background:var(--success);height:100%;transition:width .4s;"></div>
+                            <div style="width:${pctNon}%;background:var(--red-marianne);height:100%;"></div>
+                        </div>
+                        <div class="modal-result-row">
+                            <span style="color:var(--red-marianne);">NON — ${r.votesNon} voix</span>
+                            <span style="color:var(--red-marianne);">${pctNon}%</span>
+                        </div>
+                    </div>
+
+                    ${voteHtml}
+
+                    <div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--text-muted);">
+                        <span>📅 Clôture : <strong>${r.endDate || 'N/D'}</strong></span>
+                        <span>Quorum : ${r.quorum}%</span>
+                    </div>
+
+                    <button class="btn btn-secondary" style="margin-top:14px;width:100%;min-height:40px;font-size:0.85rem;" onclick="RIC_ENGINE.openScrutin('${r.id}')">
+                        Ouvrir dans l'Isoloir complet →
+                    </button>
+                `;
+
+                document.getElementById('map-modal-overlay').classList.add('open');
+            },
+
+            closeMapModal: function(event) {
+                if (event === null || event.target === document.getElementById('map-modal-overlay')) {
+                    document.getElementById('map-modal-overlay').classList.remove('open');
+                }
             },
         };
     </script>
