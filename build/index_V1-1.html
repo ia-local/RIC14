@@ -106,68 +106,121 @@
             </div>
 
             <!-- VUE : Proposer une initiative -->
-<!-- VUE : Proposer une initiative (Formulaire Wizard) -->
-<div id="view-propose" class="view">
-    <h2>✍️ Dépôt d'Initiative</h2>
-    <div class="card" style="max-width: 600px; margin: auto;">
-        
-        <!-- Indicateur de progression -->
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <span class="step-indicator active" id="ind-1">1. Identification</span>
-            <span class="step-indicator" id="ind-2">2. Paramètres</span>
-            <span class="step-indicator" id="ind-3">3. Validation</span>
-        </div>
+            <div id="view-propose" class="view">
+                <h2>Pouvoir Juridique (Initiative)</h2>
+                <div class="card" style="max-width: 800px;">
 
-        <!-- Slide 1 : Identification -->
-        <div class="step active" id="step-1">
-            <div class="form-group">
-                <label>Titre du projet</label>
-                <input type="text" id="prop-title" placeholder="Ex: Révision du Code Électoral">
-            </div>
-            <div class="form-group">
-                <label>Question soumise aux électeurs</label>
-                <input type="text" id="prop-question" placeholder="Approuvez-vous...">
-            </div>
-            <button class="btn" style="width:100%" onclick="SLIDER_MODALITE.next()">Suivant</button>
-        </div>
+                    <div style="background:#eef3f8; border-left:4px solid var(--blue-france); padding:12px 14px; border-radius:0 6px 6px 0; margin-bottom:22px; font-size:0.82rem; color:var(--text-muted); line-height:1.5;">
+                        <strong style="color:var(--blue-france);">Art. 6 — Quorums d'Initiative (Loi Organique)</strong><br>
+                        Constituant 5 % · Législatif 2 % · Abrogatoire 1 % · Révocatoire 10 % (circonscription)
+                    </div>
 
-        <!-- Slide 2 : Paramètres -->
-        <div class="step" id="step-2">
-            <div class="form-group">
-                <label>Description (Fascicule Initial)</label>
-                <textarea id="prop-desc" rows="4" placeholder="Présentez votre initiative..."></textarea>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Échelle</label>
-                    <select id="prop-level">
-                        <option value="Local">Local</option>
-                        <option value="National">National</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date Butoir</label>
-                    <input type="date" id="prop-date">
-                </div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn btn-secondary" onclick="SLIDER_MODALITE.prev(1)">Retour</button>
-                <button class="btn" onclick="SLIDER_MODALITE.next()">Suivant</button>
-            </div>
-        </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Titre du projet de loi</label>
+                            <input type="text" id="prop-title" placeholder="Ex: Révision du Code Électoral">
+                        </div>
+                        <div class="form-group">
+                            <label>Échelle Territoriale</label>
+                            <select id="prop-level" onchange="RIC_ENGINE.updateQuorumUI()">
+                                <option value="Local">Local</option>
+                                <option value="Régional">Régional</option>
+                                <option value="National" selected>National</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <!-- Slide 3 : Validation -->
-        <div class="step" id="step-3">
-            <div style="padding:20px; background:#f0f0f0; border-radius:8px; text-align:center;">
-                <p>Confirmez-vous la transmission de cette initiative au Dôme ?</p>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn btn-danger" style="flex:1" onclick="SLIDER_MODALITE.prev(2)">Annuler</button>
-                    <button class="btn btn-success" style="flex:1" onclick="SLIDER_MODALITE.next()">Valider & Diffuser</button>
+                    <!-- Type de RIC -->
+                    <div class="form-group">
+                        <label>Type de RIC <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(détermine le quorum légal)</span></label>
+                        <div id="ric-type-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">
+                            <label class="ric-type-card" id="rtc-legislatif" onclick="RIC_ENGINE.selectRicType('Législatif')" style="cursor:pointer; border:2px solid var(--blue-france); border-radius:8px; padding:12px; background:#eef3f8;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--blue-france);">📜 Législatif</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Proposer une loi nouvelle</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--blue-france); margin-top:6px;">Quorum : 2 %</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-abrogatoire" onclick="RIC_ENGINE.selectRicType('Abrogatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">🗑️ Abrogatoire</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Abroger une loi existante</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 1 %</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-constituant" onclick="RIC_ENGINE.selectRicType('Constituant')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">⚖️ Constituant</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Réviser la Constitution</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 5 %</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-revocatoire" onclick="RIC_ENGINE.selectRicType('Révocatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">🔴 Révocatoire</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Révoquer un élu</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 10 % circ.</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-convocatoire" onclick="RIC_ENGINE.selectRicType('Convocatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">📣 Convocatoire</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Convoquer constituante / collège</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 5 %</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-dissolutif" onclick="RIC_ENGINE.selectRicType('Dissolutif')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">🔁 Dissolutif</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Dissoudre Assemblée / Sénat</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 10 %</div>
+                            </label>
+                            <label class="ric-type-card" id="rtc-denonciatoire" onclick="RIC_ENGINE.selectRicType('Dénonciatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white; grid-column: span 2;">
+                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">📄 Dénonciatoire</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Dénoncer un traité ou accord international</div>
+                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 3 %</div>
+                            </label>
+                        </div>
+                        <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); padding:8px; background:#f9f9f9; border-radius:4px; border-left:3px solid var(--ric-orange);">
+                            📌 <strong>Art. 2 PLC v.2</strong> — Spectre RIC élargi : législatif, abrogatoire, révocatoire, convocatoire, dissolutif, dénonciatoire, constituant.
+                        </div>
+                        <input type="hidden" id="prop-ric-type" value="Législatif">
+                    </div>
+
+                    <!-- Quorum calculé -->
+                    <div class="form-group">
+                        <label>Quorum légal applicable</label>
+                        <div id="quorum-display" style="display:flex; align-items:center; gap:14px; background:#f4f6f9; border:1px solid var(--border-color); border-radius:6px; padding:12px 16px; min-height:44px;">
+                            <div id="quorum-value" style="font-size:1.5rem; font-weight:900; color:var(--blue-france);">2 %</div>
+                            <div id="quorum-desc" style="font-size:0.82rem; color:var(--text-muted); line-height:1.4;">du corps électoral national<br><span style="font-size:0.75rem;">Référence : Art. 6 §2 — Loi Organique RIC</span></div>
+                        </div>
+                        <input type="hidden" id="prop-quorum" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Question soumise aux électeurs</label>
+                        <input type="text" id="prop-question" placeholder="Approuvez-vous...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description détaillée (Motifs)</label>
+                        <textarea id="prop-desc" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fascicule explicatif <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(arguments pour et contre — pluralisme requis)</span></label>
+                        <textarea id="prop-fascicule" rows="5" placeholder="POUR : Résumez les arguments principaux en faveur...&#10;CONTRE : Résumez les arguments principaux contre...&#10;&#10;Ce fascicule sera diffusé aux électeurs avant le scrutin."></textarea>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">📋 Conformément aux critères Label RIC — information contradictoire obligatoire (coeff. 20/100).</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Modalité de vote</label>
+                            <select id="prop-modality">
+                                <option>Internet / Clic</option>
+                                <option>SMS</option>
+                                <option>Pétition numérique</option>
+                                <option>Main levée</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Butoir (Clôture)</label>
+                            <input type="date" id="prop-date">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-orange" style="margin-top: 20px;" onclick="RIC_ENGINE.createInitiative()">Transmettre au Dôme d'Initiative</button>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
             <!-- VUE : Liste des référendums -->
             <div id="view-referendums" class="view">
@@ -303,12 +356,6 @@
     // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
         CHAT_ENGINE.init();
-    });
-</script>
-<script src="js/slider-modalite.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        SLIDER_MODALITE.init();
     });
 </script>
     <!-- LOGIQUE JAVASCRIPT -->

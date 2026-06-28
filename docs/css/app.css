@@ -1,0 +1,427 @@
+/* ==========================================
+   1. CORE DESIGN SYSTEM (Charte RIC & DSFR)
+   ========================================== */
+:root {
+    --blue-france: #000091;
+    --blue-france-hover: #1212ff;
+    --red-marianne: #e1000f;
+    --ric-yellow: #FFD700;
+    --ric-orange: #FF8C00;
+    --bg-body: #f4f6f9;
+    --bg-card: #ffffff;
+    --text-main: #161616;
+    --text-muted: #666666;
+    --border-color: #e5e5e5;
+    --success: #18753c;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    font-family: 'Marianne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.4;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+/* ==========================================
+   2. LAYOUT RESPONSIVE (Mobile First)
+   ========================================== */
+.app-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+/* En-tête */
+header.app-header {
+    background: white;
+    padding: 16px;
+    border-bottom: 2px solid var(--ric-yellow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 20;
+}
+.marianne-brand {
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    line-height: 1.1;
+    border-left: 3px solid var(--blue-france);
+    padding-left: 8px;
+}
+/* Menu Latéral (Bureau) */
+aside.desktop-sidebar {
+    display: none;
+    width: 260px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    flex-direction: column;
+    z-index: 10;
+}
+.sidebar-nav-item {
+    padding: 16px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    border-left: 4px solid transparent;
+    transition: 0.2s;
+}
+.sidebar-nav-item:hover, .sidebar-nav-item.active {
+    background-color: #f0f4f8;
+    color: var(--blue-france);
+    border-left-color: var(--blue-france);
+}
+/* Contenu Principal */
+main.app-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-bottom: 80px; 
+}
+/* Barre de navigation basse (Mobile) */
+nav.mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 68px;
+    background: white;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-btn {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 25%;
+    gap: 4px;
+}
+.nav-btn.active { color: var(--blue-france); }
+.nav-btn span.icon { font-size: 1.4rem; }
+/* Vues de l'application */
+.view { display: none; animation: fadeIn 0.3s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+/* ==========================================
+   3. COMPOSANTS UI
+   ========================================== */
+.card {
+    background: var(--bg-card);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+h2 { color: var(--blue-france); margin-bottom: 20px; font-size: 1.5rem; border-bottom: 2px solid var(--ric-orange); display: inline-block; padding-bottom: 5px; }
+h3 { margin-bottom: 15px; font-size: 1.2rem; }
+.form-group { margin-bottom: 16px; }
+label { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+input, select, textarea {
+    width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 1rem; font-family: inherit;
+}
+
+.btn {
+    width: 100%; min-height: 44px; background: var(--blue-france); color: white;
+    border: none; border-radius: 6px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    display: inline-flex; justify-content: center; align-items: center; transition: 0.2s;
+}
+.btn:hover { background: var(--blue-france-hover); }
+.btn-orange { background: var(--ric-orange); }
+.btn-secondary { background: transparent; border: 2px solid var(--blue-france); color: var(--blue-france); }
+.badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-right: 5px; }
+.badge-level { background: #eef3f8; color: var(--blue-france); }
+.badge-modality { background: #fff4e5; color: var(--ric-orange); }
+.grid-kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+/* Notification Toast (remplace les alertes) */
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--blue-france);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+.toast-error { background: var(--red-marianne); }
+.toast-success { background: var(--success); }
+/* ==========================================
+   5. CARTE DES SCRUTINS (Leaflet)
+   ========================================== */
+#map-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+#scrutin-map {
+    width: 100%;
+    height: 55vh;
+    min-height: 320px;
+    background: #e8edf2;
+}
+.map-filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.map-filter-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid var(--border-color);
+    background: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.18s;
+    min-height: 40px;
+}
+.map-filter-btn.active-local   { background: #e8f5e9; border-color: var(--success); color: var(--success); }
+.map-filter-btn.active-regional { background: #fff4e5; border-color: var(--ric-orange); color: var(--ric-orange); }
+.map-filter-btn.active-national { background: #eef3f8; border-color: var(--blue-france); color: var(--blue-france); }
+.map-filter-btn.active-tous     { background: var(--blue-france); border-color: var(--blue-france); color: white; }
+.map-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+.map-legend-item { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+/* Modal Scrutin Map */
+.map-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+}
+.map-modal-overlay.open { display: flex; }
+.map-modal-panel {
+    background: white;
+    border-radius: 16px 16px 0 0;
+    padding: 24px 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.28s ease;
+    position: relative;
+}
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+.map-modal-handle {
+    width: 40px; height: 4px;
+    background: #ddd; border-radius: 4px;
+    margin: 0 auto 20px;
+}
+.map-modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: #f4f4f4; border: none; border-radius: 50%;
+    width: 32px; height: 32px; font-size: 1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.map-modal-zone-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 12px;
+    margin-bottom: 12px;
+}
+.modal-progress-bar {
+    width: 100%; background: #e0e0e0;
+    border-radius: 6px; height: 10px;
+    overflow: hidden; display: flex; margin: 6px 0 14px;
+}
+.modal-result-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; font-weight: bold; margin-bottom: 3px;
+}
+.ric-type-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.ric-type-card.selected { border-color: var(--blue-france) !important; background: #eef3f8 !important; }
+.ric-type-card.selected div:first-child { color: var(--blue-france) !important; }
+.ric-type-card.selected div:last-child { color: var(--blue-france) !important; }
+/* ==========================================
+   6. FORUM DE DÉBAT CITOYEN
+   ========================================== */
+.forum-section {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color);
+}
+
+.forum-section h3 {
+    color: var(--blue-france);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.comment-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--border-color);
+    transition: transform 0.2s;
+}
+.comment-item:hover { transform: translateX(2px); }
+.comment-item.role-admin { border-left-color: var(--blue-france); background: #eef3f8; }
+.comment-item.role-citoyen { border-left-color: var(--success); }
+.comment-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.comment-author { font-weight: bold; color: var(--text-main); font-size: 0.95rem; }
+.comment-text { font-size: 0.95rem; line-height: 1.5; color: #333; }
+.add-comment-box {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.add-comment-box textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: inherit;
+    margin-bottom: 12px;
+    resize: vertical;
+}/* ==========================================================
+   MISE À JOUR CSS - SLIDER & FORMULAIRE DÉPÔT
+   ========================================================== */
+
+/* Animation de transition pour les étapes du slider */
+.step {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.step.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Indicateurs de progression (Wizard) */
+.step-indicator {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--border-color);
+    flex: 1;
+    text-align: center;
+}
+
+.step-indicator.active {
+    color: var(--blue-france);
+    border-bottom-color: var(--blue-france);
+    font-weight: 700;
+}
+
+/* Ajustement des champs pour mobile et bureau */
+.form-row {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (min-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Boutons de contrôle du slider */
+.btn-danger {
+    background-color: var(--red-marianne);
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--success);
+    color: white;
+}
+
+/* ==========================================================
+   AMÉLIORATION VUE CHATROOM (Grid Split)
+   ========================================================== */
+#chat-rooms-list {
+    border-right: 1px solid var(--border-color);
+    padding-right: 10px;
+}
+
+.comment-item {
+    border-left: 4px solid var(--border-color);
+    transition: transform 0.2s;
+}
+
+.comment-item:hover {
+    transform: translateX(2px);
+}
+@media (min-width: 768px) {
+    .app-layout { flex-direction: row; }
+    header.app-header { display: none; }
+    nav.mobile-bottom-nav { display: none; }
+    aside.desktop-sidebar { display: flex; }
+    main.app-content { padding: 40px; padding-bottom: 40px; max-width: 1200px; margin: 0 auto; }
+    .grid-kpi { grid-template-columns: repeat(4, 1fr); }
+    .card { padding: 30px; }
+    .btn { width: auto; padding: 0 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+}
