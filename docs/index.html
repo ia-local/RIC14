@@ -107,18 +107,19 @@
 
             <!-- VUE : Proposer une initiative -->
 <!-- VUE : Proposer une initiative (Formulaire Wizard) -->
+<!-- VUE : Proposer une initiative (Formulaire Wizard - Évolué v.3) -->
 <div id="view-propose" class="view">
-    <h2>✍️ Dépôt d'Initiative</h2>
+    <h2>✍️ Dépôt d'Initiative (Conforme Label RIC)</h2>
     <div class="card" style="max-width: 600px; margin: auto;">
         
         <!-- Indicateur de progression -->
         <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <span class="step-indicator active" id="ind-1">1. Identification</span>
+            <span class="step-indicator active" id="ind-1">1. Cadrage</span>
             <span class="step-indicator" id="ind-2">2. Paramètres</span>
-            <span class="step-indicator" id="ind-3">3. Validation</span>
+            <span class="step-indicator" id="ind-3">3. Présélection</span>
         </div>
 
-        <!-- Slide 1 : Identification -->
+        <!-- Slide 1 : Identification & Unité de matière -->
         <div class="step active" id="step-1">
             <div class="form-group">
                 <label>Titre du projet</label>
@@ -128,26 +129,45 @@
                 <label>Question soumise aux électeurs</label>
                 <input type="text" id="prop-question" placeholder="Approuvez-vous...">
             </div>
+            
+            <!-- Ajout pour gain de points : Unité de matière -->
+            <div style="background:#eef3f8; padding:12px; border-left:4px solid var(--blue-france); border-radius:4px; margin-bottom:15px; font-size:0.85rem;">
+                <label style="display:flex; align-items:center; gap:8px; margin:0; font-weight:normal; cursor:pointer;">
+                    <input type="checkbox" id="prop-unite-matiere" style="width:auto; min-height:auto;">
+                    <span>Je certifie que cette initiative respecte le <strong>principe d'unité de matière</strong> (un seul sujet distinct abordé).</span>
+                </label>
+            </div>
+
             <button class="btn" style="width:100%" onclick="SLIDER_MODALITE.next()">Suivant</button>
         </div>
 
-        <!-- Slide 2 : Paramètres -->
+        <!-- Slide 2 : Paramètres, Échelle et Financement -->
         <div class="step" id="step-2">
             <div class="form-group">
-                <label>Description (Fascicule Initial)</label>
-                <textarea id="prop-desc" rows="4" placeholder="Présentez votre initiative..."></textarea>
+                <label>Fascicule Initial (Description du projet)</label>
+                <textarea id="prop-desc" rows="3" placeholder="Présentez les arguments de votre initiative..."></textarea>
             </div>
             <div class="form-row">
+                <!-- Ajout pour gain de points : Choix détaillé de l'échelle -->
                 <div class="form-group">
-                    <label>Échelle</label>
+                    <label>Échelle d'application</label>
                     <select id="prop-level">
-                        <option value="Local">Local</option>
+                        <option value="Communal">Communal / Intercommunal</option>
+                        <option value="Départemental">Départemental</option>
+                        <option value="Régional">Régional</option>
                         <option value="National">National</option>
                     </select>
                 </div>
+                <!-- Ajout pour gain de points : Validation du financement induit -->
                 <div class="form-group">
-                    <label>Date Butoir</label>
-                    <input type="date" id="prop-date">
+                    <label>Impact budgétaire estimé</label>
+                    <select id="prop-budget">
+                        <option value="neutre">Neutre (Aucun coût net)</option>
+                        <option value="faible">Faible (< 10 Millions €)</option>
+                        <option value="modere">Modéré (10M€ à 500M€)</option>
+                        <option value="eleve">Élevé (> 500 Millions €)</option>
+                        <option value="recette">Générateur de recettes fiscales</option>
+                    </select>
                 </div>
             </div>
             <div style="display:flex; gap:10px;">
@@ -156,13 +176,17 @@
             </div>
         </div>
 
-        <!-- Slide 3 : Validation -->
+        <!-- Slide 3 : Validation en mode Présélection -->
         <div class="step" id="step-3">
-            <div style="padding:20px; background:#f0f0f0; border-radius:8px; text-align:center;">
-                <p>Confirmez-vous la transmission de cette initiative au Dôme ?</p>
+            <div style="padding:20px; background:#fff4e5; border: 1px solid var(--ric-orange); border-radius:8px; text-align:center;">
+                <h3 style="color:var(--ric-orange); margin-bottom:10px;">Étape de Présélection Citoyenne</h3>
+                <p style="font-size:0.9rem; margin-bottom:15px;">
+                    Conformément au Label RIC, votre initiative va d'abord entrer en <strong>phase de co-parrainage (Présélection)</strong>. 
+                    Elle devra recueillir un seuil initial de signatures avant d'être soumise à la délibération générale et au vote.
+                </p>
                 <div style="display:flex; gap:10px; margin-top:20px;">
                     <button class="btn btn-danger" style="flex:1" onclick="SLIDER_MODALITE.prev(2)">Annuler</button>
-                    <button class="btn btn-success" style="flex:1" onclick="SLIDER_MODALITE.next()">Valider & Diffuser</button>
+                    <button class="btn btn-success" style="flex:1" onclick="SLIDER_MODALITE.next()">Ouvrir aux signatures</button>
                 </div>
             </div>
         </div>
