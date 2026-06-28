@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Travail — Dôme RIC / Label RIC</title>
+    <style>
+        :root {
+            --blue-france: #000091;
+            --red-marianne: #e1000f;
+            --ric-yellow: #FFD700;
+            --ric-orange: #FF8C00;
+            --success: #18753c;
+            --warning: #b34000;
+            --danger: #ce0500;
+            --text-main: #161616;
+            --text-muted: #666666;
+            --border-color: #e5e5e5;
+            --bg-body: #f4f6f9;
+            --bg-card: #ffffff;
+
+            /* Couleurs par livrable */
+            --col-index:   #000091;
+            --col-plc:     #18753c;
+            --col-reforme: #b34000;
+            --col-eval:    #6600cc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Marianne', Arial, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 24px 16px 60px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* ── EN-TÊTE ── */
+        header {
+            background: var(--blue-france);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 8px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header h1 { font-size: 1.5rem; font-weight: 900; }
+        header p  { font-size: 0.85rem; opacity: 0.8; margin-top: 6px; }
+        .version-badge {
+            background: var(--ric-yellow);
+            color: var(--blue-france);
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        /* ── LÉGENDE LIVRABLES ── */
+        .legend {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 5px 12px;
+        }
+        .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+        .dot-index   { background: var(--col-index); }
+        .dot-plc     { background: var(--col-plc); }
+        .dot-reforme { background: var(--col-reforme); }
+        .dot-eval    { background: var(--col-eval); }
+
+        /* ── SCORE PROGRESSION ── */
+        .score-bar-wrap {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .score-axis { text-align: center; }
+        .score-axis-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; }
+        .score-bar-bg {
+            background: #e0e0e0;
+            border-radius: 6px;
+            height: 14px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 6px;
+        }
+        .score-bar-v0    { position: absolute; top: 0; left: 0; height: 100%; background: #ccc; }
+        .score-bar-v3    { position: absolute; top: 0; left: 0; height: 100%; background: var(--blue-france); opacity: 0.85; }
+        .score-bar-cible { position: absolute; top: 0; left: 0; height: 100%; background: var(--success); opacity: 0.5; }
+        .score-nums { font-size: 0.78rem; color: var(--text-muted); }
+        .score-nums strong { color: var(--blue-france); }
+
+        /* ── SECTION PHASE ── */
+        .phase-block {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .phase-header {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            cursor: pointer;
+            user-select: none;
+        }
+        .phase-header:hover { background: #f8f9fa; }
+
+        .phase-num {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .phase-meta { flex: 1; }
+        .phase-title { font-weight: 900; font-size: 1.05rem; }
+        .phase-subtitle { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+
+        .phase-score-gain {
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: #eef3f8;
+            color: var(--blue-france);
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .phase-toggle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .phase-block.open .phase-toggle { transform: rotate(180deg); }
+
+        .phase-body {
+            display: none;
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+        }
+        .phase-block.open .phase-body { display: block; }
+
+        /* ── TABLEAU DES TÂCHES ── */
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+        }
+        .tasks-table th {
+            background: #f4f6f9;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+        }
+        .tasks-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+        .tasks-table tr:last-child td { border-bottom: none; }
+
+        /* Pilule livrable */
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            margin: 1px 2px 1px 0;
+        }
+        .pill-index   { background: var(--col-index); }
+        .pill-plc     { background: var(--col-plc); }
+        .pill-reforme { background: var(--col-reforme); }
+        .pill-eval    { background: var(--col-eval); }
+
+        /* Statut tâche */
+        .task-status {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+        .ts-done    { background: #e3fdf0; color: var(--success); }
+        .ts-todo    { background: #eef3f8; color: var(--blue-france); }
+        .ts-organic { background: #fff4e5; color: var(--ric-orange); }
+        .ts-hard    { background: #fce8e8; color: var(--danger); }
+
+        /* Score gain inline */
+        .score-gain {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ── DÉPENDANCES ── */
+        .dep-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: #f9f9f9;
+            border-left: 3px solid var(--ric-orange);
+            padding: 10px 14px;
+            border-radius: 0 6px 6px 0;
+            margin-top: 12px;
+        }
+
+        /* ── ROADMAP VISUELLE ── */
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 700px) { .roadmap { grid-template-columns: 1fr 1fr; } }
+
+        .roadmap-col {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .roadmap-col-header {
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: white;
+        }
+        .roadmap-col-body { padding: 12px 14px; font-size: 0.8rem; line-height: 1.7; }
+        .roadmap-col-body li { list-style: none; padding-left: 0; }
+        .roadmap-col-body li::before { content: "→ "; color: var(--text-muted); }
+
+        /* ── RÉCAP FINAL ── */
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 28px;
+        }
+        @media (max-width: 600px) { .recap-grid { grid-template-columns: 1fr; } }
+
+        .recap-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+        .recap-card .big { font-size: 2rem; font-weight: 900; color: var(--blue-france); }
+        .recap-card .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+        h2.section-title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 28px 0 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- EN-TÊTE -->
+    <header>
+        <div>
+            <h1>🗳️ Plan de Travail — Dôme RIC</h1>
+            <p>Développement asynchrone de index.html / PLC.html / reforme.html<br>
+            piloté par les critères de eval.html (Label RIC)</p>
+        </div>
+        <div class="version-badge">Référence : eval.html v.0 → cible Label ★★★</div>
+    </header>
+
+    <!-- LÉGENDE -->
+    <div class="legend">
+        <div class="legend-item"><span class="dot dot-index"></span>index.html (app)</div>
+        <div class="legend-item"><span class="dot dot-plc"></span>PLC.html (loi)</div>
+        <div class="legend-item"><span class="dot dot-reforme"></span>reforme.html (tableau)</div>
+        <div class="legend-item"><span class="dot dot-eval"></span>eval.html (scoring)</div>
+    </div>
+
+    <!-- PROGRESSION SCORES -->
+    <h2 class="section-title">Progression des scores par axe (eval.html)</h2>
+    <div class="score-bar-wrap">
+        <div class="score-axis">
+            <div class="score-axis-label">PRINCIPES / 100</div>
+            <div class="score-bar-bg">
+                <div class="score-bar-cible" style="width:90%;"></div>
+                <div class="score-bar-v3" style="width:76%;"></div>
+                <div class="score-bar-v0" style="width:55.5%;"></div>
+            </div>
+            <div class="score-nums">v.0 : 55,5 · <strong>v.3 : 76</strong> · cible : ~90</div>
+        </div>
+        <div class="score-axis">
+            <div class="score-axis-label">ÉTAPES / 100</div>
+            <div class="score-bar-bg">
+                <div class="score-bar-cible" style="width:80%;"></div>
+                <div class="score-bar-v3" style="width:58%;"></div>
+                <div class="score-bar-v0" style="width:40%;"></div>
+            </div>
+            <div class="score-nums">v.0 : 40 · <strong>v.3 : 58</strong> · cible : ~80</div>
+        </div>
+        <div class="score-axis">
+            <div class="score-axis-label">MODALITÉS / 100</div>
+            <div class="score-bar-bg">
+                <div class="score-bar-cible" style="width:75%;"></div>
+                <div class="score-bar-v3" style="width:44%;"></div>
+                <div class="score-bar-v0" style="width:27.5%;"></div>
+            </div>
+            <div class="score-nums">v.0 : 27,5 · <strong>v.3 : 44</strong> · cible : ~75</div>
+        </div>
+    </div>
+
+    <!-- ROADMAP -->
+    <h2 class="section-title">Roadmap par phase</h2>
+    <div class="roadmap">
+        <div class="roadmap-col">
+            <div class="roadmap-col-header" style="background:#000091;">Phase 1 — Fondations légales</div>
+            <div class="roadmap-col-body"><ul>
+                <li>Art. 6 loi organique (quorums)</li>
+                <li>Accès universel Art. 4</li>
+                <li>Veto citoyen Art. 11</li>
+                <li>eval.html v.1</li>
+            </ul></div>
+        </div>
+        <div class="roadmap-col">
+            <div class="roadmap-col-header" style="background:#18753c;">Phase 2 — Information & Délibération</div>
+            <div class="roadmap-col-body"><ul>
+                <li>Veille citoyenne (app)</li>
+                <li>Accès données législatives</li>
+                <li>Délai minimal pré-vote</li>
+                <li>Temps de parole médias</li>
+            </ul></div>
+        </div>
+        <div class="roadmap-col">
+            <div class="roadmap-col-header" style="background:#b34000;">Phase 3 — Modalités avancées</div>
+            <div class="roadmap-col-body"><ul>
+                <li>Modalités verrouillées par RIC</li>
+                <li>Fréquence de vote</li>
+                <li>Présélection / fusion</li>
+                <li>Financement campagnes</li>
+            </ul></div>
+        </div>
+        <div class="roadmap-col">
+            <div class="roadmap-col-header" style="background:#6600cc;">Phase 4 — Label ★★★</div>
+            <div class="roadmap-col-body"><ul>
+                <li>Recalcul eval.html final</li>
+                <li>Urgence / votation rapide</li>
+                <li>Alternative & proposition rivale</li>
+                <li>Dépôt dossier Label RIC</li>
+            </ul></div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PHASE 1 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <h2 class="section-title">Détail des phases</h2>
+
+    <div class="phase-block open">
+        <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="phase-num" style="background:#000091;">1</div>
+            <div class="phase-meta">
+                <div class="phase-title">Fondations légales — Compléter le socle constitutionnel</div>
+                <div class="phase-subtitle">Critères à fort coefficient encore à zéro · Gains eval : +~28 pts</div>
+            </div>
+            <div class="phase-score-gain">178 → ~206 / 300</div>
+            <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Tâche</th>
+                        <th style="width:20%;">Livrables</th>
+                        <th style="width:12%;">Axe eval</th>
+                        <th style="width:8%;">Coeff</th>
+                        <th style="width:12%;">Statut</th>
+                        <th style="width:13%;">Gain score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Veto citoyen</strong> — Ajouter un 8e type RIC "Veto" permettant de bloquer une loi avant promulgation</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 2</span>
+                            <span class="pill pill-index">index type</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Principes</td>
+                        <td>6</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+6 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Accès universel sans inscription</strong> — Supprimer la condition KYC obligatoire dans l'app, ou proposer une identité numérique sans pré-inscription</td>
+                        <td>
+                            <span class="pill pill-index">index login</span>
+                            <span class="pill pill-plc">PLC Art. 4</span>
+                        </td>
+                        <td>Principes</td>
+                        <td>5 + 2</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+2,5 → +7</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loi organique — Fréquence de vote</strong> — Ajouter une règle de délai entre deux RIC sur le même sujet (ex. 12 mois) dans le PLC Titre III à créer</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 6 nouveau</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>10 + 2</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+10 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Délai minimal avant référendum</strong> — Période incompressible entre dépôt et ouverture du vote (ex. 60 jours), distincte du fascicule</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 5 §4</span>
+                            <span class="pill pill-index">index : compteur</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>1</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+1 pt</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mettre à jour eval.html → v.1</strong> — Recalculer les statuts des critères modifiés depuis v.0, afficher le nouveau score et les étoiles</td>
+                        <td>
+                            <span class="pill pill-eval">eval.html v.1</span>
+                        </td>
+                        <td>Tous</td>
+                        <td>—</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">Document</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dep-note">
+                ⚙️ <strong>Dépendances internes :</strong> Le veto et l'accès universel dans PLC.html déclenchent automatiquement une mise à jour de reforme.html (nouvelles lignes Avant/Après) et de index.html (nouveau type RIC dans la grille + logique de quorum).
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PHASE 2 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="phase-block">
+        <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="phase-num" style="background:#18753c;">2</div>
+            <div class="phase-meta">
+                <div class="phase-title">Information & Délibération — Nourrir les étapes citoyennes</div>
+                <div class="phase-subtitle">Les 3 critères à coeff. 10 encore à N.I. dans l'axe Étapes · Gains eval : +~25 pts</div>
+            </div>
+            <div class="phase-score-gain">~206 → ~231 / 300</div>
+            <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Tâche</th>
+                        <th style="width:20%;">Livrables</th>
+                        <th style="width:12%;">Axe eval</th>
+                        <th style="width:8%;">Coeff</th>
+                        <th style="width:12%;">Statut</th>
+                        <th style="width:13%;">Gain score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Vue "Veille Citoyenne"</strong> — Nouvelle vue dans index.html permettant de signaler un problème législatif ou une pétition embryonnaire, avant qu'elle atteigne le seuil RIC</td>
+                        <td>
+                            <span class="pill pill-index">index : vue-veille</span>
+                            <span class="pill pill-plc">PLC Art. 3 bis</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>10</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+10 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Accès données législatives</strong> — Intégration d'un lien vers Légifrance / OpenData Assemblée dans chaque fiche scrutin : loi concernée, texte officiel, chiffres budgétaires</td>
+                        <td>
+                            <span class="pill pill-index">index : fiche scrutin</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>10</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+5 pts (oui, mais)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Période d'information médiatisée</strong> — Ajouter dans PLC un article obligeant les médias audiovisuels (CSA/ARCOM) à diffuser un temps de parole équitable sur chaque RIC en campagne</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 7 nouveau</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Principes + Modalités</td>
+                        <td>4 + 10</td>
+                        <td><span class="task-status ts-organic">Loi organique</span></td>
+                        <td><span class="score-gain">+7 à +14 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contrôle du financement des campagnes</strong> — Règles de plafonnement et de transparence des dépenses pro/anti pour chaque RIC, calquées sur le code électoral</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 8 nouveau</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                            <span class="pill pill-index">index : champ financement</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>4</td>
+                        <td><span class="task-status ts-organic">Loi organique</span></td>
+                        <td><span class="score-gain">+4 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mettre à jour eval.html → v.2</strong> — Intégrer les nouveaux statuts des critères Étapes et Modalités concernés</td>
+                        <td>
+                            <span class="pill pill-eval">eval.html v.2</span>
+                        </td>
+                        <td>Tous</td>
+                        <td>—</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">Document</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dep-note">
+                ⚙️ <strong>Dépendances internes :</strong> La vue "Veille Citoyenne" dans index.html nécessite un nouveau champ <code>type: "veille"</code> dans le state referendums. L'article médias du PLC est partiellement hors scope constitutionnel — relève d'une loi organique distincte mais peut être mentionné dans un Titre III "Dispositions organiques".
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PHASE 3 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="phase-block">
+        <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="phase-num" style="background:#b34000;">3</div>
+            <div class="phase-meta">
+                <div class="phase-title">Modalités avancées — Verrouiller les règles du jeu</div>
+                <div class="phase-subtitle">Critère à 20 pts (modalités par référendum) + présélection + fusion · Gains eval : +~30 pts</div>
+            </div>
+            <div class="phase-score-gain">~231 → ~261 / 300</div>
+            <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Tâche</th>
+                        <th style="width:20%;">Livrables</th>
+                        <th style="width:12%;">Axe eval</th>
+                        <th style="width:8%;">Coeff</th>
+                        <th style="width:12%;">Statut</th>
+                        <th style="width:13%;">Gain score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Modalités verrouillées par RIC</strong> — Ajouter dans la Constitution un article stipulant que les modalités du RIC (quorums, délais, types) ne peuvent être modifiées que par RIC, pas par le Parlement seul</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 9 nouveau</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>20</td>
+                        <td><span class="task-status ts-hard">Verrou majeur</span></td>
+                        <td><span class="score-gain">+20 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Présélection des initiatives</strong> — Système de pré-filtre dans l'app : une initiative doit recueillir un premier seuil (ex. 1 000 soutiens) avant d'être soumise au collège de validation</td>
+                        <td>
+                            <span class="pill pill-index">index : présélection</span>
+                            <span class="pill pill-plc">PLC Art. 5 §5</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>3</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+3 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fusion des propositions similaires</strong> — Algorithme ou collège citoyen pouvant fusionner deux initiatives portant sur le même sujet avant ouverture du scrutin</td>
+                        <td>
+                            <span class="pill pill-index">index : admin fusion</span>
+                            <span class="pill pill-plc">PLC Art. 5 §6</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>1</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+1 pt</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Impossibilité parlementaire de révision rapide</strong> — Délai de protection (ex. 3 ans) pendant lequel le Parlement ne peut pas modifier une loi adoptée par RIC</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 10 nouveau</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>3</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+3 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Validation du financement induit</strong> — Champ obligatoire dans le formulaire d'initiative estimant l'impact budgétaire, validé par le collège avant admission</td>
+                        <td>
+                            <span class="pill pill-index">index : champ budget</span>
+                            <span class="pill pill-plc">PLC Art. 5 §7</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>2</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+2 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mettre à jour eval.html → v.3</strong></td>
+                        <td><span class="pill pill-eval">eval.html v.3</span></td>
+                        <td>Tous</td>
+                        <td>—</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">Document</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dep-note">
+                ⚙️ <strong>Dépendances internes :</strong> Le verrouillage des modalités (coeff. 20) est le critère le plus structurant de tout le plan — il impose que PLC.html se cite lui-même comme étant modifiable uniquement par référendum. C'est un article auto-référentiel à rédiger avec soin juridique. La présélection dans index.html ajoute un statut intermédiaire <code>"Pré-sélection"</code> entre "Attente" et "Validé".
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PHASE 4 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="phase-block">
+        <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="phase-num" style="background:#6600cc;">4</div>
+            <div class="phase-meta">
+                <div class="phase-title">Label ★★★ — Finalisation et dossier</div>
+                <div class="phase-subtitle">Critères résiduels + recalcul complet eval.html + dossier de candidature · Gains eval : +~10 pts</div>
+            </div>
+            <div class="phase-score-gain">~261 → ~271 / 300</div>
+            <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-body">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Tâche</th>
+                        <th style="width:20%;">Livrables</th>
+                        <th style="width:12%;">Axe eval</th>
+                        <th style="width:8%;">Coeff</th>
+                        <th style="width:12%;">Statut</th>
+                        <th style="width:13%;">Gain score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Organisation d'une votation en urgence</strong> — Procédure d'urgence permettant d'ouvrir un RIC sous 48h (ex. crise constitutionnelle, dissolution non citoyenne)</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 11 nouveau</span>
+                            <span class="pill pill-index">index : mode urgence</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>5</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+5 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Possibilité de proposer une alternative</strong> — Dans l'isoloir, un électeur peut soumettre une contre-proposition liée au scrutin en cours (proposition rivale)</td>
+                        <td>
+                            <span class="pill pill-index">index : contre-prop</span>
+                            <span class="pill pill-plc">PLC Art. 2 §2</span>
+                        </td>
+                        <td>Étapes</td>
+                        <td>1</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+1 pt</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quorum anti-minorité + 2e tour</strong> — Procédure si le quorum n'est pas atteint au 1er tour : 2e tour sans quorum après délai de relance</td>
+                        <td>
+                            <span class="pill pill-plc">PLC Art. 12 nouveau</span>
+                            <span class="pill pill-index">index : logique 2e tour</span>
+                            <span class="pill pill-reforme">reforme ligne</span>
+                        </td>
+                        <td>Modalités</td>
+                        <td>2</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">+2 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>eval.html v.final</strong> — Recalcul complet de toutes les lignes, mise à jour du score global, étoiles et conclusion Label</td>
+                        <td>
+                            <span class="pill pill-eval">eval.html vFinal</span>
+                        </td>
+                        <td>Tous</td>
+                        <td>—</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">Document</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cohérence finale des 4 fichiers</strong> — Vérifier que chaque critère "oui" dans eval.html a une trace dans PLC, reforme, et/ou index. Alignement des numéros d'articles.</td>
+                        <td>
+                            <span class="pill pill-index">index</span>
+                            <span class="pill pill-plc">PLC</span>
+                            <span class="pill pill-reforme">reforme</span>
+                            <span class="pill pill-eval">eval</span>
+                        </td>
+                        <td>Tous</td>
+                        <td>—</td>
+                        <td><span class="task-status ts-todo">À faire</span></td>
+                        <td><span class="score-gain">Audit</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dep-note">
+                ⚙️ <strong>Note finale :</strong> Le score cible de ~271/300 correspond à 3★ si le seuil est fixé à 240 (80 %). Le critère "temps de parole médias" (coeff. 10) et "modalités modifiables par RIC" (coeff. 20) sont les deux derniers leviers structurants — leur validation seule suffit à faire basculer le Label.
+            </div>
+        </div>
+    </div>
+
+    <!-- RÉCAP -->
+    <h2 class="section-title">Récapitulatif par livrable</h2>
+    <div class="recap-grid">
+        <div class="recap-card" style="border-top: 4px solid var(--col-index);">
+            <div class="big">8</div>
+            <div class="label">tâches dans<br><strong>index.html</strong></div>
+        </div>
+        <div class="recap-card" style="border-top: 4px solid var(--col-plc);">
+            <div class="big">10</div>
+            <div class="label">nouveaux articles dans<br><strong>PLC.html</strong></div>
+        </div>
+        <div class="recap-card" style="border-top: 4px solid var(--col-reforme);">
+            <div class="big">7</div>
+            <div class="label">nouvelles lignes dans<br><strong>reforme.html</strong></div>
+        </div>
+    </div>
+    <div class="recap-grid" style="margin-top: 16px;">
+        <div class="recap-card" style="border-top: 4px solid var(--col-eval);">
+            <div class="big">4</div>
+            <div class="label">versions de<br><strong>eval.html</strong> (v1→vFinal)</div>
+        </div>
+        <div class="recap-card" style="border-top: 4px solid var(--success);">
+            <div class="big">+93</div>
+            <div class="label">points gagnés<br><strong>123 → ~271 / 300</strong></div>
+        </div>
+        <div class="recap-card" style="border-top: 4px solid var(--ric-yellow);">
+            <div class="big">★★★</div>
+            <div class="label">objectif<br><strong>Label RIC</strong></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Les phases sont déjà ouvertes/fermées par la classe CSS via onclick.
+    // On s'assure que la phase 1 est ouverte au démarrage (déjà dans le HTML).
+</script>
+</body>
+</html>

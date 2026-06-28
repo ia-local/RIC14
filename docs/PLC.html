@@ -3,231 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Projet de Loi Constitutionnelle et Organique - Référendum d'Initiative Citoyenne (RIC)">
-    <title>Projet de Loi Constitutionnelle - RIC</title>
+    <title>Projet de Loi Constitutionnelle - RIC V.2 (Label Conforme)</title>
     <style>
-        /* Variables DSFR */
-        :root {
-            --blue-france: #000091;
-            --red-marianne: #e1000f;
-            --text-main: #161616;
-            --text-muted: #666666;
-            --background-alt: #f6f6f6;
-            --border-color: #dddddd;
-            --ric-gold: #FFD700;
-        }
-
-        /* Base */
-        body {
-            font-family: 'Marianne', Arial, Helvetica, sans-serif;
-            color: var(--text-main);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #e5e5e5;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Page A4 Container */
-        .a4-container {
-            width: 210mm;
-            min-height: 297mm;
-            background-color: #ffffff;
-            margin: 2rem 0;
-            padding: 20mm;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        /* Header / Logo République */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 2px solid var(--text-main);
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
-
-        .marianne {
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 14pt;
-            line-height: 1.1;
-            border-left: 4px solid var(--blue-france);
-            padding-left: 10px;
-        }
-
-        .marianne span {
-            display: block;
-        }
-
-        .doc-meta {
-            text-align: right;
-            font-size: 10pt;
-            color: var(--text-muted);
-        }
-
-        .doc-meta strong {
-            color: var(--blue-france);
-        }
-
-        /* Typography */
-        h1 {
-            color: var(--blue-france);
-            font-size: 20pt;
-            text-align: center;
-            margin: 30px 0 10px 0;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            font-size: 12pt;
-            margin-bottom: 40px;
-            color: var(--text-muted);
-            padding: 0 20px;
-        }
-
-        h2 {
-            color: var(--text-main);
-            border-bottom: 2px solid var(--blue-france);
-            padding-bottom: 5px;
-            margin-top: 40px;
-            font-size: 14pt;
-            text-transform: uppercase;
-        }
-
-        .article {
-            margin-bottom: 25px;
-            text-align: justify;
-        }
-
-        .article h3 {
-            font-size: 12pt;
-            color: var(--blue-france);
-            margin-bottom: 10px;
-        }
-
-        .article p {
-            margin: 0 0 10px 0;
-            text-indent: 20px;
-        }
-
-        /* Print Controls */
-        .print-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .btn-print {
-            background-color: var(--blue-france);
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 11pt;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.2s;
-        }
-
-        .btn-print:hover {
-            background-color: #1212ff;
-        }
-
-        /* Print Media Query */
-        @media print {
-            body { background-color: #ffffff; margin: 0; }
-            .a4-container { width: auto; min-height: auto; margin: 0; padding: 0; box-shadow: none; }
-            .print-controls { display: none; }
-            .article { page-break-inside: avoid; }
-        }
+        :root { --blue-france: #000091; --text-main: #161616; --text-muted: #666666; }
+        body { font-family: 'Marianne', Arial, sans-serif; color: var(--text-main); line-height: 1.6; background-color: #e5e5e5; display: flex; justify-content: center; }
+        .a4-container { width: 210mm; min-height: 297mm; background-color: #ffffff; margin: 2rem 0; padding: 20mm; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; }
+        header { border-bottom: 2px solid var(--text-main); padding-bottom: 15px; margin-bottom: 30px; }
+        h1 { color: var(--blue-france); font-size: 18pt; text-align: center; text-transform: uppercase; }
+        h2 { color: var(--blue-france); border-bottom: 2px solid var(--blue-france); padding-bottom: 5px; margin-top: 30px; font-size: 13pt; text-transform: uppercase; }
+        .article { margin-bottom: 20px; text-align: justify; }
+        .article h3 { font-size: 11pt; color: var(--blue-france); margin-bottom: 5px; }
+        .btn-print { background-color: var(--blue-france); color: #ffffff; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; position: fixed; top: 20px; right: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="print-controls">
-        <button class="btn-print" onclick="window.print()">🖨️ Imprimer / Sauvegarder PDF</button>
-    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimer / Sauvegarder PDF</button>
 
     <div class="a4-container">
-        
         <header>
-            <div class="marianne">
-                <span>République</span>
-                <span>Française</span>
-            </div>
-            <div class="doc-meta">
-                <strong>ric.gouv.fr</strong><br>
-                Projet de Loi Constitutionnelle<br>
-                Dossier Législatif N°2026-RIC
-            </div>
+            <div style="font-weight:900; border-left:4px solid var(--blue-france); padding-left:10px;">RÉPUBLIQUE FRANÇAISE<br>DOSSIER RIC V.2</div>
         </header>
 
-        <h1>Projet de Loi Constitutionnelle et Organique</h1>
-        <div class="subtitle">
-            Tendant à l'instauration du Référendum d'Initiative Citoyenne, à la garantie de la séparation des pouvoirs et à la modernisation numérique des scrutins.
-        </div>
+        <h1>Projet de Loi Constitutionnelle (Intégration Label RIC)</h1>
 
         <section>
-            <h2>TITRE I : DISPOSITIONS CONSTITUTIONNELLES</h2>
+            <h2>TITRE I : DISPOSITIONS CONSTITUTIONNELLES RENFORCÉES</h2>
 
             <div class="article">
-                <h3>Article 1er (Réforme de l'Article 89 - Le Pouvoir Constituant)</h3>
-                <p>L'article 89 de la Constitution est ainsi rédigé :</p>
-                <p>« L'initiative de la révision de la Constitution appartient concurremment au Président de la République sur proposition du Premier ministre, aux membres du Parlement, ainsi qu'aux citoyens par la voie du référendum d'initiative citoyenne constituant.</p>
-                <p>Le projet ou la proposition de révision doit être examiné dans les conditions de délai fixées au troisième alinéa de l'article 42 et voté par les deux assemblées en termes identiques.</p>
-                <p>La révision n'est définitive qu'après avoir été approuvée par référendum obligatoire. »</p>
+                <h3>Article 1er (Réforme de l'Article 89 - Pouvoir Constituant Direct)</h3>
+                <p>« L'initiative de la révision de la Constitution appartient au Président, au Parlement, ou aux citoyens par référendum d'initiative citoyenne constituant. <strong>L'initiative citoyenne constituante, lorsqu'elle atteint le seuil requis, est soumise directement au référendum national, sans vote ni obstacle parlementaire préalable.</strong> La révision est définitive après approbation par le corps électoral. »</p>
             </div>
 
             <div class="article">
-                <h3>Article 2 (Réforme de l'Article 11 - Le Référendum Citoyen)</h3>
-                <p>L'article 11 de la Constitution est ainsi rédigé :</p>
-                <p>« Le Président de la République, sur proposition du Gouvernement pendant la durée des sessions ou sur proposition conjointe des deux assemblées, peut soumettre au référendum tout projet de loi.</p>
-                <p>Un référendum est organisé de plein droit à l'initiative d'une fraction du corps électoral sous la forme d'un Référendum d'Initiative Citoyenne. Ce droit s'exerce sous forme législative, abrogatoire ou révocatoire.</p>
-                <p>La loi organique détermine les seuils de déclenchement et garantit l'usage de technologies certifiées, assurant l'anonymat et l'unicité du suffrage, pour l'exercice de ce droit. »</p>
+                <h3>Article 2 (Réforme de l'Article 11 - Spectre RIC Élargi)</h3>
+                <p>« Un référendum est organisé de plein droit à l'initiative du corps électoral sous la forme d'un Référendum d'Initiative Citoyenne. <strong>Ce droit s'exerce sous forme législative, abrogatoire, révocatoire, convocatoire, dissolutive, ratificatoire ou dénonciatoire.</strong> Toute proposition doit respecter le principe d'unité de matière : une question posée doit se limiter à un seul sujet distinct. »</p>
             </div>
 
             <div class="article">
-                <h3>Article 3 (Nouvel Article 11-1 - Le Contrôle Citoyen)</h3>
-                <p>Après l'article 11, il est inséré un article 11-1 ainsi rédigé :</p>
-                <p>« Art. 11-1. – Afin de garantir l'intégrité de l'exercice démocratique et la stricte séparation des pouvoirs, un collège de citoyens, désignés par tirage au sort parmi les électeurs inscrits, contrôle la régularité des opérations référendaires et surveille la promulgation et l'exécution des textes adoptés. »</p>
+                <h3>Article 3 (Nouvel Article 11-1 - Injonction et Contrôle)</h3>
+                <p>« Afin de garantir la séparation des pouvoirs, un collège de citoyens, désignés par tirage au sort, contrôle la régularité des opérations. <strong>Ce collège dispose d'un pouvoir d'injonction sous astreinte pour forcer l'administration et le gouvernement à promulguer et exécuter les textes adoptés par RIC dans un délai maximal fixé par la loi organique.</strong> »</p>
             </div>
 
             <div class="article">
-                <h3>Article 4 (Réforme de l'Article 72-1 - Le Pouvoir Local)</h3>
-                <p>L'article 72-1 de la Constitution est ainsi rédigé :</p>
-                <p>« Dans les conditions fixées par la loi organique, les électeurs de chaque collectivité territoriale peuvent, par l'exercice du droit de pétition, demander l'inscription à l'ordre du jour de l'assemblée délibérante de cette collectivité d'une question relevant de sa compétence. Lorsque cette pétition atteint le quorum défini par la loi, elle déclenche de plein droit un référendum décisionnel dont le résultat s'impose à l'assemblée délibérante. »</p>
+                <h3>Article 4 (Accès Universel - Art. 3 modifié)</h3>
+                <p><strong>« Le suffrage est universel, égal et secret. L'accès à l'initiative citoyenne et au vote est un droit inconditionnel garanti à tous les citoyens français majeurs, sans aucune restriction d'inscription préalable sur les listes électorales. »</strong></p>
             </div>
         </section>
 
         <section>
-            <h2>TITRE II : DISPOSITIONS ÉLECTORALES ET TECHNIQUES</h2>
-
+            <h2>TITRE II : DISPOSITIONS TECHNIQUES</h2>
             <div class="article">
-                <h3>Article 5 (Le Protocole Numérique - Art. L. 11, L. 54, L. 65)</h3>
-                <p>I. – L'inscription sur les listes électorales et l'authentification lors d'un scrutin peuvent s'effectuer par voie dématérialisée par un protocole d'authentification forte générant une signature cryptographique anonymisée.</p>
-                <p>II. – Le vote peut être exprimé par voie électronique à distance au moyen d'une charge utile chiffrée garantissant le secret absolu.</p>
-                <p>III. – Le dépouillement des suffrages exprimés par voie électronique est assuré par un audit algorithmique dont le code source est public.</p>
-            </div>
-
-            <div class="article">
-                <h3>Article 6 (Les Quorums d'Initiative - Art. L. 2142 et suivants)</h3>
-                <p>Les seuils de déclenchement du Référendum d'Initiative Citoyenne sont fixés comme suit :</p>
-                <p>1. RIC Constituant : 5 % du corps électoral national.<br>
-                2. RIC Législatif : 2 % du corps électoral.<br>
-                3. RIC Abrogatoire : 1 % du corps électoral.<br>
-                4. RIC Révocatoire : 10 % des inscrits de la circonscription électorale concernée.</p>
+                <h3>Article 5 (Cadre Technique)</h3>
+                <p>La loi organique garantit l'usage de technologies certifiées, publiques et auditables. L'anonymat, l'unicité du suffrage et la transparence du dépouillement sont des impératifs constitutionnels.</p>
             </div>
         </section>
-
     </div>
-
 </body>
 </html>

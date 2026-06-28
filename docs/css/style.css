@@ -1,0 +1,248 @@
+/* ==========================================================
+   RIC Design System
+========================================================== */
+
+:root{
+
+    --primary:#000091;
+
+    --secondary:#0063cb;
+
+    --success:#18753c;
+
+    --warning:#ffb400;
+
+    --danger:#e1000f;
+
+    --background:#f6f6f6;
+
+    --surface:#ffffff;
+
+    --border:#dddddd;
+
+    --text:#161616;
+
+    --text-light:#666;
+
+    --radius:12px;
+
+    --shadow:0 6px 20px rgba(0,0,0,.08);
+
+    --transition:.25s;
+
+    --sidebar-width:280px;
+
+    --header-height:70px;
+
+}
+
+/* ========================================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+/* ========================================================== */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+/* ========================================================== */
+
+body{
+
+    background:var(--background);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    min-height:100vh;
+
+}
+
+/* ========================================================== */
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+/* ========================================================== */
+
+button{
+
+    cursor:pointer;
+
+    border:none;
+
+    transition:.2s;
+
+}
+
+button:hover{
+
+    opacity:.9;
+
+}
+
+/* ========================================================== */
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid var(--border);
+
+    outline:none;
+
+}
+
+/* ========================================================== */
+
+.view{
+
+    display:none;
+
+    animation:fade .25s ease;
+
+}
+
+.view.active{
+
+    display:block;
+
+}
+
+/* ========================================================== */
+
+.card{
+
+    background:white;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:24px;
+
+}
+
+/* ========================================================== */
+
+.btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 20px;
+
+    border-radius:8px;
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.btn.secondary{
+
+    background:var(--secondary);
+
+}
+
+.btn.success{
+
+    background:var(--success);
+
+}
+
+.btn.danger{
+
+    background:var(--danger);
+
+}
+
+/* ========================================================== */
+
+.toast{
+
+    position:fixed;
+
+    top:20px;
+
+    right:20px;
+
+    min-width:280px;
+
+    background:#161616;
+
+    color:white;
+
+    padding:16px;
+
+    border-radius:8px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+
+    z-index:9999;
+
+}
+
+.toast.show{
+
+    opacity:1;
+
+}
+
+/* ========================================================== */
+
+@keyframes fade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}

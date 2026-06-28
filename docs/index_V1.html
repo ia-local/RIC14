@@ -466,10 +466,6 @@
                     </div>
                     <button class="btn" style="width: 100%; margin-top: 10px;" onclick="RIC_ENGINE.login()">S'authentifier</button>
 
-                    <div style="margin-top: 16px; padding: 12px; background: #eef3f8; border-left: 3px solid var(--blue-france); border-radius: 4px; font-size: 0.78rem; color: var(--text-muted); text-align: left;">
-                        <strong style="color:var(--blue-france);">Art. 4 PLC v.2</strong> — Le droit d'accès au vote est inconditionnel pour tout citoyen français majeur. Cette interface prototype requiert une authentification KYC à des fins de démonstration uniquement.
-                    </div>
-
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: left;">
                         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Comptes de test :</p>
                         <div style="display: flex; gap: 10px;">
@@ -539,7 +535,7 @@
                             </label>
                             <label class="ric-type-card" id="rtc-abrogatoire" onclick="RIC_ENGINE.selectRicType('Abrogatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
                                 <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">🗑️ Abrogatoire</div>
-                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Abroger une loi existante</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Abroger une loi</div>
                                 <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 1 %</div>
                             </label>
                             <label class="ric-type-card" id="rtc-constituant" onclick="RIC_ENGINE.selectRicType('Constituant')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
@@ -552,24 +548,6 @@
                                 <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Révoquer un élu</div>
                                 <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 10 % circ.</div>
                             </label>
-                            <label class="ric-type-card" id="rtc-convocatoire" onclick="RIC_ENGINE.selectRicType('Convocatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
-                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">📣 Convocatoire</div>
-                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Convoquer constituante / collège</div>
-                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 5 %</div>
-                            </label>
-                            <label class="ric-type-card" id="rtc-dissolutif" onclick="RIC_ENGINE.selectRicType('Dissolutif')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white;">
-                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">🔁 Dissolutif</div>
-                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Dissoudre Assemblée / Sénat</div>
-                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 10 %</div>
-                            </label>
-                            <label class="ric-type-card" id="rtc-denonciatoire" onclick="RIC_ENGINE.selectRicType('Dénonciatoire')" style="cursor:pointer; border:2px solid var(--border-color); border-radius:8px; padding:12px; background:white; grid-column: span 2;">
-                                <div style="font-weight:700; font-size:0.9rem; color:var(--text-muted);">📄 Dénonciatoire</div>
-                                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;">Dénoncer un traité ou accord international</div>
-                                <div style="font-size:0.85rem; font-weight:900; color:var(--text-muted); margin-top:6px;">Quorum : 3 %</div>
-                            </label>
-                        </div>
-                        <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); padding:8px; background:#f9f9f9; border-radius:4px; border-left:3px solid var(--ric-orange);">
-                            📌 <strong>Art. 2 PLC v.2</strong> — Spectre RIC élargi : législatif, abrogatoire, révocatoire, convocatoire, dissolutif, dénonciatoire, constituant.
                         </div>
                         <input type="hidden" id="prop-ric-type" value="Législatif">
                     </div>
@@ -592,12 +570,6 @@
                     <div class="form-group">
                         <label>Description détaillée (Motifs)</label>
                         <textarea id="prop-desc" rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fascicule explicatif <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(arguments pour et contre — pluralisme requis)</span></label>
-                        <textarea id="prop-fascicule" rows="5" placeholder="POUR : Résumez les arguments principaux en faveur...&#10;CONTRE : Résumez les arguments principaux contre...&#10;&#10;Ce fascicule sera diffusé aux électeurs avant le scrutin."></textarea>
-                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">📋 Conformément aux critères Label RIC — information contradictoire obligatoire (coeff. 20/100).</div>
                     </div>
 
                     <div class="form-row">
@@ -627,7 +599,6 @@
                     <select id="filter-level" onchange="RIC_ENGINE.renderList()" style="width: auto; min-width: 200px;">
                         <option value="Tous">Filtrer par territoire : Tous</option>
                         <option value="Local">Local</option>
-                        <option value="Régional">Régional</option>
                         <option value="National">National</option>
                     </select>
                 </div>
@@ -742,18 +713,8 @@
                         status: "Validé",
                         votesOui: 432,
                         votesNon: 128,
-                        votesBlanc: 34,
                         voters: [],
                         geo: { type: "national", lat: 46.6, lng: 2.3, label: "France entière" },
-                        fascicule: {
-                            status: "EN_REDACTION", // BROUILLON, EN_REDACTION, PUBLIÉ
-                            bilan: {
-                                argumentsPour: [], // Extraits automatiquement du forum
-                                argumentsContre: [], // Extraits automatiquement du forum
-                                synthese: "" // Rédigée par le collège
-                            },
-                            version: 1
-                        },
                         comments: [
                             { author: "Citoyen_849", text: "Cette réforme est essentielle pour redonner la souveraineté au peuple. L'article 3 de la Constitution prendra enfin tout son sens.", date: "27/06/2026", role: "citoyen" },
                             { author: "Collège Exécutif", text: "Attention, un RIC constituant non encadré pourrait entrer en contradiction avec les traités internationaux en vigueur. Une délibération approfondie est nécessaire.", date: "28/06/2026", role: "admin" }
@@ -771,18 +732,8 @@
                         status: "Validé", 
                         votesOui: 890,
                         votesNon: 410,
-                        votesBlanc: 62,
                         voters: [],
                         geo: { type: "national", lat: 46.2, lng: 1.8, label: "France entière" },
-                                                fascicule: {
-                            status: "EN_REDACTION", // BROUILLON, EN_REDACTION, PUBLIÉ
-                            bilan: {
-                                argumentsPour: [], // Extraits automatiquement du forum
-                                argumentsContre: [], // Extraits automatiquement du forum
-                                synthese: "" // Rédigée par le collège
-                            },
-                            version: 1
-                        },
                         comments: [
                             { author: "Lucie M.", text: "Les politiques répressives ont échoué depuis 50 ans. Il est temps de taxer et de faire de la prévention efficace !", date: "26/06/2026", role: "citoyen" }
                         ]
@@ -799,18 +750,8 @@
                         status: "Validé",
                         votesOui: 125,
                         votesNon: 15,
-                        votesBlanc: 8,
                         voters: [],
                         geo: { type: "local", lat: 49.218, lng: -0.218, label: "Bavent (14)" },
-                                                fascicule: {
-                            status: "EN_REDACTION", // BROUILLON, EN_REDACTION, PUBLIÉ
-                            bilan: {
-                                argumentsPour: [], // Extraits automatiquement du forum
-                                argumentsContre: [], // Extraits automatiquement du forum
-                                synthese: "" // Rédigée par le collège
-                            },
-                            version: 1
-                        },
                         comments: []
                     },
                     {
@@ -825,19 +766,8 @@
                         status: "Validé",
                         votesOui: 312,
                         votesNon: 87,
-                        votesBlanc: 21,
                         voters: [],
                         geo: { type: "regional", lat: 49.18, lng: 0.37, label: "Région Normandie" },
-                        fascicule: {
-                            status: "EN_REDACTION",
-                            bilan: {
-                                argumentsPour: [],
-                                argumentsContre: [],
-                                synthese: ""
-                            },
-                            version: 1
-                        },
-
                         comments: []
                     },
                     {
@@ -852,18 +782,8 @@
                         status: "Validé",
                         votesOui: 640,
                         votesNon: 120,
-                        votesBlanc: 44,
                         voters: [],
                         geo: { type: "local", lat: 49.183, lng: -0.362, label: "Caen (14)" },
-                                                fascicule: {
-                            status: "EN_REDACTION", // BROUILLON, EN_REDACTION, PUBLIÉ
-                            bilan: {
-                                argumentsPour: [], // Extraits automatiquement du forum
-                                argumentsContre: [], // Extraits automatiquement du forum
-                                synthese: "" // Rédigée par le collège
-                            },
-                            version: 1
-                        },
                         comments: []
                     }
                 ],
@@ -883,21 +803,18 @@
                 document.getElementById('login-pwd').value = pwd;
             },
 
-            /* Quorum légal Art. 6 — étendu PLC v.2 Art. 2 */
+            /* Quorum légal Art. 6 */
             _QUORUM_RULES: {
-                'Constituant':    { pct: 5,  scope: 'national',        ref: 'Art. 6 §1 — corps électoral national' },
-                'Législatif':     { pct: 2,  scope: 'national',        ref: 'Art. 6 §2 — corps électoral national' },
-                'Abrogatoire':    { pct: 1,  scope: 'national',        ref: 'Art. 6 §3 — corps électoral national' },
-                'Révocatoire':    { pct: 10, scope: 'circonscription', ref: 'Art. 6 §4 — inscrits de la circonscription' },
-                'Convocatoire':   { pct: 5,  scope: 'national',        ref: 'Art. 2 PLC v.2 — convocation constituante ou collège' },
-                'Dissolutif':     { pct: 10, scope: 'national',        ref: 'Art. 2 PLC v.2 — dissolution Assemblée / Sénat' },
-                'Dénonciatoire':  { pct: 3,  scope: 'national',        ref: 'Art. 2 PLC v.2 — dénonciation de traité ou accord' },
+                'Constituant':  { pct: 5,  scope: 'national',        ref: 'Art. 6 §1 — corps électoral national' },
+                'Législatif':   { pct: 2,  scope: 'national',        ref: 'Art. 6 §2 — corps électoral national' },
+                'Abrogatoire':  { pct: 1,  scope: 'national',        ref: 'Art. 6 §3 — corps électoral national' },
+                'Révocatoire':  { pct: 10, scope: 'circonscription', ref: 'Art. 6 §4 — inscrits de la circonscription' },
             },
 
             selectRicType: function(type) {
                 document.getElementById('prop-ric-type').value = type;
-                // Réinitialise tous les cards
-                ['legislatif','abrogatoire','constituant','revocatoire','convocatoire','dissolutif','denonciatoire'].forEach(k => {
+                // Réinitialise
+                ['legislatif','abrogatoire','constituant','revocatoire'].forEach(k => {
                     const el = document.getElementById('rtc-' + k);
                     if (el) {
                         el.style.borderColor = 'var(--border-color)';
@@ -905,12 +822,8 @@
                         el.querySelectorAll('div').forEach(d => d.style.color = 'var(--text-muted)');
                     }
                 });
-                // Active la carte sélectionnée
-                const idMap = {
-                    'Législatif':'legislatif','Abrogatoire':'abrogatoire','Constituant':'constituant',
-                    'Révocatoire':'revocatoire','Convocatoire':'convocatoire',
-                    'Dissolutif':'dissolutif','Dénonciatoire':'denonciatoire'
-                };
+                // Active
+                const idMap = { 'Législatif':'legislatif','Abrogatoire':'abrogatoire','Constituant':'constituant','Révocatoire':'revocatoire' };
                 const active = document.getElementById('rtc-' + idMap[type]);
                 if (active) {
                     active.style.borderColor = 'var(--blue-france)';
@@ -1043,7 +956,6 @@
                     title: title,
                     question: document.getElementById('prop-question').value,
                     description: document.getElementById('prop-desc').value,
-                    fascicule: document.getElementById('prop-fascicule').value,
                     level: document.getElementById('prop-level').value,
                     ricType: document.getElementById('prop-ric-type').value,
                     modality: document.getElementById('prop-modality').value,
@@ -1051,8 +963,7 @@
                     endDate: endDate,
                     status: "Attente", 
                     votesOui: 0, 
-                    votesNon: 0,
-                    votesBlanc: 0,
+                    votesNon: 0, 
                     voters: [],
                     geo: null,
                     comments: [] // Init forum array
@@ -1064,7 +975,6 @@
                 document.getElementById('prop-title').value = '';
                 document.getElementById('prop-question').value = '';
                 document.getElementById('prop-desc').value = '';
-                document.getElementById('prop-fascicule').value = '';
                 document.getElementById('prop-date').value = '';
                 this.selectRicType('Législatif');
                 
@@ -1114,16 +1024,15 @@
             openScrutin: function(id) {
                 const r = this.state.referendums.find(item => item.id === id);
                 
+                // Securing access if called directly
                 let hasVoted = false;
                 if(this.state.currentUser) {
                     hasVoted = r.voters.includes(this.state.currentUser.id);
                 }
                 
-                const blanc = r.votesBlanc || 0;
-                const total = r.votesOui + r.votesNon + blanc;
-                const pctOui   = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
-                const pctNon   = total === 0 ? 0 : Math.round((r.votesNon / total) * 100);
-                const pctBlanc = total === 0 ? 0 : 100 - pctOui - pctNon;
+                const total = r.votesOui + r.votesNon;
+                const pctOui = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
+                const pctNon = total === 0 ? 0 : Math.round((r.votesNon / total) * 100);
                 
                 let actionHtml = '';
 
@@ -1147,16 +1056,8 @@
                                 <span style="color: var(--red-marianne);">NON (${r.votesNon} voix)</span>
                                 <span style="color: var(--red-marianne);">${pctNon}%</span>
                             </div>
-                            <div style="width: 100%; background: #e0e0e0; border-radius: 6px; height: 12px; overflow: hidden; margin-bottom: 15px;">
-                                <div style="width: ${pctNon}%; background: var(--red-marianne); height: 100%; transition: width 0.5s ease;"></div>
-                            </div>
-
-                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">
-                                <span style="color: var(--text-muted);">BLANC (${blanc} voix)</span>
-                                <span style="color: var(--text-muted);">${pctBlanc}%</span>
-                            </div>
                             <div style="width: 100%; background: #e0e0e0; border-radius: 6px; height: 12px; overflow: hidden;">
-                                <div style="width: ${pctBlanc}%; background: #aaaaaa; height: 100%; transition: width 0.5s ease;"></div>
+                                <div style="width: ${pctNon}%; background: var(--red-marianne); height: 100%; transition: width 0.5s ease;"></div>
                             </div>
                         </div>
 
@@ -1168,30 +1069,12 @@
                     actionHtml = `<div style="background:#fff4e5; padding:15px; border-radius:6px; color:var(--ric-orange); font-weight:bold; text-align:center; margin-top:20px;">Veuillez vous authentifier pour voter.</div>`;
                 } else {
                     actionHtml = `
-                        <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
-                            <button class="btn" style="background:var(--success); flex:2; min-width:100px;" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">✅ OUI</button>
-                            <button class="btn" style="background:var(--red-marianne); flex:2; min-width:100px;" onclick="RIC_ENGINE.submitVote('${r.id}', 'NON')">❌ NON</button>
-                            <button class="btn" style="background:#888; flex:1; min-width:80px; font-size:0.85rem;" onclick="RIC_ENGINE.submitVote('${r.id}', 'BLANC')" title="Vote blanc — Art. 5 PLC v.2">⬜ BLANC</button>
+                        <div style="display:flex; gap:15px; margin-top:20px;">
+                            <button class="btn" style="background:var(--success); flex:1;" onclick="RIC_ENGINE.submitVote('${r.id}', 'OUI')">OUI</button>
+                            <button class="btn" style="background:var(--red-marianne); flex:1;" onclick="RIC_ENGINE.submitVote('${r.id}', 'NON')">NON</button>
                         </div>
-                        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:8px; text-align:right;">Le vote blanc est comptabilisé séparément — Art. 5 PLC v.2</div>
                     `;
                 }
-
-                // --- FASCICULE EXPLICATIF ---
-                // Dans openScrutin()
-                let fasciculeHtml = `
-                    <div class="card" id="fascicule-section">
-                        <h3>📋 Fascicule Contradictoire (Bilan du Débat)</h3>
-                        <div class="bilan-content">
-                            <div style="color: var(--success);"><strong>POUR :</strong> ${r.fascicule.bilan.argumentsPour.join('; ')}</div>
-                            <div style="color: var(--red-marianne);"><strong>CONTRE :</strong> ${r.fascicule.bilan.argumentsContre.join('; ')}</div>
-                        </div>
-                        ${this.state.currentUser?.role === 'admin' 
-                            ? `<button class="btn btn-secondary" onclick="RIC_ENGINE.genererBilanContradictoire('${r.id}')">🔄 Actualiser le bilan depuis le forum</button>` 
-                            : ''
-                        }
-                    </div>
-                `;
 
                 // --- GÉNÉRATION DU FORUM CITOYEN ---
                 let commentsHtml = `
@@ -1217,8 +1100,9 @@
                 } else {
                     commentsHtml += `<p style="font-size:0.9rem; color:var(--text-muted); font-style:italic;">Aucun argumentaire déposé pour le moment. Ouvrez le débat.</p>`;
                 }
-                commentsHtml += `</div>`;
+                commentsHtml += `</div>`; // Fin de la liste
 
+                // Boîte d'ajout de commentaire (si connecté)
                 if (this.state.currentUser) {
                     commentsHtml += `
                         <div class="add-comment-box">
@@ -1231,22 +1115,17 @@
                     commentsHtml += `<div style="margin-top:20px; padding:15px; background:#fff4e5; border-radius:6px; color:var(--ric-orange); font-size:0.85rem; font-weight:bold; text-align:center;">Veuillez vous authentifier pour participer à la délibération.</div>`;
                 }
                 
-                commentsHtml += `</div>`;
-
-                // Badge type RIC si disponible
-                const ricTypeBadge = r.ricType ? `<span class="badge" style="background:#f0e6ff; color:#6600cc;">${r.ricType}</span>` : '';
+                commentsHtml += `</div>`; // Fin de forum-section
 
                 document.getElementById('isoloir-card').innerHTML = `
                     <span class="badge badge-level">${r.level}</span>
                     <span class="badge badge-modality">${r.modality}</span>
-                    ${ricTypeBadge}
                     <h2 style="border:none; margin-top:15px; padding:0;">${r.title}</h2>
                     <div style="padding:15px; background:#f8f9fa; border-left:4px solid var(--ric-orange); margin:15px 0; font-size:1.1rem;">
                         <strong>Question :</strong> "${r.question}"
                     </div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Clôture prévue le : <strong>${r.endDate || 'Non définie'}</strong> · Quorum : <strong>${r.quorum}%</strong></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Clôture prévue le : <strong>${r.endDate || 'Non définie'}</strong></p>
                     <p>${r.description}</p>
-                    ${fasciculeHtml}
                     ${actionHtml}
                     ${commentsHtml}
                 `;
@@ -1263,10 +1142,10 @@
                         window[`myChart_${r.id}`] = new Chart(ctx, {
                             type: 'doughnut',
                             data: {
-                                labels: ['OUI', 'NON', 'BLANC'],
+                                labels: ['OUI', 'NON'],
                                 datasets: [{
-                                    data: [r.votesOui, r.votesNon, blanc],
-                                    backgroundColor: ['#18753c', '#e1000f', '#aaaaaa'],
+                                    data: [r.votesOui, r.votesNon],
+                                    backgroundColor: ['#18753c', '#e1000f'],
                                     borderWidth: 0,
                                     hoverOffset: 4
                                 }]
@@ -1295,10 +1174,8 @@
 
             submitVote: function(id, choice) {
                 const r = this.state.referendums.find(item => item.id === id);
-                if (!r.votesBlanc) r.votesBlanc = 0;
-                if (choice === 'OUI')   r.votesOui++;
-                if (choice === 'NON')   r.votesNon++;
-                if (choice === 'BLANC') r.votesBlanc++;
+                if (choice === 'OUI') r.votesOui++;
+                if (choice === 'NON') r.votesNon++;
                 r.voters.push(this.state.currentUser.id);
                 this.showToast("A voté. Le choix a été chiffré et sécurisé.");
                 this.openScrutin(id);
@@ -1474,7 +1351,7 @@
                 const self = this;
                 const marker = L.marker([lat, lng], { icon: self._makeIcon(r.level) });
 
-                const total = r.votesOui + r.votesNon + (r.votesBlanc || 0);
+                const total = r.votesOui + r.votesNon;
                 const pct = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
                 const color = self._markerColor(r.level);
 
@@ -1509,11 +1386,9 @@
                 const r = this.state.referendums.find(item => item.id === id);
                 if (!r) return;
 
-                const blanc = r.votesBlanc || 0;
-                const total = r.votesOui + r.votesNon + blanc;
-                const pctOui   = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
-                const pctNon   = total === 0 ? 0 : 100 - pctOui - (total === 0 ? 0 : Math.round((blanc / total) * 100));
-                const pctBlanc = total === 0 ? 0 : 100 - pctOui - pctNon;
+                const total = r.votesOui + r.votesNon;
+                const pctOui = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
+                const pctNon = 100 - pctOui;
                 const color = this._markerColor(r.level);
 
                 const tagStyle = `background:${color}1a; border:1px solid ${color}; color:${color};`;
@@ -1534,10 +1409,9 @@
                     voteHtml = `<div style="background:#fff4e5;padding:10px;border-radius:6px;color:var(--ric-orange);font-weight:bold;font-size:0.85rem;text-align:center;">Connectez-vous pour voter</div>`;
                 } else {
                     voteHtml = `
-                        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
-                            <button class="btn" style="background:var(--success);flex:2;min-height:42px;min-width:70px;" onclick="RIC_ENGINE.submitVote('${r.id}','OUI');RIC_ENGINE.openMapModal('${r.id}')">✅ OUI</button>
-                            <button class="btn" style="background:var(--red-marianne);flex:2;min-height:42px;min-width:70px;" onclick="RIC_ENGINE.submitVote('${r.id}','NON');RIC_ENGINE.openMapModal('${r.id}')">❌ NON</button>
-                            <button class="btn" style="background:#888;flex:1;min-height:42px;min-width:60px;font-size:0.8rem;" onclick="RIC_ENGINE.submitVote('${r.id}','BLANC');RIC_ENGINE.openMapModal('${r.id}')">⬜</button>
+                        <div style="display:flex;gap:10px;margin-top:4px;">
+                            <button class="btn" style="background:var(--success);flex:1;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','OUI');RIC_ENGINE.openMapModal('${r.id}')">OUI</button>
+                            <button class="btn" style="background:var(--red-marianne);flex:1;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','NON');RIC_ENGINE.openMapModal('${r.id}')">NON</button>
                         </div>`;
                 }
 
@@ -1557,15 +1431,10 @@
                         <div class="modal-progress-bar">
                             <div style="width:${pctOui}%;background:var(--success);height:100%;transition:width .4s;"></div>
                             <div style="width:${pctNon}%;background:var(--red-marianne);height:100%;"></div>
-                            <div style="width:${pctBlanc}%;background:#aaa;height:100%;"></div>
                         </div>
                         <div class="modal-result-row">
                             <span style="color:var(--red-marianne);">NON — ${r.votesNon} voix</span>
                             <span style="color:var(--red-marianne);">${pctNon}%</span>
-                        </div>
-                        <div class="modal-result-row" style="margin-top:4px;">
-                            <span style="color:#888;">BLANC — ${blanc} voix</span>
-                            <span style="color:#888;">${pctBlanc}%</span>
                         </div>
                     </div>
 
@@ -1589,20 +1458,6 @@
                     document.getElementById('map-modal-overlay').classList.remove('open');
                 }
             },
-            genererBilanContradictoire : function(refId) {
-            const r = this.state.referendums.find(i => i.id === refId);
-
-            // Filtre les commentaires pour extraire la substantifique moelle du débat
-            r.fascicule.bilan.argumentsPour = r.comments
-                .filter(c => c.text.toLowerCase().includes('pour'))
-                .map(c => c.text);
-
-            r.fascicule.bilan.argumentsContre = r.comments
-                .filter(c => c.text.toLowerCase().includes('contre') || c.text.toLowerCase().includes('attention'))
-                .map(c => c.text);
-
-            this.showToast("Bilan du débat mis à jour à partir du forum.");
-        },
         };
     </script>
 </body>

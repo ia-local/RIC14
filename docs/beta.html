@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>RIC - Dôme d'Initiative Citoyenne</title>
+
+    <!-- CSS externes -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/referendum.css">
+    <link rel="stylesheet" href="css/forum.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+    <!-- Bibliothèques -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+
+<div id="toast-message" class="toast"></div>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+
+    <aside
+        id="desktop-sidebar"
+        class="desktop-sidebar">
+    </aside>
+
+    <!-- Header -->
+
+    <header
+        id="mobile-header"
+        class="app-header">
+    </header>
+
+    <!-- Main -->
+
+    <main
+        id="app-content"
+        class="app-content">
+
+        <!-- Login -->
+
+        <section
+            id="view-login"
+            class="view active">
+        </section>
+
+        <!-- Dashboard -->
+
+        <section
+            id="view-dashboard"
+            class="view">
+        </section>
+
+        <!-- Proposition -->
+
+        <section
+            id="view-propose"
+            class="view">
+        </section>
+
+        <!-- Liste -->
+
+        <section
+            id="view-referendums"
+            class="view">
+        </section>
+
+        <!-- Vote -->
+
+        <section
+            id="view-vote-detail"
+            class="view">
+        </section>
+
+        <!-- Administration -->
+
+        <section
+            id="view-admin"
+            class="view">
+        </section>
+
+        <!-- Carte -->
+
+        <section
+            id="view-carte"
+            class="view">
+        </section>
+
+    </main>
+
+    <!-- Navigation Mobile -->
+
+    <nav
+        id="mobile-nav"
+        class="mobile-bottom-nav">
+    </nav>
+
+</div>
+
+<!-- Fenêtre Carte -->
+
+<div
+    id="map-modal-overlay"
+    class="map-modal-overlay">
+
+    <div
+        id="map-modal-panel"
+        class="map-modal-panel">
+
+        <div
+            id="map-modal-content">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Point d'entrée -->
+
+<script type="module" src="js/app.js"></script>
+
+</body>
+
+</html>
