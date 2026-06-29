@@ -620,7 +620,6 @@ createInitiativeFromSlider : function(data) {
             </div>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Clôture prévue le : <strong>${r.endDate || 'Non définie'}</strong> · Quorum : <strong>${r.quorum}%</strong></p>
             <p>${r.description}</p>
-            ${fasciculeHtml}
             ${actionHtml}
             ${commentsHtml}
         `;
