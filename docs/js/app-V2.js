@@ -1,11 +1,9 @@
-
 const RIC_ENGINE = {
     state: {
         users: {
             "citoyen@ric.fr": { id: "user_4829", name: "Citoyen(ne)", role: "citoyen" },
             "admin@ric.fr": { id: "user_0001", name: "Collège Exécutif", role: "admin" }
         },
-        // Intégration de l'array "comments" pour simuler le forum de débat
         referendums: [
             {
                 id: "ref_1",
@@ -145,6 +143,7 @@ const RIC_ENGINE = {
         ],
         currentUser: null
     },
+    
     addCommentToRef: function(refId, text) {
         const r = this.state.referendums.find(i => i.id === refId);
         if (!r.comments) r.comments = [];
@@ -155,19 +154,20 @@ const RIC_ENGINE = {
             role: this.state.currentUser.role
         });
     },
-    // Système de notification Toast
+
     showToast: function(msg, type = 'success') {
         const toast = document.getElementById('toast-message');
         toast.innerText = msg;
         toast.className = 'toast show ' + (type === 'error' ? 'toast-error' : 'toast-success');
         setTimeout(() => { toast.classList.remove('show'); }, 3500);
     },
+    
     quickFill: function(email, pwd) {
         document.getElementById('login-email').value = email;
         document.getElementById('login-pwd').value = pwd;
     },
-    /* Quorum légal Art. 6 — étendu PLC v.2 Art. 2 */
-/* Quorum légal Art. 6 — étendu PLC v.2 Art. 2 */
+
+    /* Quorum légal Art. 6 — étendu PLC v.2 Art. 2 + VETO ajouté */
     _QUORUM_RULES: {
         'Constituant':    { pct: 5,  scope: 'national',        ref: 'Art. 6 §1 — corps électoral national' },
         'Législatif':     { pct: 2,  scope: 'national',        ref: 'Art. 6 §2 — corps électoral national' },
@@ -176,53 +176,9 @@ const RIC_ENGINE = {
         'Convocatoire':   { pct: 5,  scope: 'national',        ref: 'Art. 2 PLC v.2 — convocation constituante ou collège' },
         'Dissolutif':     { pct: 10, scope: 'national',        ref: 'Art. 2 PLC v.2 — dissolution Assemblée / Sénat' },
         'Dénonciatoire':  { pct: 3,  scope: 'national',        ref: 'Art. 2 PLC v.2 — dénonciation de traité ou accord' },
-        'Veto':           { pct: 1,  scope: 'national',        ref: 'Art. 2 PLC v.2 — blocage avant promulgation' }, // NOUVEAU
+        'Veto':           { pct: 1,  scope: 'national',        ref: 'Art. 2 PLC v.2 — blocage avant promulgation' }
     },
-    selectRicType: function(type) {
-        document.getElementById('prop-ric-type').value = type;
-        // Réinitialise tous les cards
-        ['legislatif','abrogatoire','constituant','revocatoire','convocatoire','dissolutif','denonciatoire'].forEach(k => {
-            const el = document.getElementById('rtc-' + k);
-            if (el) {
-                el.style.borderColor = 'var(--border-color)';
-                el.style.background = 'white';
-                el.querySelectorAll('div').forEach(d => d.style.color = 'var(--text-muted)');
-            }
-        });
-        // Active la carte sélectionnée
-        const idMap = {
-            'Législatif':'legislatif','Abrogatoire':'abrogatoire','Constituant':'constituant',
-            'Révocatoire':'revocatoire','Convocatoire':'convocatoire',
-            'Dissolutif':'dissolutif','Dénonciatoire':'denonciatoire'
-        };
-        const active = document.getElementById('rtc-' + idMap[type]);
-        if (active) {
-            active.style.borderColor = 'var(--blue-france)';
-            active.style.background = '#eef3f8';
-            active.querySelectorAll('div').forEach(d => d.style.color = 'var(--blue-france)');
-        }
-        this.updateQuorumUI();
-    },
-updateQuorumUI : function() {
-    const type  = document.getElementById('prop-ric-type').value || 'Législatif';
-    const level = document.getElementById('prop-level').value;
-    const rule  = this._QUORUM_RULES[type] || this._QUORUM_RULES['Législatif'];
-    let scopeLabel = '';
-    
-    if (type === 'Révocatoire') {
-        scopeLabel = 'des inscrits de la circonscription concernée';
-    } else if (level === 'Local' || level === 'Régional') {
-        scopeLabel = 'des inscrits de la circonscription territoriale';
-    } else {
-        scopeLabel = 'du corps électoral national';
-    }
-    
-    const valEl = document.getElementById('quorum-value');
-    const descEl = document.getElementById('quorum-desc');
-    
-    if (valEl) valEl.innerText = rule.pct + ' %';
-    if (descEl) descEl.innerHTML = scopeLabel + '<br><span style="font-size:0.75rem;">Référence : ' + rule.ref + '</span>';
-},
+
     login: function() {
         const email = document.getElementById('login-email').value.trim();
         const user = this.state.users[email];
@@ -238,12 +194,13 @@ updateQuorumUI : function() {
             document.querySelectorAll('.admin-link').forEach(el => {
                 el.style.display = (user.role === 'admin') ? 'flex' : 'none';
             });
-            this.showToast(`Bienvenue, ${user.name}`);
+            this.showToast(`Bienvenue, accès certifié pour : ${user.name}`);
             this.navigate('dashboard');
         } else {
-            this.showToast("Identifiants KYC inconnus.", "error");
+            this.showToast("Identifiants inconnus.", "error");
         }
     },
+
     logout: function() {
         this.state.currentUser = null;
         document.getElementById('mobile-nav').style.display = 'none';
@@ -251,8 +208,8 @@ updateQuorumUI : function() {
         document.getElementById('desktop-user-info').style.display = 'none';
         this.navigate('login');
     },
-// Remplacez votre fonction navigate actuelle par celle-ci :
-navigate: function(viewId) {
+
+    navigate: function(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         
         const targetView = document.getElementById('view-' + viewId);
@@ -266,7 +223,6 @@ navigate: function(viewId) {
         if(viewId === 'dashboard') this.renderDashboard();
         if(viewId === 'referendums') this.renderList();
         
-        // BRANCHEMENT ICI : Génère l'accueil de la chatroom avec ses listes à gauche !
         if(viewId === 'chat') {
             if (typeof CHAT_ENGINE !== 'undefined') {
                 CHAT_ENGINE.renderChatroomHome();
@@ -276,6 +232,7 @@ navigate: function(viewId) {
         if(viewId === 'admin') this.renderAdmin();
         if(viewId === 'carte') this.initMap();
     },
+
     renderDashboard: function() {
         const actives = this.state.referendums.filter(r => r.status === 'Validé');
         const clos = this.state.referendums.filter(r => r.status === 'Clôturé');
@@ -317,152 +274,55 @@ navigate: function(viewId) {
             `;
         });
     },
-SLIDER_MODALITE : {
-    currentStep: 1,
 
-    init: function() {
-        this.goTo(1);
-    },
-
-    goTo: function(step) {
-        this.currentStep = step;
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        const targetStep = document.getElementById(`step-${step}`);
-        if (targetStep) targetStep.classList.add('active');
-
-        document.querySelectorAll('.step-indicator').forEach((el, index) => {
-            if (index + 1 === step) el.classList.add('active');
-            else el.classList.remove('active');
-        });
-    },
-
-    collectData: function() {
-        return {
-            title: document.getElementById('prop-title').value,
-            question: document.getElementById('prop-question').value,
-            description: document.getElementById('prop-desc').value,
-            ricType: document.getElementById('prop-ric-type').value,
-            level: document.getElementById('prop-level').value,
-            modality: document.getElementById('prop-modality').value,
-            endDate: document.getElementById('prop-date').value
-        };
-    },
-
-    next: function() {
-        if (this.currentStep === 1) {
-            // Validation Slide 1
-            if(!document.getElementById('prop-title').value || !document.getElementById('prop-question').value) {
-                RIC_ENGINE.showToast("Le titre et la question sont obligatoires.", "error");
-                return;
+    // Méthode de création via le DataLoader (7 étapes)
+createInitiativeFromSlider : function(data) {
+    // Calcul du quorum selon le type sélectionné
+    const rule = this._QUORUM_RULES[data.ricType] || this._QUORUM_RULES['Législatif'];
+    
+    const newRef = {
+        id: "ref_" + Date.now(),
+        title: data.title,
+        question: data.question,
+        description: data.description,
+        level: data.level,
+        ricType: data.ricType,
+        modality: data.modality,
+        quorum: rule.pct,
+        endDate: data.endDate,
+        voters: [],
+        status: "Attente", // Statut initial "Attente" pour le contrôle du Collège
+        fascicule: {
+            status: "EN_REDACTION",
+            bilan: {
+                argumentsPour: [data.description],
+                argumentsContre: ["En attente d'instruction par le Collège..."],
+                synthese: ""
             }
-            if(!document.getElementById('prop-unite-matiere').checked) {
-                RIC_ENGINE.showToast("Vous devez certifier l'unité de matière.", "error");
-                return;
-            }
-            this.goTo(2);
-        } else if (this.currentStep === 2) {
-            // Validation Slide 2
-            if(!document.getElementById('prop-date').value) {
-                RIC_ENGINE.showToast("Veuillez définir une date butoir.", "error");
-                return;
-            }
-            this.goTo(3);
-        } else {
-            // Validation finale Slide 3
-            this.submit();
+        },
+        comments: [],
+        votesOui: 0, votesNon: 0, votesBlanc: 0,
+        geo: { 
+            type: data.level === 'National' ? 'national' : 'local', 
+            lat: 46.6, lng: 2.3, label: data.level === 'National' ? "France entière" : "Territoire défini" 
         }
-    },
+    };
 
-    prev: function(step) {
-        this.goTo(step);
-    },
-
-    submit: function() {
-        const data = this.collectData();
-        RIC_ENGINE.createInitiativeFromSlider(data);
-        
-        // Réinitialisation du formulaire après envoi
-        document.getElementById('prop-title').value = '';
-        document.getElementById('prop-question').value = '';
-        document.getElementById('prop-desc').value = '';
-        document.getElementById('prop-unite-matiere').checked = false;
-        document.getElementById('prop-date').value = '';
-        this.goTo(1);
-    }
+    this.state.referendums.push(newRef);
+    this.showToast("Initiative transmise avec succès au Collège pour contrôle (Présélection).");
+    
+    // Redirection vers le tableau de bord ou l'espace Admin pour voir la mise en attente
+    this.renderAdmin();
+    this.navigate('dashboard');
 },
 
-// Remplacez la fonction existante createInitiativeFromSlider par celle-ci :
-createInitiativeFromSlider : function(data) {
-        const newRef = {
-            id: "ref_" + Date.now(),
-            title: data.title,
-            question: data.question,
-            description: data.description,
-            level: data.level,
-            ricType: data.ricType,
-            modeScrutin: data.modeScrutin, // Injection de l'attribut
-            modality: data.modalityCollect,
-            voters: [],
-            status: "Attente",
-            fascicule: {
-                status: "EN_REDACTION",
-                bilan: {
-                    argumentsPour: [data.description],
-                    argumentsContre: ["En attente de débat..."],
-                    synthese: ""
-                }
-            },
-            comments: [],
-            votesOui: 0, votesNon: 0, votesBlanc: 0
-        };
-
-        this.state.referendums.push(newRef);
-        this.showToast("Initiative créée avec succès.");
-        this.navigate('dashboard');
-    },
-    createInitiative: function() {
-        const title = document.getElementById('prop-title').value.trim();
-        const endDate = document.getElementById('prop-date').value;
-        if (!title || !endDate) {
-            this.showToast("Veuillez renseigner le titre et la date butoir.", "error");
-            return;
-        }
-        const newRef = {
-            id: "ref_" + Date.now(),
-            title: title,
-            question: document.getElementById('prop-question').value,
-            description: document.getElementById('prop-desc').value,
-            fascicule: document.getElementById('prop-fascicule').value,
-            level: document.getElementById('prop-level').value,
-            ricType: document.getElementById('prop-ric-type').value,
-            modality: document.getElementById('prop-modality').value,
-            quorum: document.getElementById('prop-quorum').value,
-            endDate: endDate,
-            status: "Attente", 
-            votesOui: 0, 
-            votesNon: 0,
-            votesBlanc: 0,
-            voters: [],
-            geo: null,
-            comments: [] // Init forum array
-        };
-        this.state.referendums.push(newRef);
-        this.showToast("Initiative transmise avec succès !");
-        
-        document.getElementById('prop-title').value = '';
-        document.getElementById('prop-question').value = '';
-        document.getElementById('prop-desc').value = '';
-        document.getElementById('prop-fascicule').value = '';
-        document.getElementById('prop-date').value = '';
-        this.selectRicType('Législatif');
-        
-        this.navigate('dashboard');
-    },
     renderList: function() {
         const filter = document.getElementById('filter-level').value;
         const container = document.getElementById('referendums-container');
         container.innerHTML = '';
+        // Afficher tout ce qui n'est pas "Attente"
         const targets = this.state.referendums.filter(r => r.status !== 'Attente' && (filter === 'Tous' || r.level === filter));
+        
         targets.forEach(r => {
             const total = r.votesOui + r.votesNon;
             const pctOui = total === 0 ? 0 : Math.round((r.votesOui / total) * 100);
@@ -493,12 +353,12 @@ createInitiativeFromSlider : function(data) {
             `;
         });
     },
+
     openScrutin: function(id) {
         const r = this.state.referendums.find(item => item.id === id);
         
         let hasVoted = false;
         if (this.state.currentUser) {
-            // Si r.voters est undefined, on utilise un tableau vide [] par défaut
             const voters = r.voters || []; 
             hasVoted = voters.includes(this.state.currentUser.id);
         }
@@ -509,7 +369,6 @@ createInitiativeFromSlider : function(data) {
         const pctBlanc = total === 0 ? 0 : 100 - pctOui - pctNon;
         
         let actionHtml = '';
-        // --- RENDU ZONE DE VOTE ---
         if (hasVoted || r.status === 'Clôturé') {
             actionHtml = `
                 <div style="background:#e8f5e9; padding:15px; border-radius:6px; color:var(--success); font-weight:bold; margin-bottom:20px;">
@@ -556,8 +415,7 @@ createInitiativeFromSlider : function(data) {
                 <div style="font-size:0.72rem; color:var(--text-muted); margin-top:8px; text-align:right;">Le vote blanc est comptabilisé séparément — Art. 5 PLC v.2</div>
             `;
         }
-        // --- FASCICULE EXPLICATIF ---
-        // Dans openScrutin()
+        
         let fasciculeHtml = `
             <div class="card" id="fascicule-section">
                 <h3>📋 Fascicule Contradictoire (Bilan du Débat)</h3>
@@ -571,7 +429,7 @@ createInitiativeFromSlider : function(data) {
                 }
             </div>
         `;
-        // --- GÉNÉRATION DU FORUM CITOYEN ---
+        
         let commentsHtml = `
             <div class="forum-section">
                 <h3>💬 Délibération Citoyenne</h3>
@@ -603,12 +461,9 @@ createInitiativeFromSlider : function(data) {
                     <button class="btn btn-secondary" onclick="RIC_ENGINE.addComment('${r.id}')">Publier mon avis</button>
                 </div>
             `;
-        } else {
-            commentsHtml += `<div style="margin-top:20px; padding:15px; background:#fff4e5; border-radius:6px; color:var(--ric-orange); font-size:0.85rem; font-weight:bold; text-align:center;">Veuillez vous authentifier pour participer à la délibération.</div>`;
         }
-        
         commentsHtml += `</div>`;
-        // Badge type RIC si disponible
+        
         const ricTypeBadge = r.ricType ? `<span class="badge" style="background:#f0e6ff; color:#6600cc;">${r.ricType}</span>` : '';
         document.getElementById('isoloir-card').innerHTML = `
             <span class="badge badge-level">${r.level}</span>
@@ -629,10 +484,7 @@ createInitiativeFromSlider : function(data) {
         if (hasVoted || r.status === 'Clôturé') {
             const ctx = document.getElementById(`chart-${r.id}`);
             if (ctx) {
-                if (window[`myChart_${r.id}`]) {
-                    window[`myChart_${r.id}`].destroy();
-                }
-                
+                if (window[`myChart_${r.id}`]) window[`myChart_${r.id}`].destroy();
                 window[`myChart_${r.id}`] = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
@@ -647,24 +499,13 @@ createInitiativeFromSlider : function(data) {
                     options: {
                         responsive: true,
                         cutout: '75%',
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.label || '';
-                                        if (label) { label += ': '; }
-                                        label += context.parsed + ' voix';
-                                        return label;
-                                    }
-                                }
-                            }
-                        }
+                        plugins: { legend: { display: false } }
                     }
                 });
             }
         }
     },
+    
     submitVote: function(id, choice) {
         const r = this.state.referendums.find(item => item.id === id);
         if (!r.votesBlanc) r.votesBlanc = 0;
@@ -675,38 +516,30 @@ createInitiativeFromSlider : function(data) {
         this.showToast("A voté. Le choix a été chiffré et sécurisé.");
         this.openScrutin(id);
     },
+    
     addComment: function(id) {
         if (!this.state.currentUser) return;
-        
         const textArea = document.getElementById(`new-comment-text-${id}`);
         const text = textArea.value.trim();
+        if (!text) return;
         
-        if (!text) {
-            this.showToast("L'argumentaire est vide.", "error");
-            return;
-        }
         const r = this.state.referendums.find(item => item.id === id);
         if (!r.comments) r.comments = [];
-        const today = new Date();
-        const dateStr = today.toLocaleDateString('fr-FR');
-        // Ajout au registre local
         r.comments.push({
             author: this.state.currentUser.name,
             text: text,
-            date: dateStr,
+            date: new Date().toLocaleDateString('fr-FR'),
             role: this.state.currentUser.role
         });
         this.showToast("Argumentaire versé au débat citoyen.");
-        this.openScrutin(id); // Rafraîchit l'isoloir pour afficher le message
+        this.openScrutin(id); 
     },
+    
     renderAdmin: function() {
         const pending = document.getElementById('admin-pending-container');
-        const active = document.getElementById('admin-active-container');
-        if (!pending || !active) return; 
+        if (!pending) return; 
         pending.innerHTML = '';
-        active.innerHTML = '';
-        
-        this.state.referendums.filter(r => r.status === 'Attente').forEach(r => {
+        this.state.referendums.filter(r => r.status === 'En collecte').forEach(r => {
             pending.innerHTML += `
                 <div class="card" style="padding:15px; margin-bottom:10px;">
                     <strong>${r.title}</strong>
@@ -720,7 +553,6 @@ createInitiativeFromSlider : function(data) {
     
     tirageAuSort: function() {
         this.showToast("Initialisation du tirage sur Registre National (Hash)...", "success");
-        
         setTimeout(() => {
             const elus = ["Laurence", "Mickael", "Claudine", "Thomas"];
             const liste = document.getElementById('jury-list');
@@ -741,12 +573,14 @@ createInitiativeFromSlider : function(data) {
         this.renderAdmin();
         this.showToast("Initiative validée !");
     },
+
     /* ==========================================
        CARTE DES SCRUTINS – Leaflet Engine
        ========================================== */
     _map: null,
     _mapFilter: 'Tous',
     _mapMarkers: [],
+    
     initMap: function() {
         const self = this;
         if (self._map) {
@@ -768,25 +602,22 @@ createInitiativeFromSlider : function(data) {
             self._renderMarkers();
         }, 100);
     },
+    
     _markerColor: function(level) {
         if (level === 'Local')    return '#18753c';
         if (level === 'Régional') return '#FF8C00';
         return '#000091';
     },
+    
     _makeIcon: function(level) {
         const color = this._markerColor(level);
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 44" width="32" height="44">
             <path d="M16 0C9.4 0 4 5.4 4 12c0 9 12 32 12 32s12-23 12-32C28 5.4 22.6 0 16 0z" fill="${color}" stroke="white" stroke-width="2"/>
             <circle cx="16" cy="12" r="5" fill="white"/>
         </svg>`;
-        return L.divIcon({
-            html: svg,
-            className: '',
-            iconSize: [32, 44],
-            iconAnchor: [16, 44],
-            popupAnchor: [0, -44]
-        });
+        return L.divIcon({ html: svg, className: '', iconSize: [32, 44], iconAnchor: [16, 44], popupAnchor: [0, -44] });
     },
+    
     _renderMarkers: function() {
         const self = this;
         if (!self._map) return;
@@ -794,15 +625,16 @@ createInitiativeFromSlider : function(data) {
         self._mapMarkers = [];
         const filter = self._mapFilter;
         const refs = self.state.referendums.filter(r => {
-            if (r.status === 'Attente' || !r.geo) return false;
+            if (r.status === 'Attente' || r.status === 'En collecte' || !r.geo) return false;
             if (filter === 'Tous') return true;
             if (filter === 'Local')    return r.level === 'Local';
             if (filter === 'Régional') return r.level === 'Régional';
             return false;
         });
+        
         const nationalGroup = refs.filter(r => r.level === 'National');
         const others = refs.filter(r => r.level !== 'National');
-        // Dispersion visuelle pour les points superposés (National)
+        
         nationalGroup.forEach((r, i) => {
             const angle = (i / Math.max(nationalGroup.length, 1)) * 2 * Math.PI;
             const radius = nationalGroup.length > 1 ? 1.5 : 0;
@@ -810,15 +642,11 @@ createInitiativeFromSlider : function(data) {
             const lng = r.geo.lng + radius * Math.cos(angle);
             self._addMarker(r, lat, lng);
         });
+        
         others.forEach(r => self._addMarker(r, r.geo.lat, r.geo.lng));
-        if (filter === 'Local') {
-            self._map.setView([46.6, 2.3], 6);
-        } else if (filter === 'Régional') {
-            self._map.setView([46.6, 2.3], 5);
-        } else {
-            self._map.setView([46.6, 2.3], 5);
-        }
+        self._map.setView([46.6, 2.3], filter === 'Local' ? 6 : 5);
     },
+    
     _addMarker: function(r, lat, lng) {
         const self = this;
         const marker = L.marker([lat, lng], { icon: self._makeIcon(r.level) });
@@ -836,17 +664,17 @@ createInitiativeFromSlider : function(data) {
         marker.addTo(self._map);
         self._mapMarkers.push(marker);
     },
+    
     setMapFilter: function(filter) {
         this._mapFilter = filter;
-        document.querySelectorAll('.map-filter-btn').forEach(b => {
-            b.className = 'map-filter-btn';
-        });
+        document.querySelectorAll('.map-filter-btn').forEach(b => { b.className = 'map-filter-btn'; });
         const idMap = { 'Tous': 'mfb-tous', 'Régional': 'mfb-regional', 'Local': 'mfb-local' };
         const classMap = { 'Tous': 'active-tous', 'Régional': 'active-regional', 'Local': 'active-local' };
         const btn = document.getElementById(idMap[filter]);
         if (btn) btn.classList.add(classMap[filter]);
         this._renderMarkers();
     },
+    
     openMapModal: function(id) {
         const r = this.state.referendums.find(item => item.id === id);
         if (!r) return;
@@ -858,10 +686,12 @@ createInitiativeFromSlider : function(data) {
         const color = this._markerColor(r.level);
         const tagStyle = `background:${color}1a; border:1px solid ${color}; color:${color};`;
         const zoneIcon = r.level === 'Local' ? '🏙️' : r.level === 'Régional' ? '🏛️' : '🗺️';
+        
         let hasVoted = false;
         if(this.state.currentUser) {
             hasVoted = r.voters.includes(this.state.currentUser.id);
         }
+        
         let voteHtml = '';
         if (r.status === 'Clôturé' || hasVoted) {
             voteHtml = `
@@ -873,11 +703,11 @@ createInitiativeFromSlider : function(data) {
         } else {
             voteHtml = `
                 <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
-                    <button class="btn" style="background:var(--success);flex:2;min-height:42px;min-width:70px;" onclick="RIC_ENGINE.submitVote('${r.id}','OUI');RIC_ENGINE.openMapModal('${r.id}')">✅ OUI</button>
-                    <button class="btn" style="background:var(--red-marianne);flex:2;min-height:42px;min-width:70px;" onclick="RIC_ENGINE.submitVote('${r.id}','NON');RIC_ENGINE.openMapModal('${r.id}')">❌ NON</button>
-                    <button class="btn" style="background:#888;flex:1;min-height:42px;min-width:60px;font-size:0.8rem;" onclick="RIC_ENGINE.submitVote('${r.id}','BLANC');RIC_ENGINE.openMapModal('${r.id}')">⬜</button>
+                    <button class="btn" style="background:var(--success);flex:2;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','OUI');RIC_ENGINE.openMapModal('${r.id}')">✅ OUI</button>
+                    <button class="btn" style="background:var(--red-marianne);flex:2;min-height:42px;" onclick="RIC_ENGINE.submitVote('${r.id}','NON');RIC_ENGINE.openMapModal('${r.id}')">❌ NON</button>
                 </div>`;
         }
+        
         document.getElementById('map-modal-content').innerHTML = `
             <div class="map-modal-zone-tag" style="${tagStyle}">${zoneIcon} ${r.level} · ${r.geo ? r.geo.label : ''}</div>
             <h3 style="font-size:1.05rem;line-height:1.35;margin-bottom:10px;color:var(--blue-france);">${r.title}</h3>
@@ -899,56 +729,25 @@ createInitiativeFromSlider : function(data) {
                     <span style="color:var(--red-marianne);">NON — ${r.votesNon} voix</span>
                     <span style="color:var(--red-marianne);">${pctNon}%</span>
                 </div>
-                <div class="modal-result-row" style="margin-top:4px;">
-                    <span style="color:#888;">BLANC — ${blanc} voix</span>
-                    <span style="color:#888;">${pctBlanc}%</span>
-                </div>
             </div>
             ${voteHtml}
-            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--text-muted);">
-                <span>📅 Clôture : <strong>${r.endDate || 'N/D'}</strong></span>
-                <span>Quorum : ${r.quorum}%</span>
-            </div>
             <button class="btn btn-secondary" style="margin-top:14px;width:100%;min-height:40px;font-size:0.85rem;" onclick="RIC_ENGINE.openScrutin('${r.id}')">
                 Ouvrir le Débat Citoyen →
             </button>
         `;
         document.getElementById('map-modal-overlay').classList.add('open');
     },
+    
     closeMapModal: function(event) {
         if (event === null || event.target === document.getElementById('map-modal-overlay')) {
             document.getElementById('map-modal-overlay').classList.remove('open');
         }
     },
+    
     genererBilanContradictoire : function(refId) {
-    const r = this.state.referendums.find(i => i.id === refId);
-    // Filtre les commentaires pour extraire la substantifique moelle du débat
-    r.fascicule.bilan.argumentsPour = r.comments
-        .filter(c => c.text.toLowerCase().includes('pour'))
-        .map(c => c.text);
-    r.fascicule.bilan.argumentsContre = r.comments
-        .filter(c => c.text.toLowerCase().includes('contre') || c.text.toLowerCase().includes('attention'))
-        .map(c => c.text);
-    this.showToast("Bilan du débat mis à jour à partir du forum.");
-},
-};
-const RIC_SLIDER = {
-    next: function(step) {
-        // Validation simple avant passage
-        if(step === 2 && !document.getElementById('prop-title').value) {
-            alert("Veuillez remplir le titre.");
-            return;
-        }
-        this.goTo(step);
-    },
-    prev: function(step) {
-        this.goTo(step);
-    },
-    goTo: function(step) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.step-indicator').forEach(i => i.classList.remove('active'));
-        
-        document.getElementById('step-' + step).classList.add('active');
-        document.getElementById('ind-' + step).classList.add('active');
+        const r = this.state.referendums.find(i => i.id === refId);
+        r.fascicule.bilan.argumentsPour = r.comments.filter(c => c.text.toLowerCase().includes('pour')).map(c => c.text);
+        r.fascicule.bilan.argumentsContre = r.comments.filter(c => c.text.toLowerCase().includes('contre') || c.text.toLowerCase().includes('attention')).map(c => c.text);
+        this.showToast("Bilan du débat mis à jour à partir du forum.");
     }
 };

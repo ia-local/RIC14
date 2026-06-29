@@ -342,77 +342,24 @@ input, select, textarea {
     font-family: inherit;
     margin-bottom: 12px;
     resize: vertical;
-}/* ==========================================================
-   MISE À JOUR CSS - SLIDER & FORMULAIRE DÉPÔT
-   ========================================================== */
-
-/* Animation de transition pour les étapes du slider */
+}
 .step {
     display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
 }
-
 .step.active {
     display: block;
-    opacity: 1;
+    animation: fade .3s;
 }
-
-/* Indicateurs de progression (Wizard) */
 .step-indicator {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--text-light);
     padding-bottom: 5px;
-    border-bottom: 2px solid var(--border-color);
-    flex: 1;
-    text-align: center;
+    border-bottom: 2px solid #eee;
 }
-
 .step-indicator.active {
-    color: var(--blue-france);
-    border-bottom-color: var(--blue-france);
-    font-weight: 700;
-}
-
-/* Ajustement des champs pour mobile et bureau */
-.form-row {
-    display: grid;
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-@media (min-width: 600px) {
-    .form-row {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-/* Boutons de contrôle du slider */
-.btn-danger {
-    background-color: var(--red-marianne);
-    color: white;
-}
-
-.btn-success {
-    background-color: var(--success);
-    color: white;
-}
-
-/* ==========================================================
-   AMÉLIORATION VUE CHATROOM (Grid Split)
-   ========================================================== */
-#chat-rooms-list {
-    border-right: 1px solid var(--border-color);
-    padding-right: 10px;
-}
-
-.comment-item {
-    border-left: 4px solid var(--border-color);
-    transition: transform 0.2s;
-}
-
-.comment-item:hover {
-    transform: translateX(2px);
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: bold;
 }
 @media (min-width: 768px) {
     .app-layout { flex-direction: row; }

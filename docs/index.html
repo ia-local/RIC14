@@ -52,32 +52,26 @@
         <main class="app-content">
 
             <!-- VUE : Connexion -->
+<!-- VUE : Connexion (Accès Universel) -->
             <div id="view-login" class="view active">
                 <div class="card" style="max-width: 500px; margin: 40px auto; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 10px;">🗳️</div>
                     <h2 style="border: none; margin-bottom: 5px;">Espace Souverain</h2>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">Authentification certifiée (KYC) pour le vote numérique.</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">Accès inconditionnel au vote numérique.</p>
                     
-                    <div class="form-group" style="text-align: left;">
-                        <label>Adresse Électronique</label>
-                        <input type="email" id="login-email" placeholder="citoyen@ric.fr ou admin@ric.fr">
-                    </div>
-                    <div class="form-group" style="text-align: left;">
-                        <label>Mot de passe</label>
-                        <input type="password" id="login-pwd" placeholder="••••••••">
-                    </div>
-                    <button class="btn" style="width: 100%; margin-top: 10px;" onclick="RIC_ENGINE.login()">S'authentifier</button>
-
-                    <div style="margin-top: 16px; padding: 12px; background: #eef3f8; border-left: 3px solid var(--blue-france); border-radius: 4px; font-size: 0.78rem; color: var(--text-muted); text-align: left;">
-                        <strong style="color:var(--blue-france);">Art. 4 PLC v.2</strong> — Le droit d'accès au vote est inconditionnel pour tout citoyen français majeur. Cette interface prototype requiert une authentification KYC à des fins de démonstration uniquement.
+                    <!-- Champs masqués pour maintenir la compatibilité avec app-ric.js -->
+                    <div style="display: none;">
+                        <input type="email" id="login-email" value="">
+                        <input type="password" id="login-pwd" value="">
                     </div>
 
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: left;">
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Comptes de test :</p>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.8rem;" onclick="RIC_ENGINE.quickFill('citoyen@ric.fr', '123')">Test Citoyen</button>
-                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.8rem;" onclick="RIC_ENGINE.quickFill('admin@ric.fr', 'admin')">Test Admin</button>
-                        </div>
+                    <!-- Boutons de connexion rapide en 1 clic (Sans KYC) -->
+                    <button class="btn" style="width: 100%; margin-top: 10px; background: var(--success);" onclick="RIC_ENGINE.quickFill('citoyen@ric.fr', '123'); RIC_ENGINE.login()">Accès Libre Citoyen (Anonyme)</button>
+                    
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="RIC_ENGINE.quickFill('admin@ric.fr', 'admin'); RIC_ENGINE.login()">Accès Collège de Supervision</button>
+
+                    <div style="margin-top: 25px; padding: 12px; background: #eef3f8; border-left: 3px solid var(--blue-france); border-radius: 4px; font-size: 0.78rem; color: var(--text-muted); text-align: left;">
+                        <strong style="color:var(--blue-france);">Art. 4 PLC v.2</strong> — Le droit d'accès au vote est inconditionnel pour tout citoyen français majeur. Le système de vérification (KYC) a été désactivé pour garantir l'anonymat absolu.
                     </div>
                 </div>
             </div>
@@ -106,90 +100,135 @@
             </div>
 
             <!-- VUE : Proposer une initiative -->
+
 <!-- VUE : Proposer une initiative (Formulaire Wizard) -->
-<!-- VUE : Proposer une initiative (Formulaire Wizard - Évolué v.3) -->
+<!-- À remplacer intégralement dans index.html -->
 <div id="view-propose" class="view">
-    <h2>✍️ Dépôt d'Initiative (Conforme Label RIC)</h2>
-    <div class="card" style="max-width: 600px; margin: auto;">
+    <h2>✍️ Dépôt d'Initiative (Label RIC)</h2>
+    <div class="card" style="max-width: 650px; margin: auto;">
         
-        <!-- Indicateur de progression -->
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <!-- Indicateur de progression 4 Étapes -->
+        <div class="wizard-stepper" style="display:flex; justify-content:space-between; margin-bottom:20px; border-bottom:2px solid #eee; padding-bottom:10px;">
             <span class="step-indicator active" id="ind-1">1. Cadrage</span>
             <span class="step-indicator" id="ind-2">2. Paramètres</span>
-            <span class="step-indicator" id="ind-3">3. Présélection</span>
+            <span class="step-indicator" id="ind-3">3. Validation</span>
+            <span class="step-indicator" id="ind-4">4. Bilan</span>
         </div>
 
-        <!-- Slide 1 : Identification & Unité de matière -->
+        <!-- Étape 1 : Cadrage -->
         <div class="step active" id="step-1">
+            <h3 style="color:var(--blue-france);">Étape 1 : Cadrage</h3>
             <div class="form-group">
-                <label>Titre du projet</label>
-                <input type="text" id="prop-title" placeholder="Ex: Révision du Code Électoral">
+                <label>Titre de l'initiative</label>
+                <input type="text" id="prop-title" placeholder="Ex: Révision du code...">
             </div>
             <div class="form-group">
-                <label>Question soumise aux électeurs</label>
+                <label>Question posée aux électeurs</label>
                 <input type="text" id="prop-question" placeholder="Approuvez-vous...">
             </div>
-            
-            <!-- Ajout pour gain de points : Unité de matière -->
-            <div style="background:#eef3f8; padding:12px; border-left:4px solid var(--blue-france); border-radius:4px; margin-bottom:15px; font-size:0.85rem;">
-                <label style="display:flex; align-items:center; gap:8px; margin:0; font-weight:normal; cursor:pointer;">
-                    <input type="checkbox" id="prop-unite-matiere" style="width:auto; min-height:auto;">
-                    <span>Je certifie que cette initiative respecte le <strong>principe d'unité de matière</strong> (un seul sujet distinct abordé).</span>
+            <div class="form-group">
+                <label>Motifs (Validation de l'unité de matière)</label>
+                <textarea id="prop-desc" rows="3" placeholder="Détaillez les raisons..."></textarea>
+            </div>
+            <div style="background:#eef3f8; padding:12px; border-left:4px solid var(--blue-france); margin-bottom:15px; font-size:0.85rem;">
+                <label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer;">
+                    <input type="checkbox" id="prop-unite-matiere">
+                    <span>Je certifie que cette initiative respecte le <strong>principe d'unité de matière</strong>.</span>
                 </label>
             </div>
-
-            <button class="btn" style="width:100%" onclick="SLIDER_MODALITE.next()">Suivant</button>
+            <button class="btn" style="width:100%" onclick="SLIDER_MODALITE.next()">Suivant →</button>
         </div>
-
-        <!-- Slide 2 : Paramètres, Échelle et Financement -->
+<!-- Slide 2 : Modalités du scrutin -->
         <div class="step" id="step-2">
-            <div class="form-group">
-                <label>Fascicule Initial (Description du projet)</label>
-                <textarea id="prop-desc" rows="3" placeholder="Présentez les arguments de votre initiative..."></textarea>
-            </div>
+            <h3 style="color:var(--blue-france);">Étape 2 : Modalités du Référendum</h3>
             <div class="form-row">
-                <!-- Ajout pour gain de points : Choix détaillé de l'échelle -->
                 <div class="form-group">
-                    <label>Échelle d'application</label>
-                    <select id="prop-level">
-                        <option value="Communal">Communal / Intercommunal</option>
-                        <option value="Départemental">Départemental</option>
-                        <option value="Régional">Régional</option>
-                        <option value="National">National</option>
+                    <label>Type de Référendum</label>
+                    <select id="prop-ric-type">
+                        <option value="Législatif">Législatif (Créer une loi)</option>
+                        <option value="Abrogatoire">Abrogatoire (Supprimer une loi)</option>
+                        <option value="Veto">Veto (Bloquer avant promulgation)</option>
+                        <option value="Constituant">Constituant (Réviser la Constitution)</option>
+                        <option value="Révocatoire">Révocatoire (Révoquer un élu)</option>
                     </select>
                 </div>
-                <!-- Ajout pour gain de points : Validation du financement induit -->
                 <div class="form-group">
-                    <label>Impact budgétaire estimé</label>
-                    <select id="prop-budget">
-                        <option value="neutre">Neutre (Aucun coût net)</option>
-                        <option value="faible">Faible (< 10 Millions €)</option>
-                        <option value="modere">Modéré (10M€ à 500M€)</option>
-                        <option value="eleve">Élevé (> 500 Millions €)</option>
-                        <option value="recette">Générateur de recettes fiscales</option>
+                    <label>Niveau de scrutin (Échelle)</label>
+                    <select id="prop-level">
+                        <option value="National">National</option>
+                        <option value="Régional">Régional</option>
+                        <option value="Départemental">Départemental</option>
+                        <option value="Local">Communal / Intercommunal</option>
                     </select>
                 </div>
             </div>
+            
+            <!-- NOUVELLE LIGNE : Mode de scrutin & Collecte -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Méthode de dépouillement (Scrutin)</label>
+                    <select id="prop-mode-scrutin">
+                        <option value="Binaire">Binaire classique (Oui / Non / Blanc)</option>
+                        <option value="Majoritaire Relatif">Scrutin Majoritaire (Simple / Relatif)</option>
+                        <option value="Majoritaire Absolu">Scrutin Majoritaire à deux tours (Absolu)</option>
+                        <option value="Jugement Majoritaire">Jugement Majoritaire (Mentions de valeur)</option>
+                        <option value="Approbation">Vote par Approbation (Choix multiples)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Modalité de collecte des signatures</label>
+                    <select id="prop-modality-vote">
+                        <option value="Vote numérique certifié">Vote numérique certifié</option>
+                        <option value="Pétition numérique">Pétition numérique</option>
+                        <option value="SMS sécurisé">SMS sécurisé</option>
+                        <option value="Main levée (Assemblée locale)">Main levée (Assemblée locale)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Date butoir souhaitée</label>
+                <input type="date" id="prop-date">
+            </div>
+            
             <div style="display:flex; gap:10px;">
-                <button class="btn btn-secondary" onclick="SLIDER_MODALITE.prev(1)">Retour</button>
-                <button class="btn" onclick="SLIDER_MODALITE.next()">Suivant</button>
+                <button class="btn btn-secondary" onclick="SLIDER_MODALITE.prev()">← Retour</button>
+                <button class="btn" onclick="SLIDER_MODALITE.next()">Suivant : Contrôle →</button>
             </div>
         </div>
 
-        <!-- Slide 3 : Validation en mode Présélection -->
+        <!-- Étape 3 : Validation -->
         <div class="step" id="step-3">
-            <div style="padding:20px; background:#fff4e5; border: 1px solid var(--ric-orange); border-radius:8px; text-align:center;">
-                <h3 style="color:var(--ric-orange); margin-bottom:10px;">Étape de Présélection Citoyenne</h3>
+            <h3 style="color:var(--blue-france);">Étape 3 : Validation Formelle</h3>
+            <div style="padding:20px; background:#fff4e5; border-left: 4px solid var(--ric-orange); text-align:left;">
                 <p style="font-size:0.9rem; margin-bottom:15px;">
-                    Conformément au Label RIC, votre initiative va d'abord entrer en <strong>phase de co-parrainage (Présélection)</strong>. 
-                    Elle devra recueillir un seuil initial de signatures avant d'être soumise à la délibération générale et au vote.
+                    Transmission sécurisée au <strong>Collège de Supervision Citoyenne</strong>.
+                    Le collège vérifiera la légalité formelle et l'unité de matière.
                 </p>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn btn-danger" style="flex:1" onclick="SLIDER_MODALITE.prev(2)">Annuler</button>
-                    <button class="btn btn-success" style="flex:1" onclick="SLIDER_MODALITE.next()">Ouvrir aux signatures</button>
-                </div>
+                <button class="btn" style="background:var(--ric-orange); width:100%;" onclick="RIC_ENGINE.showToast('Transmission réussie', 'success'); SLIDER_MODALITE.next();">
+                    📨 Envoyer au Collège
+                </button>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-secondary" onclick="SLIDER_MODALITE.prev(2)">← Retour</button>
             </div>
         </div>
+
+        <!-- Étape 4 : Bilan -->
+        <div class="step" id="step-4">
+            <h3 style="color:var(--blue-france);">Étape 4 : Bilan et Enregistrement</h3>
+            <div style="text-align:center; padding: 20px;">
+                <span style="font-size: 3rem;">✅</span>
+                <h4 style="margin-top:10px; color:var(--text-main)">Dossier Transmis</h4>
+                <p style="font-size:0.9rem; color:var(--text-muted); margin-top:10px;">
+                    Votre proposition est en cours d'instruction. Vous pouvez suivre son statut dans le Tableau de Bord.
+                </p>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-secondary" onclick="SLIDER_MODALITE.prev(2)">✏️ Modifier la demande</button>
+                <button class="btn" style="background:var(--success);" onclick="SLIDER_MODALITE.submit()">📁 Fermer et Sauvegarder</button>
+            </div>
+        </div>
+
     </div>
 </div>
 

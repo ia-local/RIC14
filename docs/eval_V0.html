@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr" data-fr-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pré-évaluation du Label RIC - Proposition RIC14 v.0</title>
+    <style>
+        :root {
+            --blue-france: #000091;
+            --text-main: #161616;
+            --text-muted: #666666;
+            --border-color: #dddddd;
+            --bg-body: #f6f6f6;
+            --bg-table-header: #eef3f8;
+            --success: #18753c;
+            --warning: #b34000;
+            --danger: #ce0500;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Marianne', Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--blue-france);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 { color: var(--blue-france); font-size: 1.8rem; margin-bottom: 10px; }
+        h2 { color: var(--text-main); font-size: 1.4rem; margin: 30px 0 15px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); }
+        h3 { font-size: 1.1rem; margin-bottom: 10px; }
+
+        .summary-card {
+            background: var(--bg-table-header);
+            border-left: 4px solid var(--blue-france);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .methodology {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--text-muted);
+            color: white;
+            font-weight: bold;
+        }
+
+        th:nth-child(2), th:nth-child(3), td:nth-child(2), td:nth-child(3) {
+            text-align: center;
+            width: 15%;
+        }
+
+        .score-header {
+            background: var(--blue-france);
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footnotes {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            padding-left: 15px;
+        }
+
+        .footnotes p { margin-bottom: 5px; }
+
+        /* Coloration des statuts */
+        .status-oui { color: var(--success); font-weight: bold; }
+        .status-ouimais { color: var(--warning); font-weight: bold; }
+        .status-non { color: var(--danger); font-weight: bold; }
+        .status-ni { color: var(--text-muted); font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Pré-évaluation du Label RIC</h1>
+            <p><strong>"Proposition de loi constitutionnelle sur le RIC" de RIC14 v.0 (1er semestre 2026)</strong></p>
+        </header>
+
+        <div class="summary-card">
+            <h3>Synthèse de la pré-évaluation</h3>
+            <div class="summary-grid">
+                <div>Note globale obtenue :</div>
+                <div>123 / 300</div>
+                
+                <div>Nombre d'étoiles obtenues :</div>
+                <div>1 / 3</div>
+                
+                <div>Obtention du Label RIC :</div>
+                <div class="status-non">Non</div>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: normal;">
+                <strong>Points d'améliorations possibles :</strong> Les critères retenus pour étudier les propositions sont issus des plus grandes consultations réalisées à ce jour en France. Les personnes ayant répondu à ces consultations ont des attentes précises non satisfaites dans cette proposition de RIC.<br>
+                Pour améliorer la proposition, voir ci-dessous les critères non validés dans les tableaux et les commentaires.
+            </p>
+        </div>
+
+        <div class="methodology">
+            <strong>Barème de la notation :</strong><br>
+            "oui" = présent dans la proposition => 1 point x Coefficient<br>
+            "oui, mais" = présent partiellement dans la proposition => 0,5 point x Coefficient<br>
+            "N.I." = absent de la proposition => 0 point<br>
+            "non" = contre dans la proposition => 0 point
+        </div>
+
+        <h2>Notation des Principes</h2>
+        <div class="score-header">
+            <span>NOTE : 55,5 / 100</span>
+            <span>ÉTOILE : ★</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Critères ayant reçu plus de 75 % de réponses positives (Parlement & Citoyen, Vrai Débat, Culture-RIC)</th>
+                    <th>Coeff (100)</th>
+                    <th>RIC14 (v0)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Initiative réellement citoyenne</td><td>10</td><td class="status-oui">oui</td></tr>
+                <tr><td>Constituant (révision de la Constitution)</td><td>10</td><td class="status-oui">oui*</td></tr>
+                <tr><td>Période d'information plurielle et neutre</td><td>8</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Sur tout sujet</td><td>8</td><td class="status-oui">oui</td></tr>
+                <tr><td>Décisions supérieures à celles de tout autre acteur politique</td><td>8</td><td class="status-oui">oui</td></tr>
+                <tr><td>Veto</td><td>6</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Révocatoire (élus et hauts fonctionnaires)</td><td>5</td><td class="status-oui">oui</td></tr>
+                <tr><td>Convocatoire (constituante, collège d'experts...)</td><td>5</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Dissolutif (Assemblée nationale, Sénat, constituante...)</td><td>5</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Ratificatoire et dénonciatoire (traités, pactes et accords)</td><td>5</td><td class="status-ouimais">oui, mais**</td></tr>
+                <tr><td>Décisions appliquées sous un certain délai</td><td>5</td><td class="status-ouimais">oui, mais***</td></tr>
+                <tr><td>Votes autorisés à tous les Français majeurs</td><td>5</td><td class="status-non">non</td></tr>
+                <tr><td>Législatif (proposition de loi)</td><td>4</td><td class="status-oui">oui</td></tr>
+                <tr><td>Abrogatif (suppression de loi)</td><td>4</td><td class="status-oui">oui</td></tr>
+                <tr><td>Période d'information médiatisée (obligation de diffusion)</td><td>4</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Mode de scrutin adapté (autres possibilités que oui / non)</td><td>3</td><td class="status-non">non</td></tr>
+                <tr><td>Décisions modifiables uniquement par référendum</td><td>3</td><td class="status-ouimais">oui, mais****</td></tr>
+                <tr><td>Initiative accessible à tous les Français majeurs</td><td>2</td><td class="status-non">non</td></tr>
+            </tbody>
+        </table>
+        <div class="footnotes">
+            <p>* Oui. Attention toutefois, même si rien n'indique que les initiatives citoyennes peuvent être considérées comme "proposition" ou "projet", l'alinéa 2 du 1er article crée un doute sur le besoin d'une validation par les 2 chambres pour un RIC Constituant : "Le projet ou la proposition de révision doit être examiné dans les conditions de délai fixées au troisième alinéa de l'article 42 et voté par les deux assemblées en termes identiques".</p>
+            <p>** Oui, dénoncer un traité en modifiant la Constitution est possible par contre une ratification est normalement réalisée par le Parlement.</p>
+            <p>*** Oui, mais le délai est laissé à l'appréciation du collège de citoyens, désignés par tirage au sort (11-1). Ce collège est rassurant, mais un délai maximal serait le bienvenu.</p>
+            <p>**** Oui, mais juste pour les référendums constitutionnels.</p>
+        </div>
+
+        <h2>Notation des Étapes</h2>
+        <div class="score-header">
+            <span>NOTE : 40 / 100</span>
+            <span>ÉTOILE : -</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Critères ayant reçu plus de 75 % de réponses positives (Parlement & Citoyen, Vrai Débat, Culture-RIC)</th>
+                    <th>Coeff (100)</th>
+                    <th>RIC14 (v0)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Référendum réellement décisionnel</td><td>30</td><td class="status-oui">oui</td></tr>
+                <tr><td>Choix éclairés par des infos complètes et contradictoires</td><td>20</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Veille citoyenne (détection de problématiques facilitée)</td><td>10</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Accès rapide et détaillé à l'information (activités législatives, chiffres et sources des données...)</td><td>10</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Contrôle des signatures</td><td>10</td><td class="status-oui">oui</td></tr>
+                <tr><td>Organisation de votation en urgence</td><td>5</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Fascicule explicatif pour chaque RIC</td><td>4</td><td class="status-non">non</td></tr>
+                <tr><td>Présélection</td><td>3</td><td class="status-non">non</td></tr>
+                <tr><td>Validation du financement induit par la proposition</td><td>2</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Choix de l'échelle (selon population concernée et compétence des collectivités territoriales)</td><td>4</td><td class="status-non">non</td></tr>
+                <tr><td>Possibilité de proposer une alternative</td><td>1</td><td class="status-non">non</td></tr>
+                <tr><td>Fusion des propositions similaires</td><td>1</td><td class="status-non">non</td></tr>
+            </tbody>
+        </table>
+
+        <h2>Notation des Modalités</h2>
+        <div class="score-header">
+            <span>NOTE : 27,5 / 100</span>
+            <span>ÉTOILE : -</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Critères ayant reçu plus de 75 % de réponses positives (Parlement & Citoyen, Vrai Débat, Culture-RIC)</th>
+                    <th>Coeff (100)</th>
+                    <th>RIC14 (v0)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Modalité modifiables uniquement par référendum</td><td>20</td><td class="status-non">non</td></tr>
+                <tr><td>Temps de parole égal dans les médias, radio/TV+presse</td><td>10</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Déclenchement raisonnable : seuil ou méthode</td><td>10</td><td class="status-oui">oui*</td></tr>
+                <tr><td>Fréquence de vote raisonnable (trimestriel, semestriel)</td><td>10</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Procédure pour la mise en application, relancer si mise en oeuvre tarde ou dénature l'intention</td><td>5</td><td class="status-ouimais">oui, mais**</td></tr>
+                <tr><td>Seuil + expérimentation de méthodes alternatives</td><td>5</td><td class="status-non">non</td></tr>
+                <tr><td>Mécanisme pour éviter les manipulations de signatures</td><td>5</td><td class="status-oui">oui</td></tr>
+                <tr><td>A toutes les échelles géographiques (communes, interco, départements, régions, état)</td><td>4</td><td class="status-oui">oui</td></tr>
+                <tr><td>Contrôle du financement des campagnes référendaires</td><td>4</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Consultation contradictoire en ligne (type forum)</td><td>4</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Mise à disposition d'une plateforme pour les RIC</td><td>4</td><td class="status-non">non</td></tr>
+                <tr><td>Différents modes de scrutins possibles (intervalles, valeurs, jugement majoritaire...)</td><td>4</td><td class="status-non">non</td></tr>
+                <tr><td>Impossibilité pour les parlementaires de revenir trop rapidement sur la décision</td><td>3</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Unité de matière (un seul sujet par initiative)</td><td>3</td><td class="status-non">non</td></tr>
+                <tr><td>Procédure pour éviter la prise de pouvoir par une minorité de citoyens (quorum + 2è tour sans quorum si non atteint...)</td><td>2</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Procédure permettant d'éviter un nouveau RIC sur le même sujet trop rapidement</td><td>2</td><td class="status-non">non</td></tr>
+                <tr><td>Délai minimal avant référendum pour éviter le vote impulsif</td><td>1</td><td class="status-ni">N.I.</td></tr>
+                <tr><td>Vote blanc possible et pris en compte</td><td>1</td><td class="status-ni">N.I.</td></tr>
+            </tbody>
+        </table>
+        <div class="footnotes">
+            <p>* Attention, on peut supposer que les signatures pour un RIC abrogatoire seraient plus faciles à obtenir (seuil de 1%) que pour un RIC législatif (seuil à 2%).</p>
+            <p>** Oui, mais la surveillance de l'exécution est à l'appréciation du collège de citoyens, désignés par tirage au sort (11-1), mais la surveillance n'implique pas de procédure de relance ni de sanction.</p>
+            <p>*** Oui pour le constituant, mais pas mentionné pour les autres RIC.</p>
+        </div>
+
+    </div>
+</body>
+</html>
